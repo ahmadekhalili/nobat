@@ -1,0 +1,641 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+
+{% block additional_style %}
+.datepicker-wrapper {
+  /* Override the document's RTL order only for this container */
+  direction: ltr;
+  white-space: nowrap; /* Prevent line breaks */
+}
+
+.datepicker-wrapper > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.my-button .button-text {
+  position: relative;
+  z-index: 2;
+}
+
+.status-squares {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 3px;
+  width: 42px;
+  height: 42px;
+  z-index: 1;
+}
+
+.status-squares .square {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.status-squares .green {
+  background-color: #4ecb71;
+}
+
+.status-squares .red {
+  background-color: #e74c3c;
+}
+
+{% endblock %}
+{% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}
+{% block content %}
+          <div class="buttons-middle middle-buttons">
+            <div class="status-indicator {% if customer is none %}status-unknown{% elif customer.status == 'complete' %}status-completed{% elif customer.status == 'start' %}status-started{% else %}status-stopped{% endif %}">
+                {% if customer.status == 'complete' %}وضعیت: تکمیل شده{% elif customer.status == 'start' %}وضعیت: در حال کار{% else %}وضعیت: متوقف شده{% endif %}
+            </div>
+            <div class="row">
+              <div class="col-6">
+                  <form id="crawlstopForm" action="{% url 'main:stop_crawl' %}?{{ request.GET.urlencode }}" method="GET">
+                      <button class="my-button">توقف</button></form>
+              </div>
+              <div class="col-6">
+                  <form id="crawlForm" action="{% url 'main:crawl_customer' %}" method="POST">{% csrf_token %}
+                      <input type="hidden" name="customer" value="{{ customer.id }}">
+                      <button type="submit" class="my-button">
+
+  <span class="button-text">شروع</span>
+  <div id="status_squares" class="status-squares">
+  </div>
+                      </button>
+                  </form>
+              </div>
+              <div class="col-6">
+                <button class="my-button">ویرایش</button>
+              </div>
+              <div class="col-6">
+                <button class="my-button">حذف</button>
+              </div>
+              <div class="col-6">
+
+<div class="datepicker-wrapper">
+  <jalali-date-picker id="customer_date"></jalali-date-picker>
+  <select id="customer_time" class="modern-select">
+    <option value="" selected>---</option>
+    {% for time in time_slots %}
+        {% if customer.customer_time == time %}
+             <option value="{{ time }}" selected>{{ time }}</option>
+        {% else %}
+            <option value="{{ time }}">{{ time }}</option>
+        {% endif %}
+    {% endfor %}
+  </select>
+  <select id="time1" class="modern-select">
+    <option value="" selected>---</option>
+    {% for time in time_slots %}
+        {% if customer.time1 == time %}
+             <option value="{{ time }}" selected>{{ time }}</option>
+        {% else %}
+            <option value="{{ time }}">{{ time }}</option>
+        {% endif %}
+    {% endfor %}
+  </select>
+</div>
+<div class="datepicker-wrapper">
+  <jalali-date-picker id="date1"></jalali-date-picker>
+  <select id="time2" class="modern-select">
+    <option value="" selected>---</option>
+    {% for time in time_slots %}
+        {% if customer.time2 == time %}
+             <option value="{{ time }}" selected>{{ time }}</option>
+        {% else %}
+            <option value="{{ time }}">{{ time }}</option>
+        {% endif %}
+    {% endfor %}
+  </select>
+  <select id="time3" class="modern-select">
+    <option value="" selected>---</option>
+    {% for time in time_slots %}
+        {% if customer.time3 == time %}
+             <option value="{{ time }}" selected>{{ time }}</option>
+        {% else %}
+            <option value="{{ time }}">{{ time }}</option>
+        {% endif %}
+    {% endfor %}
+  </select>
+</div>
+
+  <script> // build jalali date peaker 0to100
+    class JalaliDatePicker extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+      }
+
+      connectedCallback() {
+        this.shadowRoot.innerHTML = `
+          <style>
+            :host {
+              display: block;
+              font-family: Tahoma, Arial, sans-serif;
+              --primary-color: #3498db;
+              --secondary-color: #2980b9;
+              --text-color: #333;
+              --background-color: #fff;
+              --border-color: #ddd;
+              --highlight-color: #f0f8ff;
+            }
+            .jalali-picker-container {
+              width: 300px;
+              margin: 0 auto;
+            }
+            .jalali-picker-input {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid var(--border-color);
+              border-radius: 4px;
+              font-size: 14px;
+              margin-bottom: 5px;
+              box-sizing: border-box;
+            }
+            .jalali-picker-calendar {
+              display: none;
+              background-color: var(--background-color);
+              border: 1px solid var(--border-color);
+              border-radius: 4px;
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+              overflow: hidden;
+            }
+            .jalali-picker-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              background-color: var(--primary-color);
+              color: white;
+              padding: 10px;
+            }
+            .jalali-picker-month-year {
+              text-align: center;
+              font-weight: bold;
+            }
+            .jalali-picker-nav {
+              cursor: pointer;
+              font-size: 16px;
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 50%;
+            }
+            .jalali-picker-nav:hover {
+              background-color: var(--secondary-color);
+            }
+            .jalali-picker-days {
+              display: grid;
+              grid-template-columns: repeat(7, 1fr);
+              text-align: center;
+            }
+            .jalali-picker-day-name {
+              padding: 10px 0;
+              font-weight: bold;
+              background-color: #f8f9fa;
+            }
+            .jalali-picker-day {
+              padding: 10px 0;
+              cursor: pointer;
+            }
+            .jalali-picker-day:hover {
+              background-color: var(--highlight-color);
+            }
+            .jalali-picker-day.other-month {
+              color: #aaa;
+            }
+            .jalali-picker-day.selected {
+              background-color: var(--primary-color);
+              color: white;
+              border-radius: 50%;
+            }
+            .jalali-picker-day.today {
+              font-weight: bold;
+              color: var(--primary-color);
+            }
+          </style>
+          <div class="jalali-picker-container">
+            <input type="text" class="jalali-picker-input" placeholder="انتخاب تاریخ" readonly>
+            <div class="jalali-picker-calendar">
+              <div class="jalali-picker-header">
+                <div class="jalali-picker-nav jalali-picker-prev">‹</div>
+                <div class="jalali-picker-month-year"></div>
+                <div class="jalali-picker-nav jalali-picker-next">›</div>
+              </div>
+              <div class="jalali-picker-days"></div>
+            </div>
+          </div>
+        `;
+        this.initializeDatePicker();
+      }
+
+      initializeDatePicker() {
+        const shadow = this.shadowRoot;
+        // Jalali date conversion helper functions
+        const JalaliDate = {
+          g_days_in_month: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+          j_days_in_month: [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29],
+          jalaliToGregorian: function(j_y, j_m, j_d) {
+            j_y = parseInt(j_y);
+            j_m = parseInt(j_m);
+            j_d = parseInt(j_d);
+            var jy = j_y - 979;
+            var jm = j_m - 1;
+            var jd = j_d - 1;
+            var j_day_no = 365 * jy + parseInt(jy / 33) * 8 + parseInt((jy % 33 + 3) / 4);
+            for (var i = 0; i < jm; ++i) j_day_no += this.j_days_in_month[i];
+            j_day_no += jd;
+            var g_day_no = j_day_no + 79;
+            var gy = 1600 + 400 * parseInt(g_day_no / 146097);
+            g_day_no = g_day_no % 146097;
+            var leap = true;
+            if (g_day_no >= 36525) {
+              g_day_no--;
+              gy += 100 * parseInt(g_day_no / 36524);
+              g_day_no = g_day_no % 36524;
+              if (g_day_no >= 365) g_day_no++;
+              else leap = false;
+            }
+            gy += 4 * parseInt(g_day_no / 1461);
+            g_day_no %= 1461;
+            if (g_day_no >= 366) {
+              leap = false;
+              g_day_no--;
+              gy += parseInt(g_day_no / 365);
+              g_day_no = g_day_no % 365;
+            }
+            for (var i = 0; g_day_no >= this.g_days_in_month[i] + (i == 1 && leap); i++)
+              g_day_no -= this.g_days_in_month[i] + (i == 1 && leap);
+            return [gy, i + 1, g_day_no + 1];
+          },
+          gregorianToJalali: function(g_y, g_m, g_d) {
+            g_y = parseInt(g_y);
+            g_m = parseInt(g_m);
+            g_d = parseInt(g_d);
+            var gy = g_y - 1600;
+            var gm = g_m - 1;
+            var gd = g_d - 1;
+            var g_day_no = 365 * gy + parseInt((gy + 3) / 4) - parseInt((gy + 99) / 100) + parseInt((gy + 399) / 400);
+            for (var i = 0; i < gm; ++i)
+              g_day_no += this.g_days_in_month[i];
+            if (gm > 1 && ((gy % 4 == 0 && gy % 100 != 0) || (gy % 400 == 0)))
+              g_day_no++;
+            g_day_no += gd;
+            var j_day_no = g_day_no - 79;
+            var j_np = parseInt(j_day_no / 12053);
+            j_day_no = j_day_no % 12053;
+            var jy = 979 + 33 * j_np + 4 * parseInt(j_day_no / 1461);
+            j_day_no %= 1461;
+            if (j_day_no >= 366) {
+              jy += parseInt((j_day_no - 1) / 365);
+              j_day_no = (j_day_no - 1) % 365;
+            }
+            for (var i = 0; i < 11 && j_day_no >= this.j_days_in_month[i]; ++i) {
+              j_day_no -= this.j_days_in_month[i];
+            }
+            return [jy, i + 1, j_day_no + 1];
+          },
+          isLeapJalaliYear: function(year) {
+            return ((((((year - 474) % 2820) + 474) + 38) * 682) % 2816) < 682;
+          },
+          getJalaliMonthLength: function(year, month) {
+            if (month <= 6) return 31;
+            if (month <= 11) return 30;
+            if (this.isLeapJalaliYear(year)) return 30;
+            return 29;
+          }
+        };
+
+        const jalaliMonthNames = [
+          'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+          'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        ];
+        const dayNames = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
+        const input = shadow.querySelector('.jalali-picker-input');
+        const calendar = shadow.querySelector('.jalali-picker-calendar');
+        const monthYearDisplay = shadow.querySelector('.jalali-picker-month-year');
+        const prevButton = shadow.querySelector('.jalali-picker-prev');
+        const nextButton = shadow.querySelector('.jalali-picker-next');
+        const daysContainer = shadow.querySelector('.jalali-picker-days');
+
+        let currentDate = new Date();
+        let currentJalaliDate = JalaliDate.gregorianToJalali(
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1,
+          currentDate.getDate()
+        );
+        let selectedDate = null;
+        let viewYear = currentJalaliDate[0];
+        let viewMonth = currentJalaliDate[1];
+
+        // Set up day names header
+        daysContainer.innerHTML = '';
+        dayNames.forEach(day => {
+          const dayNameElement = document.createElement('div');
+          dayNameElement.className = 'jalali-picker-day-name';
+          dayNameElement.textContent = day;
+          daysContainer.appendChild(dayNameElement);
+        });
+
+        function updateCalendar() {
+          // Remove old day cells
+          const dayElements = shadow.querySelectorAll('.jalali-picker-day');
+          dayElements.forEach(el => el.remove());
+          monthYearDisplay.textContent = `${jalaliMonthNames[viewMonth - 1]} ${viewYear}`;
+
+          // Calculate first day of month (Gregorian)
+          const firstDayGregorian = JalaliDate.jalaliToGregorian(viewYear, viewMonth, 1);
+          const firstDayOfMonth = new Date(...firstDayGregorian);
+          let dayOfWeek = (firstDayOfMonth.getDay() + 1) % 7;
+          const prevMonthDays = dayOfWeek;
+          const daysInMonth = JalaliDate.getJalaliMonthLength(viewYear, viewMonth);
+
+          let prevMonth = viewMonth - 1;
+          let prevYear = viewYear;
+          if (prevMonth < 1) {
+            prevMonth = 12;
+            prevYear--;
+          }
+          const daysInPrevMonth = JalaliDate.getJalaliMonthLength(prevYear, prevMonth);
+
+          // Days from previous month
+          for (let i = 0; i < prevMonthDays; i++) {
+            const day = daysInPrevMonth - prevMonthDays + i + 1;
+            createDayElement(day, prevYear, prevMonth, true);
+          }
+          // Days of current month
+          for (let i = 1; i <= daysInMonth; i++) {
+            createDayElement(i, viewYear, viewMonth, false);
+          }
+          // Days from next month
+          const totalCells = Math.ceil((daysInMonth + dayOfWeek) / 7) * 7;
+          const nextMonthDays = totalCells - (prevMonthDays + daysInMonth);
+          let nextMonth = viewMonth + 1;
+          let nextYear = viewYear;
+          if (nextMonth > 12) {
+            nextMonth = 1;
+            nextYear++;
+          }
+          for (let i = 1; i <= nextMonthDays; i++) {
+            createDayElement(i, nextYear, nextMonth, true);
+          }
+        }
+
+        function createDayElement(day, year, month, isOtherMonth) {
+          const dayElement = document.createElement('div');
+          dayElement.className = 'jalali-picker-day';
+          if (isOtherMonth) {
+            dayElement.classList.add('other-month');
+          }
+          const today = new Date();
+          const todayJalali = JalaliDate.gregorianToJalali(
+            today.getFullYear(),
+            today.getMonth() + 1,
+            today.getDate()
+          );
+          if (year === todayJalali[0] && month === todayJalali[1] && day === todayJalali[2]) {
+            dayElement.classList.add('today');
+          }
+          if (selectedDate && year === selectedDate[0] && month === selectedDate[1] && day === selectedDate[2]) {
+            dayElement.classList.add('selected');
+          }
+          dayElement.textContent = day;
+          dayElement.addEventListener('click', () => {
+            selectedDate = [year, month, day];
+            const formattedDate = `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
+            input.value = formattedDate;
+            calendar.style.display = 'none';
+            input.dispatchEvent(new Event('change'));
+            updateCalendar();
+          });
+          daysContainer.appendChild(dayElement);
+        }
+
+        input.addEventListener('click', (e) => {
+          calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
+          if (calendar.style.display === 'block') {
+            updateCalendar();
+          }
+          e.stopPropagation();
+        });
+        prevButton.addEventListener('click', (e) => {
+          viewMonth--;
+          if (viewMonth < 1) {
+            viewMonth = 12;
+            viewYear--;
+          }
+          updateCalendar();
+          e.stopPropagation();
+        });
+        nextButton.addEventListener('click', (e) => {
+          viewMonth++;
+          if (viewMonth > 12) {
+            viewMonth = 1;
+            viewYear++;
+          }
+          updateCalendar();
+          e.stopPropagation();
+        });
+        // Close calendar if clicked outside the component
+        document.addEventListener('click', (e) => {
+          if (!this.contains(e.target)) {
+            calendar.style.display = 'none';
+          }
+        });
+      }
+    }
+
+
+    customElements.define('jalali-date-picker', JalaliDatePicker);
+  </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('crawlForm');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission (page reload)
+
+      // Get values from select elements
+      const customer_time = document.getElementById('customer_time').value; // Corrected ID
+      const time1 = document.getElementById('time1').value;
+      const time2 = document.getElementById('time2').value;
+      const time3 = document.getElementById('time3').value;
+
+      // Get values from jalali-date-picker elements
+      const datePicker1 = document.getElementById('customer_date');
+      const datePicker2 = document.getElementById('date1');
+
+      // Access the shadowRoot and then the input to get the value
+      const customer_date = datePicker1.shadowRoot.querySelector('.jalali-picker-input').value;
+      const date1 = datePicker2.shadowRoot.querySelector('.jalali-picker-input').value;
+
+
+      // Create FormData object to send data
+      const formData = new FormData();
+      formData.append('customer_time', customer_time); // Corrected variable name
+      formData.append('time1', time1);
+      formData.append('time2', time2);
+      formData.append('time3', time3);
+      formData.append('customer_date', customer_date);
+      formData.append('date1', date1);
+      // Include CSRF token (important for Django POST requests)
+      formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+      formData.append('customer', document.querySelector('[name=customer]').value);
+
+      // Send data using Fetch API
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest' // Identify as AJAX request (optional but good practice)
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text(); // Or response.json() if your server returns JSON
+      })
+      .then(data => {
+        console.log('Success:', data);
+        // You can update part of the page here if needed based on server response
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+
+// adds small squares after pressing the button
+document.addEventListener("DOMContentLoaded", () => {
+  const crawlButton = document.getElementById("crawlForm");
+  const statusSquares = document.getElementById("status_squares");
+
+  async function addSquare() {
+          // 94% chance for green, 6% chance for red
+    const isGreen = Math.random() < 0.94;
+    const colorClass = isGreen ? "green" : "red";
+    const response = await fetch("{% url 'main:square_nums' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}", // Important for Django POST requests.
+      },
+
+      body: JSON.stringify({ customer: "{{ customer.id }}", color_class: colorClass})
+    });
+
+    // Random delay between 0 and 3000 milliseconds (0 to 3 seconds)
+    const delay = Math.random() * 3000;
+
+    setTimeout(() => {
+      const square = document.createElement("div");
+      square.classList.add("square");
+      square.classList.add(colorClass);
+      statusSquares.appendChild(square);
+    }, delay);
+  }
+
+  // Attach the click event listener to the crawlButton element
+  crawlButton.addEventListener("click", addSquare);
+});
+
+// add squares after refresh the page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get the Django URL from the template using the URL tag.
+      // This assumes the script is rendered via a Django template.
+      const baseUrl = "{% url 'main:square_nums' %}";
+
+      // Get the current query parameters from the URL.
+      const currentQueryParams = window.location.search;
+
+      // Append the query params to the base URL.
+      const fullUrl = baseUrl + currentQueryParams;
+
+      fetch(fullUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Extract the square_colors string from the JSON response.
+          const squareColorsString = data.square_colors;
+          // Convert the comma-separated string into an array, trimming extra whitespace.
+          const colors = squareColorsString.split(',').map(color => color.trim());
+
+          const statusSquares = document.getElementById('status_squares');
+          if (statusSquares) {
+            colors.forEach(color => {
+              const squareDiv = document.createElement('div');
+              // Add both "square" and the specific color as classes.
+              squareDiv.classList.add('square', color);
+              statusSquares.appendChild(squareDiv);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching status squares:', error);
+        });
+    });
+
+// removes all small squares
+document.addEventListener('DOMContentLoaded', function() {
+  const crawlstopForm = document.getElementById('crawlstopForm');
+
+  crawlstopForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission and page reload
+
+    // Generate a random delay between 0 and 1500 milliseconds.
+    const randomDelay = Math.random() * 1500;
+
+    // Remove squares after the random delay.
+    setTimeout(function() {
+      const squares = document.querySelectorAll('#status_squares .square.green, #status_squares .square.red');
+      squares.forEach(function(square) {
+        square.remove();
+      });
+    }, randomDelay);
+
+    // Create FormData object from the form.
+    const formData = new FormData(crawlstopForm);
+
+    // Create the query string from the form data.
+    const queryString = new URLSearchParams(formData).toString();
+
+    // Use the form's action attribute and append the query string.
+    const url = `${crawlstopForm.action}`;
+
+    // Send the AJAX request using Fetch.
+    fetch(url, {
+      method: crawlstopForm.method, // "GET" in this case.
+      credentials: 'same-origin' // Include cookies for same-origin requests.
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text(); // Or response.json() if you expect JSON.
+    })
+    .then(data => {
+      console.log('Form submitted successfully:', data);
+      // Optionally, update the page with the response data.
+    })
+    .catch(error => {
+      console.error('Error during form submission:', error);
+    });
+  });
+});
+</script>
+              </div>
+            </div>
+          </div>
+{% endblock %}

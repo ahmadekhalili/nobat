@@ -1,0 +1,174 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+
+{% block additional_style %}
+  .license-container {
+    max-width: 600px;
+    margin: 0 auto;
+    direction: rtl;
+  }
+
+  .license-card {
+    display: flex;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    align-items: center;
+  }
+
+  .license-card.positive {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-left: 5px solid #52cd4e;
+  }
+
+  .license-card.negative {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    border-left: 5px solid #ff6b6b;
+  }
+
+  .license-icon {
+    font-size: 4rem;
+    margin-right: 20px;
+  }
+
+  .license-card.positive .license-icon {
+    color: #2e7d32;
+  }
+
+  .license-card.negative .license-icon {
+    color: #c62828;
+  }
+
+  .license-details {
+    flex: 1;
+  }
+
+  .license-status {
+    margin-bottom: 15px;
+  }
+
+  .license-status .badge {
+    font-size: 1rem;
+    padding: 8px 15px;
+    border-radius: 30px;
+  }
+
+  .time-remaining {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: baseline;
+  }
+
+  .days-count {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+
+  .days-label {
+    font-size: 1.5rem;
+    margin-right: 8px;
+  }
+
+  .license-dates {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .date-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 8px;
+  }
+
+  .date-label {
+    font-weight: bold;
+  }
+
+  .renew-section .btn {
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+
+  .renew-section .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 576px) {
+    .license-card {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .license-icon {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+
+    .date-item {
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+{% endblock %}
+
+{% block title %}<a href="{% url 'user:profile' %}">زمان لایسنس</a>{% endblock %} {# Override the 'title' block #}
+
+{% block content %}
+<div class="buttons-middle w-100">
+  <div class="license-container">
+    <h3 class="text-center mb-4"></h3>
+
+    <div class="license-card {% if secs_remaining > 0 %}positive{% else %}negative{% endif %}">
+      <div class="license-icon">
+        {% if secs_remaining > 0 %}
+        <i class="fas fa-check-circle"></i>
+        {% else %}
+        <i class="fas fa-exclamation-circle"></i>
+        {% endif %}
+      </div>
+
+      <div class="license-details">
+        <div class="license-status">
+          {% if secs_remaining > 0 %}
+          <span class="badge bg-success">فعال</span>
+          {% else %}
+          <span class="badge bg-danger">منقضی شده</span>
+          {% endif %}
+        </div>
+
+        <div class="time-remaining">
+          <span class="days-count">{{ days_remaining }}</span>
+          <span class="days-label">روز</span>
+          {% if secs_remaining > 0 %}
+          <span class="remaining-text">باقی مانده</span>
+          {% else %}
+          <span class="remaining-text">گذشته از انقضا</span>
+          {% endif %}
+        </div>
+
+        <div class="license-dates">
+
+          <div class="date-item">
+            <span class="date-label">تاریخ پایان:</span>
+            <span class="date-value">{{ user.expiration_date|date:"H:i:s - Y/m/d" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,379 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+
+{% block additional_style %}
+        .form-container {
+            background-color: white;
+            border-radius: 0 0 15px 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .my-input {
+            width: 100%;
+            text-align: right;
+            direction: rtl;
+            font-family: 'Vazir', sans-serif;
+            margin-bottom: 15px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            height: 60px;
+        }
+        .custom-select {
+            width: 100%;
+            text-align: right;
+            direction: rtl;
+            font-family: 'Vazir', sans-serif;
+            margin-bottom: 15px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            height: 50px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            background-size: 20px;
+        }
+        .custom-select option {
+            text-align: right;
+            direction: rtl;
+        }
+        .form-group label {
+            text-align: right;
+            display: block;
+            margin-bottom: 10px;
+            font-family: 'Vazir', sans-serif;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 20px;
+            font-family: 'Vazir', sans-serif;
+            font-size: 18px;
+            border-radius: 15px;
+            width: 100%;
+            margin-top: 25px;
+            height: 60px;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .operation-message {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-family: 'Vazir', sans-serif;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+{% endblock %}
+{% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}
+
+
+
+{% block content %}
+               <div class="form-container">
+                   <p style="direction: ltr; text-align: right; color: red"> {{ customer.finall_message }}</p>
+                   <p> {{ customer.customer_date }} - {{ customer.customer_time }}</p>
+
+                    <form action="{% url 'user:edit-customer' %}?{{ request.GET.urlencode }}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+
+                            <!-- Row 1: کد ملی and پسورد -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">پسورد</label>
+                                    <input type="password" id="password" name="password" value="{{ customer.password|cut:'plain$' }}" class="my-input" placeholder="پسورد ورود به سامانه دریافت نوبت را وارد کنید" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nationalCode">کد ملی</label>
+                                    <input type="text" id="nationalCode" name="username" value="{{ customer.username }}" class="my-input" placeholder="کد ملی خود را وارد کنید" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="city">شهر</label>
+                                    <select id="city" name="town" class="custom-select" required>
+                                        {% for town in towns %}
+                                            {% if town.id == current_town.id %}
+                                                <option value="{{ town.id }}" selected>{{ town.name }}</option>
+                                            {% else %}
+                                                <option value="{{ town.id }}">{{ town.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <option value="">شهر خود را انتخاب کنید</option>
+                                    </select>
+                                </div>
+                            </div>
+
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="province">استان</label>
+        <select id="province" name="state" class="custom-select" required>
+            {% for state in states %}
+                {% if state.id == current_state.id %}
+                    <option value="{{ state.id }}" selected>{{ state.name }}</option>
+                {% else %}
+                    <option value="{{ state.id }}">{{ state.name }}</option>
+                {% endif %}
+            {% endfor %}
+            <option value="">استان خود را انتخاب کنید</option>
+        </select>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="serviceCenter">مرکز خدمات</label>
+        <select id="serviceCenter" name="service_center" class="custom-select" required>
+            {% if current_center %}
+                <option value="{{ current_center.id }}" selected>{{ current_center.name }}</option>
+            {% endif %}
+            <option value="">مرکز خود را انتخاب کنید</option>
+        </select>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="form-group">
+        <label for="serviceType">نوع خدمات</label>
+        <select id="serviceType" name="service_type" class="custom-select" required>
+            {% for service in services %}
+                {% if service.id == current_service.id %}
+                    <option value="{{ service.id }}" selected>{{ service.name }}</option>
+                {% else %}
+                    <option value="{{ service.id }}">{{ service.name }}</option>
+                {% endif %}
+            {% endfor %}
+            <option value="">نوع خدمات را انتخاب کنید</option>
+        </select>
+    </div>
+</div>
+
+
+
+                            <!-- Row 5: پلاک -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plateNumber">پلاک</label>
+                                    <input type="text" id="plateNumber" name="pelak" value="{{ customer.pelak.number }}" class="my-input" placeholder="پلاک خود را وارد کنید" required />
+                                </div>
+                            </div>
+
+
+                            <!-- Row 3: شماره موبایل  -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mobileNumber">شماره موبایل</label>
+                                    <input type="tel" id="mobileNumber" name="phone" style="direction: ltr;" value="{{ customer.phone }}" class="my-input" placeholder="شماره موبایل ورود به سامانه دریافت نوبت را وارد کنید" required />
+                                </div>
+                            </div>
+                            <!-- Row 5: نام خانوادگی  -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastName">نام خانوادگی</label>
+                                    <input type="text" id="lastName" name="last_name" value="{{ customer.last_name }}" class="my-input" placeholder="نام خانوادگی خود را وارد کنید" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstName">نام</label>
+                                    <input type="text" id="firstName" name="first_name" value="{{ customer.first_name }}" class="my-input" placeholder="نام خود را وارد کنید" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">ثبت اطلاعات</button>
+                    </form>
+
+                    <div class="operation-message">{{ message }}</div>
+                    <script>console.log("{{ console }}")</script>
+                </div>
+
+<script>
+// Function: populateSelectOptions
+// Purpose: Populate the 'province' and 'serviceType' select elements with data fetched from the server.
+async function populateSelectOptions() {
+  // Get the 'province' select element by its ID.
+  const selectElement = document.getElementById('province');
+  // Clear any existing options.
+  //selectElement.innerHTML = '';
+  // Create a document fragment to hold the new options for better performance.
+  const fragment = document.createDocumentFragment();
+
+  // Fetch the list of states (provinces) from the server.
+  const response_state = await fetch("{% url 'main:states' %}");
+  if (!response_state.ok) {
+    console.error('Network error:', response_state.statusText);
+    return;
+  }
+  // Parse the response as JSON.
+  const states = await response_state.json();
+
+  // Loop through each state and create an <option> element.
+  states.forEach(state => {
+    const option = document.createElement('option');
+    option.value = state.id;         // Set the option's value.
+    option.textContent = state.name;   // Set the visible text.
+    fragment.appendChild(option);      // Append the option to the document fragment.
+  });
+
+  // Append all state options to the province select element at once.
+  selectElement.appendChild(fragment);
+
+
+  // --- Populate serviceType select ---
+  const serviceElement = document.getElementById('serviceType');
+  // Clear any existing options.
+  serviceElement.innerHTML = '';
+  // Create a document fragment to hold service type options.
+  const fragment_service = document.createDocumentFragment();
+
+  try {
+    // Fetch the service type list from the server.
+    const response_service = await fetch("{% url 'main:service_list' %}");
+    if (!response_service.ok) {
+      console.error('Network error:', response_service.statusText);
+      return;
+    }
+    // Parse the response as JSON.
+    const data = await response_service.json();
+
+    // Loop through each service type item and create an <option> element.
+    data.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.id;          // Set the service type's id as value.
+      option.textContent = item.name;    // Set the service type's name as the display text.
+      fragment_service.appendChild(option);
+    });
+
+    // Append all service type options to the serviceType select element.
+    serviceElement.appendChild(fragment_service);
+  } catch (error) {
+    console.error('Error fetching or parsing data:', error);
+  }
+}
+
+
+// Run populateSelectOptions after the DOM has loaded.
+document.addEventListener('DOMContentLoaded', function() {
+  populateSelectOptions();
+});
+
+
+// Province (State) change event listener to update the city select element.
+document.addEventListener('DOMContentLoaded', function() {
+  const provinceSelect = document.getElementById('province');
+  const citySelect = document.getElementById('city');
+
+  provinceSelect.addEventListener('change', async function() {
+    const provinceId = this.value;
+    // Clear the city select element and add a default option.
+    citySelect.innerHTML = '';
+    const defaultCityOption = document.createElement('option');
+    defaultCityOption.value = '';
+    defaultCityOption.textContent = 'شهر خود را انتخاب کنید';
+    defaultCityOption.disabled = true;
+    defaultCityOption.selected = true;
+    citySelect.appendChild(defaultCityOption);
+
+    if (provinceId) {
+      try {
+        // Fetch cities/towns for the selected province.
+        const response = await fetch("{% url 'main:towns-by-state' %}?province=" + provinceId);
+        if (!response.ok) {
+          console.error('Network error:', response.statusText);
+          return;
+        }
+        // Parse the response as JSON.
+        const cities = await response.json();
+
+        // Loop through cities and add them to the city select element.
+        cities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city.id;         // Set the city ID.
+          option.textContent = city.name;   // Set the city name.
+          citySelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+    }
+  });
+});
+
+
+// Event listener to update the serviceCenter select based on city and service type selections.
+document.addEventListener('DOMContentLoaded', function() {
+  // Grab all the relevant select elements.
+  const citySelect = document.getElementById('city');
+  const serviceTypeSelect = document.getElementById('serviceType');  // Renamed for clarity.
+  const serviceCenterSelect = document.getElementById('serviceCenter');
+
+  // Function: updateTargetSelect
+  // Purpose: Fetch and update the serviceCenter options based on selected city and service type.
+  async function updateTargetSelect() {
+    // Get the currently selected city and service type.
+    const cityValue = citySelect.value;
+    const serviceTypeValue = serviceTypeSelect.value;
+
+    // Build the query string with the selected values.
+    const params = new URLSearchParams({
+      town: cityValue,
+      service_type: serviceTypeValue
+    });
+
+    try {
+      // Build the full URL for fetching service centers.
+      const baseUrl = "{% url 'main:selected_centers' %}";
+      const url = new URL(baseUrl, window.location.origin);
+      url.search = params.toString();
+
+      // Fetch service centers based on selected parameters.
+      const response = await fetch(url.toString());
+      if (!response.ok) {
+        console.error('Network error:', response.statusText);
+        return;
+      }
+      // Parse the JSON response.
+      const data = await response.json();
+
+      // Clear any existing options in the service center select element.
+      serviceCenterSelect.innerHTML = '';
+      // Create a document fragment to hold new options.
+      const fragment_center = document.createDocumentFragment();
+
+      // Loop through each service center and create an option element.
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;         // Set the service center's id.
+        option.textContent = item.name;   // Set the service center's name.
+        fragment_center.appendChild(option);
+      });
+
+      // Append all new service center options at once.
+      serviceCenterSelect.appendChild(fragment_center);
+    } catch (error) {
+      console.error('Error fetching or parsing data:', error);
+    }
+  }
+
+  // Add an event listener on the service type select element.
+  serviceTypeSelect.addEventListener('change', updateTargetSelect);
+});
+
+</script>
+{% endblock %}

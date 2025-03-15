@@ -1,0 +1,22 @@
+/* admin.css */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap'); /* Example Google Font */
+
+#id_number {
+    font-family: 'Noto Naskh Arabic', Tahoma, Arial, sans-serif;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+/* If you have fieldsets and want to be more specific (adjust selectors as needed): */
+.module table#result_list tbody tr td.field-pelak input { /* Example targeting within a table */
+    font-family: Tahoma, Arial, sans-serif;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+/* Or more broadly for all input fields in your model's admin (less specific, be careful): */
+.module input[type="text"] { /* Target all text input fields in the module */
+    font-family: Tahoma, Arial, sans-serif;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}

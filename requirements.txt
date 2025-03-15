@@ -1,0 +1,21 @@
+django
+djangorestframework
+django-cors-headers
+jdatetime
+django-jalali
+phonenumbers
+django-phonenumber-field
+undetected-chromedriver
+selenium-stealth
+opencv-python
+opencv-python-headless
+# scipy         # insalled by other packages
+paddlepaddle
+paddleocr
+webdriver-manager
+fake-useragent
+django-celery-beat
+django-celery-results
+redis  # for linux
+flower
+# celery  # install by django-celery-beat

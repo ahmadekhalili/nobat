@@ -1,0 +1,88 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+  {{ block.super }}
+
+<script type="text/javascript">
+  async function populateSelectOptions() {
+    const response_state = await fetch("{% url 'main:states' %}");
+    if (!response_state.ok) {
+      console.error('Network error:', response_state.statusText);
+      return;
+    }
+    const states = await response_state.json();
+    const selectElement = document.getElementById('id_state');
+
+    // Preserve existing selection if any
+    const existingValue = selectElement.value;
+
+    // Clear existing options except default
+    const optionsToRemove = Array.from(selectElement.options).filter(opt => opt.value !== "");
+    optionsToRemove.forEach(opt => opt.remove());
+
+    // Add new options
+    states.forEach(state => {
+      const option = new Option(state.name, state.id);
+      selectElement.add(option);
+    });
+
+    // Restore selection if still valid
+    if (existingValue && Array.from(selectElement.options).some(o => o.value === existingValue)) {
+      selectElement.value = existingValue;
+    }
+  }
+
+  async function loadCities(provinceId) {
+    const citySelect = document.getElementById('id_town');
+    const existingValue = citySelect.value;
+
+    // Clear existing options except default
+    const cityOptionsToRemove = Array.from(citySelect.options).filter(opt => opt.value !== "");
+    cityOptionsToRemove.forEach(opt => opt.remove());
+
+    if (provinceId) {
+      try {
+        const response = await fetch("{% url 'main:towns-by-state' %}?province=" + provinceId);
+        if (!response.ok) {
+          console.error('Network error:', response.statusText);
+          return;
+        }
+        const cities = await response.json();
+
+        cities.forEach(city => {
+          const option = new Option(city.name, city.id);
+          citySelect.add(option);
+        });
+
+        // Restore city selection if still valid
+        if (existingValue && Array.from(citySelect.options).some(o => o.value === existingValue)) {
+          citySelect.value = existingValue;
+        }
+      } catch (error) {
+        console.error('Error fetching cities:', error);
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', async function() {
+    const provinceSelect = document.getElementById('id_state');
+    const citySelect = document.getElementById('id_town');
+
+    // Initial population of states
+    await populateSelectOptions();
+
+    // Load cities if state has existing value
+    if (provinceSelect.value) {
+      await loadCities(provinceSelect.value);
+    }
+
+    // Event listener for state changes
+    provinceSelect.addEventListener('change', async function() {
+      await loadCities(this.value);
+    });
+  });
+</script>
+
+
+{% endblock %}

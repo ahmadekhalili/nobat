@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jalali Date Picker</title>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2980b9;
+      --text-color: #333;
+      --background-color: #fff;
+      --border-color: #ddd;
+      --highlight-color: #f0f8ff;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      direction: rtl;
+      text-align: right;
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .jalali-picker-container {
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    .jalali-picker-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+      margin-bottom: 5px;
+      box-sizing: border-box;
+    }
+
+    .jalali-picker-calendar {
+      display: none;
+      background-color: var(--background-color);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .jalali-picker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px;
+    }
+
+    .jalali-picker-month-year {
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .jalali-picker-nav {
+      cursor: pointer;
+      font-size: 16px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .jalali-picker-nav:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .jalali-picker-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+    }
+
+    .jalali-picker-day-name {
+      padding: 10px 0;
+      font-weight: bold;
+      background-color: #f8f9fa;
+    }
+
+    .jalali-picker-day {
+      padding: 10px 0;
+      cursor: pointer;
+    }
+
+    .jalali-picker-day:hover {
+      background-color: var(--highlight-color);
+    }
+
+    .jalali-picker-day.other-month {
+      color: #aaa;
+    }
+
+    .jalali-picker-day.selected {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+    }
+
+    .jalali-picker-day.today {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="jalali-picker-container">
+    <input type="text" class="jalali-picker-input" placeholder="انتخاب تاریخ" readonly>
+    <div class="jalali-picker-calendar">
+      <div class="jalali-picker-header">
+        <div class="jalali-picker-nav jalali-picker-prev">&#8249;</div>
+        <div class="jalali-picker-month-year"></div>
+        <div class="jalali-picker-nav jalali-picker-next">&#8250;</div>
+      </div>
+      <div class="jalali-picker-days"></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Jalali date conversion helper functions
+      const JalaliDate = {
+        g_days_in_month: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+        j_days_in_month: [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29],
+
+        jalaliToGregorian: function(j_y, j_m, j_d) {
+          j_y = parseInt(j_y);
+          j_m = parseInt(j_m);
+          j_d = parseInt(j_d);
+
+          var jy = j_y-979;
+          var jm = j_m-1;
+          var jd = j_d-1;
+
+          var j_day_no = 365*jy + parseInt(jy/33)*8 + parseInt((jy%33+3)/4);
+          for (var i=0; i < jm; ++i) j_day_no += this.j_days_in_month[i];
+
+          j_day_no += jd;
+
+          var g_day_no = j_day_no+79;
+
+          var gy = 1600 + 400*parseInt(g_day_no/146097);
+          g_day_no = g_day_no % 146097;
+
+          var leap = true;
+          if (g_day_no >= 36525) {
+            g_day_no--;
+            gy += 100*parseInt(g_day_no/36524);
+            g_day_no = g_day_no % 36524;
+
+            if (g_day_no >= 365) g_day_no++;
+            else leap = false;
+          }
+
+          gy += 4*parseInt(g_day_no/1461);
+          g_day_no %= 1461;
+
+          if (g_day_no >= 366) {
+            leap = false;
+            g_day_no--;
+            gy += parseInt(g_day_no/365);
+            g_day_no = g_day_no % 365;
+          }
+
+          for (var i = 0; g_day_no >= this.g_days_in_month[i] + (i == 1 && leap); i++)
+            g_day_no -= this.g_days_in_month[i] + (i == 1 && leap);
+
+          return [gy, i+1, g_day_no+1];
+        },
+
+        gregorianToJalali: function(g_y, g_m, g_d) {
+          g_y = parseInt(g_y);
+          g_m = parseInt(g_m);
+          g_d = parseInt(g_d);
+
+          var gy = g_y-1600;
+          var gm = g_m-1;
+          var gd = g_d-1;
+
+          var g_day_no = 365*gy+parseInt((gy+3)/4)-parseInt((gy+99)/100)+parseInt((gy+399)/400);
+
+          for (var i=0; i < gm; ++i)
+            g_day_no += this.g_days_in_month[i];
+          if (gm>1 && ((gy%4==0 && gy%100!=0) || (gy%400==0)))
+            g_day_no++;
+          g_day_no += gd;
+
+          var j_day_no = g_day_no-79;
+
+          var j_np = parseInt(j_day_no/12053);
+          j_day_no = j_day_no % 12053;
+
+          var jy = 979+33*j_np+4*parseInt(j_day_no/1461);
+
+          j_day_no %= 1461;
+
+          if (j_day_no >= 366) {
+            jy += parseInt((j_day_no-1)/365);
+            j_day_no = (j_day_no-1)%365;
+          }
+
+          for (var i = 0; i < 11 && j_day_no >= this.j_days_in_month[i]; ++i) {
+            j_day_no -= this.j_days_in_month[i];
+          }
+
+          return [jy, i+1, j_day_no+1];
+        },
+
+        isLeapJalaliYear: function(year) {
+          return ((((((year - 474) % 2820) + 474) + 38) * 682) % 2816) < 682;
+        },
+
+        getJalaliMonthLength: function(year, month) {
+          if (month <= 6) return 31;
+          if (month <= 11) return 30;
+          if (this.isLeapJalaliYear(year)) return 30;
+          return 29;
+        }
+      };
+
+      // Jalali month names
+      const jalaliMonthNames = [
+        'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+        'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+      ];
+
+      // Day names
+      const dayNames = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
+      // Get DOM elements
+      const input = document.querySelector('.jalali-picker-input');
+      const calendar = document.querySelector('.jalali-picker-calendar');
+      const monthYearDisplay = document.querySelector('.jalali-picker-month-year');
+      const prevButton = document.querySelector('.jalali-picker-prev');
+      const nextButton = document.querySelector('.jalali-picker-next');
+      const daysContainer = document.querySelector('.jalali-picker-days');
+
+      // Initialize variables
+      let currentDate = new Date();
+      let currentJalaliDate = JalaliDate.gregorianToJalali(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        currentDate.getDate()
+      );
+      let selectedDate = null;
+      let viewYear = currentJalaliDate[0];
+      let viewMonth = currentJalaliDate[1];
+
+      // Create day name headers
+      dayNames.forEach(day => {
+        const dayNameElement = document.createElement('div');
+        dayNameElement.className = 'jalali-picker-day-name';
+        dayNameElement.textContent = day;
+        daysContainer.appendChild(dayNameElement);
+      });
+
+      // Update calendar
+      function updateCalendar() {
+        // Clear previous days
+        const dayElements = document.querySelectorAll('.jalali-picker-day');
+        dayElements.forEach(el => el.remove());
+
+        // Update month and year display
+        monthYearDisplay.textContent = `${jalaliMonthNames[viewMonth - 1]} ${viewYear}`;
+
+        // Get first day of month
+        const firstDayOfMonth = new Date(
+          ...JalaliDate.jalaliToGregorian(viewYear, viewMonth, 1)
+        );
+
+        // Adjust for day of week (Saturday is 0 in Jalali calendar)
+        let dayOfWeek = (firstDayOfMonth.getDay() + 1) % 7;
+
+        // Get days from previous month
+        const prevMonthDays = dayOfWeek;
+
+        // Get total days in current month
+        const daysInMonth = JalaliDate.getJalaliMonthLength(viewYear, viewMonth);
+
+        // Get previous month and year
+        let prevMonth = viewMonth - 1;
+        let prevYear = viewYear;
+        if (prevMonth < 1) {
+          prevMonth = 12;
+          prevYear--;
+        }
+
+        // Get days in previous month
+        const daysInPrevMonth = JalaliDate.getJalaliMonthLength(prevYear, prevMonth);
+
+        // Create day elements for previous month
+        for (let i = 0; i < prevMonthDays; i++) {
+          const day = daysInPrevMonth - prevMonthDays + i + 1;
+          createDayElement(day, prevYear, prevMonth, true);
+        }
+
+        // Create day elements for current month
+        for (let i = 1; i <= daysInMonth; i++) {
+          createDayElement(i, viewYear, viewMonth, false);
+        }
+
+        // Fill remaining slots with days from next month
+        const totalCells = Math.ceil((daysInMonth + dayOfWeek) / 7) * 7;
+        const nextMonthDays = totalCells - (prevMonthDays + daysInMonth);
+
+        // Get next month and year
+        let nextMonth = viewMonth + 1;
+        let nextYear = viewYear;
+        if (nextMonth > 12) {
+          nextMonth = 1;
+          nextYear++;
+        }
+
+        // Create day elements for next month
+        for (let i = 1; i <= nextMonthDays; i++) {
+          createDayElement(i, nextYear, nextMonth, true);
+        }
+      }
+
+      // Create a day element
+      function createDayElement(day, year, month, isOtherMonth) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'jalali-picker-day';
+        if (isOtherMonth) {
+          dayElement.classList.add('other-month');
+        }
+
+        // Check if day is today
+        const today = new Date();
+        const todayJalali = JalaliDate.gregorianToJalali(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          today.getDate()
+        );
+
+        if (year === todayJalali[0] && month === todayJalali[1] && day === todayJalali[2]) {
+          dayElement.classList.add('today');
+        }
+
+        // Check if day is selected
+        if (selectedDate && year === selectedDate[0] && month === selectedDate[1] && day === selectedDate[2]) {
+          dayElement.classList.add('selected');
+        }
+
+        dayElement.textContent = day;
+
+        // Add click event
+        dayElement.addEventListener('click', () => {
+          selectedDate = [year, month, day];
+
+          // Format selected date
+          const formattedDate = `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
+          input.value = formattedDate;
+
+          // Hide calendar
+          calendar.style.display = 'none';
+
+          // Dispatch change event
+          const event = new Event('change');
+          input.dispatchEvent(event);
+
+          updateCalendar();
+        });
+
+        daysContainer.appendChild(dayElement);
+      }
+
+      // Toggle calendar
+      input.addEventListener('click', () => {
+        if (calendar.style.display === 'block') {
+          calendar.style.display = 'none';
+        } else {
+          calendar.style.display = 'block';
+          updateCalendar();
+        }
+      });
+
+      // Navigate to previous month
+      prevButton.addEventListener('click', () => {
+        viewMonth--;
+        if (viewMonth < 1) {
+          viewMonth = 12;
+          viewYear--;
+        }
+        updateCalendar();
+      });
+
+      // Navigate to next month
+      nextButton.addEventListener('click', () => {
+        viewMonth++;
+        if (viewMonth > 12) {
+          viewMonth = 1;
+          viewYear++;
+        }
+        updateCalendar();
+      });
+
+      // Close calendar when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !calendar.contains(e.target)) {
+          calendar.style.display = 'none';
+        }
+      });
+
+      // Initial setup
+      updateCalendar();
+    })();
+  </script>
+</body>
+</html>

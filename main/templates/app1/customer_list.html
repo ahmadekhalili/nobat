@@ -1,0 +1,51 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+
+    {% block additional_style %}
+      .buttons-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      width: 100%;
+    }
+    .buttons-list form {
+      width: 100%;
+    }
+    .my-button {
+      width: 100%;
+      text-align: center;
+      background-color: #f8f9fa;
+      color: #495057;
+      border: 1px solid #ced4da;
+      border-radius: 10px;
+      padding: 15px 30px;
+      font-size: 15px;
+      cursor: pointer;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.5;
+      min-height: 100px;
+      transition: all 0.3s ease;
+    }
+    .my-button:hover {
+      background-color: #e2e6ea;
+      transform: scale(1.02);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    {% endblock %}
+{% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}
+{% block content %}
+
+
+          <div class="buttons-list">
+            {% for cust in customers %}
+              <form action="{% url 'user:customer' cust.id %}" method="GET">
+                <button class="my-button">{% if cust.first_name and cust.last_name %}{{ cust.first_name }} {{ cust.last_name }} - {{ cust.username }}{% else %}کاربر {{ forloop.counter }} - {{ cust.username }}{% endif %}
+                                          <br>{{ cust.cd_peigiri }}
+                </button>
+              </form>
+            {% endfor %}
+          </div>
+{% endblock %}

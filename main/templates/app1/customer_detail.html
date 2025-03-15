@@ -1,0 +1,242 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+
+{% block additional_style %}
+     /* Scoped styles that won't affect your sidebar */
+    .rtl-info-module {
+      font-family: 'Tahoma', sans-serif;
+      text-align: right;
+      direction: rtl;
+      width: 80%; /* Added width to make it fit closer to right element */
+      display: inline-block; /* Allows the element to take only necessary width */
+      vertical-align: top; /* Aligns properly with adjacent elements */
+      margin-right: 0; /* Removes any right margin */
+    }
+
+    .rtl-info-module * {
+      box-sizing: border-box;
+    }
+
+    .rtl-info-container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 800px;
+      padding: 30px;
+      margin: 20px auto;
+      direction: rtl;
+    }
+
+    .rtl-info-module h1 {
+      color: #444;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 500;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 15px;
+    }
+
+    .rtl-info-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px 15px;
+    }
+
+    .rtl-info-item {
+      flex: 1 0 calc(50% - 20px);
+      margin: 0 10px;
+      min-width: 200px;
+    }
+
+    .rtl-info-label {
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .rtl-info-value {
+      color: #333;
+      background-color: #fbfbfb;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+
+    .rtl-info-value:hover {
+      border-color: #ddd;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .rtl-tracking-code {
+      text-align: center;
+      margin: 20px 0 30px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      border: 1px dashed #ddd;
+      font-size: 1.1rem;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .rtl-info-module footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    .rtl-highlight {
+      background-color: #fff8e6;
+      border-color: #ffe0b2;
+      color: #d0a144;
+    }
+
+    .rtl-screenshot {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid #eee;
+    }
+
+    .rtl-copy-btn {
+      background: none;
+      border: none;
+      color: #999;
+      font-size: 0.9rem;
+      cursor: pointer;
+      float: left;
+      padding: 0 5px;
+      transition: color 0.2s;
+    }
+
+    .rtl-copy-btn:hover {
+      color: #555;
+    }
+
+    .rtl-tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .rtl-tooltip .rtl-tooltiptext {
+      visibility: hidden;
+      width: 80px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -40px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+    }
+
+    .rtl-tooltip:hover .rtl-tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .rtl-info-item {
+        flex: 1 0 100%;
+        margin-bottom: 15px;
+      }
+    }
+{% endblock %}
+
+{% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}
+
+
+{% block content %}
+  <!-- This wrapper class scopes all our RTL styling -->
+  <div class="rtl-info-module">
+    <div class="rtl-info-container">
+      <h1>اطلاعات {{ customer.first_name }} {{ customer.last_name }}</h1>
+
+      <div class="rtl-tracking-code">
+         <span id="rtl-trackingCode">{{ customer.cd_peigiri }}</span>
+
+      </div>
+
+      <div class="rtl-info-row">
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">نام:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.first_name }}</div>
+        </div>
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">نام خانوادگی:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.last_name }}</div>
+        </div>
+      </div>
+
+      <div class="rtl-info-row">
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">کد ملی:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.username }}</div>
+        </div>
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">استان:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.state.name }}</div>
+        </div>
+      </div>
+
+      <div class="rtl-info-row">
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">شهر:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.town.name }}</div>
+        </div>
+        <div class="rtl-info-item">
+          <div class="rtl-info-label" >پلاک:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.pelak.number }}</div>
+        </div>
+      </div>
+
+      <div class="rtl-info-row">
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">شماره موبایل:</div>
+          <div class="rtl-info-value" style="direction: ltr;" onclick="rtlHighlight(this)">{{ customer.phone }}</div>
+        </div>
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">نوع خدمات:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.service_type.name }}</div>
+        </div>
+      </div>
+
+      <div class="rtl-info-row">
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">مرکز خدمات:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.service_center.title }}</div>
+        </div>
+        <div class="rtl-info-item">
+          <div class="rtl-info-label">روز و ساعت:</div>
+          <div class="rtl-info-value" onclick="rtlHighlight(this)">{{ customer.customer_date }} {{ customer.customer_time }}</div>
+        </div>
+      </div>
+
+      <div class="rtl-info-row">
+        <div class="rtl-info-item" style="flex: 1 0 100%;">
+          <div class="rtl-info-label">عکس:</div>
+          <img {% if customer.result_image %}src="{{ customer.result_image.url }}"{% else %}src=""{% endif %} alt="تصویر" class="rtl-screenshot">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
