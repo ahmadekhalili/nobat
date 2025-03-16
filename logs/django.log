@@ -7866,3 +7866,60 @@ django.utils.datastructures.MultiValueDictKeyError: 'customer'
 [2025-03-16 19:21:23] INFO [django.server:213] "GET /square_nums/ HTTP/1.0" 200 0
 [2025-03-16 19:21:23] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8124
 [2025-03-16 19:21:23] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:27:54] INFO [django.server:213] "GET /user/login/ HTTP/1.0" 200 8858
+[2025-03-16 19:27:55] INFO [django.server:213] "POST /user/login2/ HTTP/1.0" 302 0
+[2025-03-16 19:27:55] WARNING [django.request:248] Not Found: /user/login/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:27:55] WARNING [django.server:213] "GET /user/login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8118
+[2025-03-16 19:27:55] INFO [django.server:213] "GET /user/profile/ HTTP/1.0" 200 66436
+[2025-03-16 19:27:55] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-16 19:27:55] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5519
+[2025-03-16 19:27:55] INFO [django.server:213] "GET /user/profile/ HTTP/1.0" 200 66436
+[2025-03-16 19:27:56] INFO [django.server:213] "GET /square_nums/ HTTP/1.0" 200 0
+[2025-03-16 19:27:56] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:27:56] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8124
+[2025-03-16 19:27:56] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:32:57] INFO [django.server:213] "GET /user/login/ HTTP/1.1" 200 8858
+[2025-03-16 19:32:57] WARNING [django.request:248] Not Found: /user/login/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:32:57] WARNING [django.server:213] "GET /user/login/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8127
+[2025-03-16 19:32:59] INFO [django.server:213] "GET /user/login/ HTTP/1.1" 200 8858
+[2025-03-16 19:32:59] WARNING [django.request:248] Not Found: /user/login/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:32:59] WARNING [django.server:213] "GET /user/login/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8127
+[2025-03-16 19:33:03] INFO [django.server:213] "POST /api/token/ HTTP/1.1" 200 483
+[2025-03-16 19:33:03] INFO [django.server:213] "POST /user/login/ HTTP/1.1" 302 0
+[2025-03-16 19:33:03] INFO [django.server:213] "GET /user/profile/ HTTP/1.1" 200 68268
+[2025-03-16 19:33:03] INFO [django.server:213] "GET /user/profile/ HTTP/1.1" 200 68268
+[2025-03-16 19:33:04] INFO [django.server:213] "GET /square_nums/ HTTP/1.1" 200 0
+[2025-03-16 19:33:04] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:04] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 19:33:04] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 19:33:17] INFO [django.server:213] "GET /user/login/ HTTP/1.0" 200 8858
+[2025-03-16 19:33:17] WARNING [django.request:248] Not Found: /user/login/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:17] WARNING [django.server:213] "GET /user/login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8118
+[2025-03-16 19:33:17] INFO [django.server:213] "POST /user/login2/ HTTP/1.0" 302 0
+[2025-03-16 19:33:18] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-16 19:33:18] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5519
+[2025-03-16 19:33:18] INFO [django.server:213] "GET /user/profile/ HTTP/1.0" 200 68268
+[2025-03-16 19:33:18] INFO [django.server:213] "GET /user/profile/ HTTP/1.0" 200 68268
+[2025-03-16 19:33:18] INFO [django.server:213] "GET /square_nums/ HTTP/1.0" 200 0
+[2025-03-16 19:33:18] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:18] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8124
+[2025-03-16 19:33:18] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:33:39] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.0" 200 68323
+[2025-03-16 19:33:39] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:39] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8124
+[2025-03-16 19:33:39] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:33:39] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.0" 200 20
+[2025-03-16 19:33:44] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.0" 200 11111
+[2025-03-16 19:33:44] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:44] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8130
+[2025-03-16 19:33:44] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:33:53] INFO [django.server:213] "GET /user/add/?customer= HTTP/1.0" 200 24140
+[2025-03-16 19:33:53] WARNING [django.request:248] Not Found: /user/add/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:53] INFO [django.server:213] "GET /states/ HTTP/1.0" 200 1125
+[2025-03-16 19:33:53] WARNING [django.server:213] "GET /user/add/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8112
+[2025-03-16 19:33:53] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:33:53] INFO [django.server:213] "GET /service_list/ HTTP/1.0" 200 839
+[2025-03-16 19:33:57] INFO [django.server:213] "GET /user/customers/?customer= HTTP/1.0" 200 11110
+[2025-03-16 19:33:57] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-16 19:33:57] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 19:33:57] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8130
