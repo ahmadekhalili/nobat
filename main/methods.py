@@ -138,6 +138,15 @@ def convert_jalali_to_gregorian(j_date_str, j_time_str):
     return None
 
 
+def convert_str_jdatetime(date_str, time_str):  # convert date like: "1403-03-12" and "07:12" to its jdatetime (one digit supports)
+    try:
+        year, month, day = map(int, date_str.split('-'))
+        hour, minute = map(int, time_str.split(':'))
+        # Create a jdatetime object directly
+        return jdatetime.datetime(year, month, day, hour, minute)
+    except:
+        return None
+
 def add_square(customer_id, color_class='green'):
     if not customer_id:
         customer_id = customer_id

@@ -133,7 +133,7 @@ class Customer(models.Model):
     color_classes = models.TextField(blank=True)  # how much crawling browser are running for this user
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
-    finall_message = models.CharField(max_length=255, default="")
+    finall_message = models.CharField(max_length=255, blank=True, default="")
 
     customer_time = models.CharField(max_length=30, blank=True)  # reservation time
     customer_date = models.CharField(max_length=30, blank=True)

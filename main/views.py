@@ -14,7 +14,7 @@ from celery.utils.log import get_task_logger
 
 
 from .crawl import *
-from .methods import convert_jalali_to_gregorian, add_square
+from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime
 from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
 
@@ -76,26 +76,38 @@ def crawl_func(customer_id, customer_date, customer_time, test):
             success = CenterStep(driver, report).run(customer)
             if success:
                 # only first index of date and times used for customer.customer_date&time
-                success = DateTimeStep(driver, report).run(dates=[customer_date], times=[
-                    [customer_time]])  # each date can have several times here only one
-                if not success:
+                success_datetime = DateTimeStep(driver, report).run(dates=[customer_date], times=[[customer_time]])  # each date can have several times here only one
+                if not success_datetime[1]:   # time is better identifier is loop
                     if customer_date and customer_time:
                         finall_message = "هیچ روز و ساعت خالی برای رزرو وجود ندارد"
                     else:
                         finall_message = "در روز/ساعت انتخابی نوبت خالی وجود ندارد"
-                if success:
+                if success_datetime[0] and success_datetime[1]:
+                    j_datetime = convert_str_jdatetime(success_datetime[0], success_datetime[1])
                     print('active browsers: ', len(active_browsers))
-                    cd_peigiry_message = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
+                    peigiry_path = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
 
-                    if cd_peigiry_message:
+                    if peigiry_path:  # (cd_peily, full_image_path)
+                        print(f"cd peigiry, image url to save in model: {peigiry_path}")
                         customer.status = 'complete'
-                        customer.cd_peigiri = cd_peigiry_message
+                        customer.cd_peigiri = peigiry_path[0]
                         customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
+                        print(f"specefic selected date$time to save in customer model: {success_datetime}")
+                        if success_datetime[0] and success_datetime[1]:
+                            customer.customer_date, customer.customer_time = success_datetime[0], success_datetime[1]
+                        with open(peigiry_path[1], 'rb') as f:
+                            # This ensures Django uses the 'upload_to' path and handles the file storage correctly.
+                            customer.result_image.save(os.path.basename(peigiry_path[1]), File(f), save=True)
                         customer.save()
+                        print(f"everthing done successfully and saved to the model(customer)")
                         return True
                     else:
                         driver.quit()
+                        customer.status = "stop"
+                        customer.cd_peigiri = ""
+                        customer.finall_message = finall_message
                         customer.save()
+
                         return False
         # DateTimeStep(driver, report).run(date_time='')
     driver.quit()
@@ -103,7 +115,7 @@ def crawl_func(customer_id, customer_date, customer_time, test):
     if customer.status != 'complete':  # don't override the message in subsequence browsers came after successfull submit
         customer.finall_message = finall_message
         customer.status = status
-    customer.save()
+        customer.save()
     return
 
 
@@ -129,7 +141,7 @@ class CrawlCustomer(APIView):
 
     def post(self, request, *args, **kwargs):
         post = request.POST
-        test = True     # you can pass test=True for test porpuse (only finall submit not click)
+        test = False     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
         print('form data: ', request.POST)
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..

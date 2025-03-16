@@ -16,6 +16,9 @@
       background-color: #f4f6f9;
       font-family: 'Vazir', sans-serif;
     }
+    a.dropdown-item.text-end {
+    font-size: 14px !important;
+}
     @font-face {
       font-family: 'Vazir';
       src: url('Vazir.eot'); /* IE9 Compat Modes */
@@ -298,14 +301,14 @@
               <ul class="dropdown-menu" id="customer-list" aria-labelledby="customerDropdown" style="direction: rtl;">
                 {% if not request.user.is_superuser %}
                   {% for customer in user.customers.all %}
-                    <li><a class="dropdown-item text-end" href="{% url 'user:profile' %}?customer={{ customer.id }}">{% if customer.first_name and customer.last_name %}{{ customer.first_name }} {{ customer.last_name }} - {{ customer.username }}{% else %}کاربر {{ forloop.counter }} - {{ customer.username }}{% endif %}</a></li>
+                    <li><a class="dropdown-item text-end" href="{% url 'user:profile' %}?{{ request.GET.urlencode }}">{% if customer.first_name and customer.last_name %}{{ customer.first_name }} {{ customer.last_name }} - {{ customer.username }}{% else %}کاربر {{ forloop.counter }} - {{ customer.username }}{% endif %}</a></li>
                   {% endfor %}
                {% endif %}
               </ul>
             </div>
-            <button class="my-button"><a href="{% url 'user:customers-list' %}?customer={{ customer.id }}" class="main-link">لیست متقاضی های ثبت شده</a></button>
-            <button class="my-button" type="submit"><a href="{% url 'user:add-customer' %}?customer={{ customer.id }}" class="main-link">فرم</a></button>
-            <button class="my-button"><a href="{% url 'main:licence-time' %}?customer={{ customer.id }}" class="main-link" >زمان لایسنس</a></button>
+            <button class="my-button"><a href="{% url 'user:customers-list' %}?{{ request.GET.urlencode }}" class="main-link">لیست متقاضی های ثبت شده</a></button>
+            <button class="my-button" type="submit"><a href="{% url 'user:add-customer' %}?{{ request.GET.urlencode }}" class="main-link">فرم</a></button>
+            <button class="my-button"><a href="{% url 'main:licence-time' %}?{{ request.GET.urlencode }}" class="main-link" >زمان لایسنس</a></button>
             <button class="my-button"><a href="{% url 'user:edit-customer' %}?{{ request.GET.urlencode }}" class="main-link">ویرایش مشخصات</a>
             </button>
 <form id="logoutForm" action="{% url 'user:logout' %}" method="GET">

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.files import File
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -593,7 +594,8 @@ class DateTimeStep:
                     time_of_date = valid_times[valid_dates.index(date)]
                 else:    # if user not selected any date, select all times to reservation
                     valid_times = valid_times
-            return self.time_handler(time_of_date)
+            return (date, self.time_handler(time_of_date))
+        return (False, False)
 
 
 class LastStep:
@@ -740,7 +742,14 @@ class LastStep:
 
                 if test:
                     print('reserve received successfully in test')
-                    return "کد پیگیری test_cd_gen با موفقیت ثبت شد"   # return true to make button element be 'completion'
+                    screenshot_folder = os.path.join(settings.BASE_DIR, "media", "saved_nobats")
+                    if not os.path.exists(screenshot_folder):
+                        os.makedirs(screenshot_folder)
+                    screenshot_path = os.path.join(screenshot_folder, f"screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png")
+                    driver.save_screenshot(screenshot_path)
+                    print(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
+                    message = "کد پیگیری test_cd_gen با موفقیت ثبت شد"
+                    return (message, screenshot_path)   # return true to make button element be 'completion'
                 else:   # finalize reservation
                     submit_button.click()
                     print('Pressed reserve receiving submit button')
@@ -769,7 +778,7 @@ class LastStep:
                         print(message)
                         self.report(('pub', message))
 
-                        return cd_peigiry_message
+                        return (cd_peigiry_message, screenshot_path)
                     except:
                         print('nobat reservation ended but in getting the cd_peigiry problem happended')
                         return False
