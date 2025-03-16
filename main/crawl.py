@@ -109,6 +109,8 @@ def setup():
     options.add_argument('--disable-extensions')
     options.add_argument('--dns-prefetch-disable')
     options.add_argument("--disable-gpu")
+    user_agent = UserAgent().random
+    options.add_argument(f"--user-agent={user_agent}")
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()
@@ -526,7 +528,7 @@ class DateTimeStep:
                         screenshot_folder = "media/log_images"
                         if not os.path.exists(screenshot_folder):
                             os.makedirs(screenshot_folder)
-                        screenshot_path = screenshot_folder + f"/screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png"
+                        screenshot_path = screenshot_folder + f"/date_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png"
                         print(f'Screen shots of the times has taken at: {screenshot_path}')
                         self.report.append(('dev', message))
                         driver.save_screenshot(screenshot_path)
@@ -552,7 +554,7 @@ class DateTimeStep:
                     screenshot_folder = "media/log_images"
                     if not os.path.exists(screenshot_folder):
                         os.makedirs(screenshot_folder)
-                    screenshot_path = screenshot_folder + f"/screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png"
+                    screenshot_path = screenshot_folder + f"/time_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png"
                     print(f'Screen shots of the times has taken at: {screenshot_path}')
                     self.report.append(('dev', message))
                     driver.save_screenshot(screenshot_path)
@@ -603,7 +605,7 @@ class LastStep:
         self.driver = driver
         self.report = report
 
-    def service_submit(self, vehicle_cat, pelak_nums, cd_meli):
+    def service_submit(self, vehicle_cat, pelak_nums, cd_meli, test=None):
         driver = self.driver
         try:
             try:
@@ -738,7 +740,11 @@ class LastStep:
                 submit_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "button.btn.btn-success.btn-block"))
                 )
-                #submit_button.click()
+
+                if test:
+                    return "کد پیگیری test_cd_gen با موفقیت ثبت شد"   # return true to make button element be 'completion'
+                else:   # finalize reservation
+                    submit_button.click()
 
                 time.sleep(5)
                 try:
@@ -751,20 +757,23 @@ class LastStep:
                         raise
                 except:     # form submited successfully
                     try:
+                        screenshot_folder = "media/saved_nobats"
+                        if not os.path.exists(screenshot_folder):
+                            os.makedirs(screenshot_folder)
+                        screenshot_path = screenshot_folder + f"/screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png"
+                        driver.save_screenshot(screenshot_path)
+                        print(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
+
                         span_element = WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.XPATH, "//div[@class='alert alert-success']/span")))
                         cd_peigiry_message = span_element.text
                         message = f"کاربر با کد ملی {cd_meli} پلاک {pelak_nums} ووسیله نقلی {vehicle_cat} ثبت و نوبت دریافت شد."
                         print(message)
                         self.report(('pub', message))
-                        screenshot_folder = "media/saved_nobats"
-                        if not os.path.exists(screenshot_folder):
-                            os.makedirs(screenshot_folder)
-                        screenshot_path = screenshot_folder + f"/screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png"
-                        print(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
-                        print('nobat reservation ended successfully')
+
                         return cd_peigiry_message
                     except:
+                        print('nobat reservation ended but in getting the cd_peigiry problem happended')
                         return False
 
                 print(f'retry: {i}/{max_lim} times')    # submits failed, loop again (just captcha input resets)
@@ -773,13 +782,13 @@ class LastStep:
             i += 1
         return False
 
-    def run(self, customer):
+    def run(self, customer, test=None):
         vehicle_cat, pelak = customer.vehicle_cat, customer.pelak.number
         if vehicle_cat == 'motor':
             pelak_nums = [pelak[:3], pelak[3:]]
         else:
             pelak_nums = [pelak[:2], customer.pelak.letter_value, pelak[3:6], pelak[6:]]
-            return self.service_submit(vehicle_cat, pelak_nums, customer.username)
+            return self.service_submit(vehicle_cat, pelak_nums, customer.username, test)
 
 
 ########################################################################## for developers

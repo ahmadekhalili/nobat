@@ -5,6 +5,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from jdatetime import datetime as jdatetime
+
 from .models import *
 from .methods import generate_activation_code
 from .serializers import *
@@ -66,17 +68,19 @@ def activate(request, pk):
 
 @staff_member_required(login_url='/user/login')
 def profile(request):
-    time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(7, 17) for minute in range(0, 60, 10) if not (hour == 16 and minute > 0)]
+    customer_time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(7, 17) for minute in range(0, 60, 10) if not (hour == 16 and minute > 0)]
+    time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(0, 24) for minute in range(0, 60, 10)]
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+        return render(request, 'app1/licence_time.html', {})
+    else:
+        if request.method == 'GET':  # 'user' auto fills in templates if user logged in
+            message_status = 0
+            if request.GET.get('customer'):
+                customer = Customer.objects.get(id=request.GET['customer'])
+            else:
+                customer = None
+            return render(request, 'app1/profile_page.html', {'customer': customer, 'time_slots': time_slots, 'customer_time_slots': customer_time_slots})
 
-    if request.method == 'GET':  # 'user' auto fills in templates if user logged in
-        message_status = 0
-        if request.GET.get('customer'):
-            customer = Customer.objects.get(id=request.GET['customer'])
-            customer.status = 'stop'  # could changes in CrawlCustomer.post, so should reset here
-            customer.save()
-        else:
-            customer = None
-        return render(request, 'app1/profile_page.html', {'customer': customer, 'time_slots': time_slots})
 
 
 @staff_member_required(login_url='/user/login')

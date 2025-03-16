@@ -40,8 +40,8 @@ class CustomerUserAdmin(admin.ModelAdmin):
         'all': ('admin/css/rtl_sup..css',)  # Path relative to your static files
     }
     exclude = (
-        'time1', 'time2', 'time3', 'time4',
-        'date1', 'date2', 'date3', 'date4',
+        'time3', 'time4',
+        'date2', 'date3', 'date4',
     )
 admin.site.register(Customer, CustomerUserAdmin)
 

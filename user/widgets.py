@@ -42,12 +42,13 @@ class RemainingTimeWidget(forms.TextInput):
         if not raw_value:
             return None
 
-        if len(raw_value) == 3:
+        pattern_h = r'^(-?\d+)d$'
+        if re.match(pattern_h, raw_value):   # if raw value is ONLY DATE: 2d or 200d -10d 0d or... (without time)
             raw_value = f'{raw_value} 00:00:00'
         pattern = r'^(-?)(\d+)(?:d\s+)?(\d{1,2}):(\d{1,2}):(\d{1,2})$'
         match = re.match(pattern, raw_value)
         if not match:
-            raise ValidationError("Invalid format. Use '30d 05:00:00' or '-2d 03:12:00'.")
+            raise ValidationError("Invalid format. Correct example: '30d 05:00:00' or '-2d 03:12:00'.")
 
         sign_str, days_str, hours_str, mins_str, secs_str = match.groups()
         sign = -1 if sign_str == "-" else 1

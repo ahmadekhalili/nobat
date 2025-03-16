@@ -73,10 +73,20 @@ LOGGING = {
         },
     },
     'handlers': {
-        'file': {
+        # Handler for Django/system logs
+        'django_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'app.log'),
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB per file
+            'backupCount': 5,
+            'formatter': 'verbose',
+        },
+        # Handler for explicit logs (you decide when to log)
+        'explicit_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'explicit.log'),
             'maxBytes': 1024 * 1024 * 5,  # 5 MB per file
             'backupCount': 5,
             'formatter': 'verbose',
@@ -87,22 +97,15 @@ LOGGING = {
         },
     },
     'loggers': {
-        '': {  # Root logger configuration
-            'handlers': ['file', 'console'],
+        # Logger for Django/system logs (internal and framework-level)
+        'django': {
+            'handlers': ['django_file', 'console'],
             'level': 'INFO',
-        },
-        'main': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
             'propagate': False,
         },
-        'user': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'celery': {
-            'handlers': ['file', 'console'],
+        # Logger for explicit logging: use this when you explicitly call logging.getLogger('explicit')
+        'explicit': {
+            'handlers': ['explicit_file', 'console'],
             'level': 'DEBUG',
             'propagate': False,
         },

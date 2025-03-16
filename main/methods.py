@@ -1,5 +1,7 @@
 from django.conf import settings
 
+from user.models import Customer
+
 import cv2
 import os
 import time
@@ -134,3 +136,14 @@ def convert_jalali_to_gregorian(j_date_str, j_time_str):
         gregorian_dt = j_dt.togregorian()
         return gregorian_dt
     return None
+
+
+def add_square(customer_id, color_class='green'):
+    if not customer_id:
+        customer_id = customer_id
+    customer = Customer.objects.get(id=customer_id)  # sent via ajax not form post
+    if customer.color_classes:
+        customer.color_classes = customer.color_classes + f",{color_class}"
+    else:
+        customer.color_classes = color_class
+    customer.save()
