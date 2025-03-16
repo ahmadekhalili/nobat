@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -135,8 +137,9 @@ def crawl_login(driver, phone, password):
                 print("Error finding phone, password elements")
             try:
                 captcha_image = wait.until(EC.visibility_of_element_located((By.XPATH, "//img[contains(@class, 'captcha_image')]")))
-                png_data = captcha_image.screenshot("captcha.png")
-                text = image_to_text('captcha.png').replace(' ', '')
+                captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
+                png_data = captcha_image.screenshot(captcha_path)
+                text = image_to_text(captcha_path).replace(' ', '')
             except:
                 text = False
                 print('Error save and convert captcha to text')
@@ -217,13 +220,6 @@ def select_dropdown_items(driver):
         driver.execute_script("arguments[0].scrollIntoView(true);", li)
         # Wait until the li element is clickable (best practice to handle dynamic UIs)
         wait.until(EC.element_to_be_clickable((By.XPATH, "."))).click()
-
-
-
-
-
-
-
 
 
 # fill state, town, service type and vehicle type in first stage for crawling
@@ -525,10 +521,10 @@ class DateTimeStep:
                         message = f"Selected time not founded. searched times: {button_texts}"
                         print(message)
                         self.report.append(('dev', message))
-                        screenshot_folder = "media/log_images"
+                        screenshot_folder = os.path.join(settings.BASE_DIR, "media", "log_images")
                         if not os.path.exists(screenshot_folder):
                             os.makedirs(screenshot_folder)
-                        screenshot_path = screenshot_folder + f"/date_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png"
+                        screenshot_path = os.path.join(screenshot_folder, f"time_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png")
                         print(f'Screen shots of the times has taken at: {screenshot_path}')
                         self.report.append(('dev', message))
                         driver.save_screenshot(screenshot_path)
@@ -551,10 +547,10 @@ class DateTimeStep:
                     message = f"نوبت در زمان مورد نظر وجود ندارد"
                     print(message)
                     self.report.append(('pub', message))
-                    screenshot_folder = "media/log_images"
+                    screenshot_folder = os.path.join(settings.BASE_DIR, "media", "log_images")
                     if not os.path.exists(screenshot_folder):
                         os.makedirs(screenshot_folder)
-                    screenshot_path = screenshot_folder + f"/time_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png"
+                    screenshot_path = os.path.join(screenshot_folder, f"time_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png")
                     print(f'Screen shots of the times has taken at: {screenshot_path}')
                     self.report.append(('dev', message))
                     driver.save_screenshot(screenshot_path)
@@ -716,8 +712,9 @@ class LastStep:
                         EC.presence_of_element_located((By.CSS_SELECTOR, "img.captcha_image_reserve"))
                     )
                     # Save screenshot of just that <img> to "captcha.png"
-                    captcha_img.screenshot("captcha.png")
-                    text = image_to_text('captcha.png').replace(' ', '')
+                    captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
+                    captcha_img.screenshot(captcha_path)
+                    text = image_to_text(captcha_path).replace(' ', '')
                     print('Captcha uploaded to: captcha.png')
                 except:
                     text = None
@@ -742,10 +739,11 @@ class LastStep:
                 )
 
                 if test:
+                    print('reserve received successfully in test')
                     return "کد پیگیری test_cd_gen با موفقیت ثبت شد"   # return true to make button element be 'completion'
                 else:   # finalize reservation
                     submit_button.click()
-
+                    print('Pressed reserve receiving submit button')
                 time.sleep(5)
                 try:
                     submit_button = WebDriverWait(driver, 10).until(
@@ -757,10 +755,10 @@ class LastStep:
                         raise
                 except:     # form submited successfully
                     try:
-                        screenshot_folder = "media/saved_nobats"
+                        screenshot_folder = os.path.join(settings.BASE_DIR, "media", "saved_nobats")
                         if not os.path.exists(screenshot_folder):
                             os.makedirs(screenshot_folder)
-                        screenshot_path = screenshot_folder + f"/screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png"
+                        screenshot_path = os.path.join(screenshot_folder, f"screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png")
                         driver.save_screenshot(screenshot_path)
                         print(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
 

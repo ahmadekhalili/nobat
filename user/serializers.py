@@ -1,5 +1,7 @@
+import jwt
+from django.conf import settings
 from rest_framework import serializers
-from .models import Town, State, ServiceType
+from .models import *
 
 
 class StateSerializer(serializers.ModelSerializer):

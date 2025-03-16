@@ -28,6 +28,7 @@ def sample_task():
     print("Task runnnnnnnnnnn")
     return None
 
+
 class test_celery(APIView):
     def get(self, request):
         from datetime import datetime, timedelta
@@ -39,6 +40,7 @@ class test_celery(APIView):
         #        json.dump(all, f, ensure_ascii=False)
         return Response({'task_id': task.id})
 
+
 def index(request):
     if request.method == 'GET':
         logging.info("Task runnnnnnnnnnn")
@@ -47,11 +49,12 @@ def index(request):
 
 
 active_browsers = {}
-def crawl_func(customer_id, customer_date, customer_time):  # you can pass test=True to LastStep.run for test porpuse (finall submit not click)
+def crawl_func(customer_id, customer_date, customer_time, test):
     customer, report = Customer.objects.get(id=customer_id), []
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
     driver = setup()
+    print('started crawl')
     # we dont want unwanted subsequnce requests came after complete crawl, to make status stop
     if customer.status == 'stop':
         customer.status = 'start'
@@ -82,12 +85,12 @@ def crawl_func(customer_id, customer_date, customer_time):  # you can pass test=
                         finall_message = "در روز/ساعت انتخابی نوبت خالی وجود ندارد"
                 if success:
                     print('active browsers: ', len(active_browsers))
-                    cd_peigiry_message = LastStep(driver, report).run(customer, test=False)  # could be fals or message like: "شماره پیگیری: 03177711307"
+                    cd_peigiry_message = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
 
                     if cd_peigiry_message:
-                        status = 'complete'
-                        finall_message = "با موفقیت ثبت شد"
+                        customer.status = 'complete'
                         customer.cd_peigiri = cd_peigiry_message
+                        customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
                         customer.save()
                         return True
                     else:
@@ -105,9 +108,9 @@ def crawl_func(customer_id, customer_date, customer_time):  # you can pass test=
 
 
 @shared_task
-def crawls_task(customer_id, customer_date, customer_time):
+def crawls_task(customer_id, customer_date, customer_time, test):
     add_square(customer_id, color_class='green')  # add square to start button of profile page
-    return crawl_func(customer_id, customer_date, customer_time)
+    return crawl_func(customer_id, customer_date, customer_time, test)
 
 
 class CrawlCustomer(APIView):
@@ -126,6 +129,7 @@ class CrawlCustomer(APIView):
 
     def post(self, request, *args, **kwargs):
         post = request.POST
+        test = True     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
         print('form data: ', request.POST)
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..
@@ -137,7 +141,7 @@ class CrawlCustomer(APIView):
         customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
         print(f"dates updated, customer id: {customer_id}, datetimes: {dates_times}")
         if not datetimes:   # crawl normal inside django
-            crawl_func(customer_id, customer_date, customer_time)
+            crawl_func(customer_id, customer_date, customer_time, test)
         else:              # crawl schedule date time by celery
             for date_time in datetimes:
                 date_time = date_time - timedelta(minutes=1)  # runs 1 minute faster because of login and captcha solve time wasting
@@ -146,8 +150,8 @@ class CrawlCustomer(APIView):
                 task_time = jalali_date.strftime("%H:%M")  # Format Time (HH:MM)
                 local_tz = pytz.timezone('Asia/Tehran')
                 date_time_aware = local_tz.localize(date_time)
-                task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time], eta=date_time_aware)
-                #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time], eta=date_time_aware)
+                task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
+                #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
                 print(f'Celery rask created for run in: {task_date} {task_time}')
         return redirect('user:profile')  # رزرو موفقیت آمیر نبود دوباره تلاش کنید
 
@@ -156,6 +160,7 @@ class StopCrawl(APIView):
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(id=request.GET['customer'])
         customer.color_classes = ''
+        customer.status = 'stop'       # now customer can add another nobar reservation (afte complete status)
         customer.save()
         customer_active_browsers = active_browsers.get(customer.id, [])
         print(f"----Active browsers to close: {len(customer_active_browsers)}")

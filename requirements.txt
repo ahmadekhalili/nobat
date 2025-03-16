@@ -20,3 +20,4 @@ redis  # for linux
 flower
 pytz      # localize timezone to work celery ok
 # celery  # install by django-celery-beat
+djangorestframework-simplejwt

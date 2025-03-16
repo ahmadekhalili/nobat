@@ -142,19 +142,116 @@
     <div class="container-fluid container-custom">
         <div class="content-box">
             <div class="page-title">ورود</div>
-            <form action="{% url 'user:login' %}" method="POST">
-                {% csrf_token %}
-                <input type="text" class="my-input" name="cdmeli" value="{{ user.username }}" placeholder="کد ملی" />
-                <input type="password" class="my-input" name="password" value="{{ user.password|cut:'plain$' }}" placeholder="پسورد" />
-                <button class="initial-activation-btn">ورود</button>
-            </form>
+<form id="login-form" method="POST">
+  {% csrf_token %}
+  <input type="text" class="my-input" name="cdmeli" placeholder="کد ملی" />
+  <input type="password" class="my-input" name="password" placeholder="پسورد" />
+  <div id="login-error" style="display:none; color:red;"></div>
+  <button type="submit" class="initial-activation-btn">ورود</button>
+</form>
 
-            <div class="operation-message {% if message_status == 2 %}success-message{% else %}error-message{% endif %}" style="{% if message_status == 0 %}display: none;{% else %}{% endif %}">{{ message }}{% if message_status == 1 %}<a style="text-decoration: none; color: inherit; font-weight: bold;" href="{% url 'user:activate' user.id %}">. ورود</a>{% endif %}</div>
+            <div class="operation-message {% if message_status == 2 %}success-message{% else %}error-message{% endif %}" style="{% if message_status == 0 %}display: none;{% else %}{% endif %}">{{ message }}{% if message_status == 1 %}{% endif %}</div>
 
         </div>
     </div>
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script> // get token and set to storage
+  async function login(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Extract and validate form values
+    const username = document.querySelector('input[name="cdmeli"]').value;
+    const password = document.querySelector('input[name="password"]').value;
+    if (!username || !password) {
+      const errorElement = document.getElementById('login-error');
+      errorElement.textContent = 'لطفاً هر دو فیلد کد ملی و پسورد را پر کنید.';
+      errorElement.style.display = 'block';
+      return;
+    }
+
+    // Retrieve CSRF token
+    const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+    try {
+      // Step 1: Send login request
+      const response = await fetch('{% url "token_obtain_pair" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+        body: JSON.stringify({ username, password })
+      });
+
+      // Step 2: Parse response JSON
+      const data = await response.json();
+
+      if (response.ok) {
+        // Step 3: Verify tokens exist
+        if (data.access && data.refresh) {
+          // Step 4: Save tokens and redirect on success
+          localStorage.setItem('access_token', data.access);
+          localStorage.setItem('refresh_token', data.refresh);
+          window.location.href = '{% url "user:profile" %}';
+        } else {
+          throw new Error('Missing authentication tokens in response.');
+        }
+      } else {
+        // Step 5: Display server error message or fallback error
+        const errorElement = document.getElementById('login-error');
+        errorElement.textContent = data.detail || 'ورود ناموفق. لطفاً اطلاعات خود را بررسی کنید.';
+        errorElement.style.display = 'block';
+      }
+    } catch (error) {
+      // Step 6: Log error and show a generic error message to the user
+      console.error('Error during login:', error);
+      const errorElement = document.getElementById('login-error');
+      errorElement.textContent = 'یک خطای غیرمنتظره رخ داده است. لطفاً دوباره تلاش کنید.';
+      errorElement.style.display = 'block';
+    }
+  }
+
+  // Attach event handler to the form submission
+  document.getElementById('login-form').addEventListener('submit', login);
+</script>
+
+
+<script> // get token from storage and send to view, login
+document.addEventListener('DOMContentLoaded', async () => {
+  // Retrieve the token from localStorage
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    console.error('No token found in storage.');
+    return;
+  }
+
+  // Get the CSRF token from the hidden input inserted by Django
+  const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+  try {
+    // Send a PUT request with the token in the JSON payload
+    const response = await fetch("{% url 'user:login2' %}", {  // Replace with your actual endpoint URL
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify({ token: token })
+    });
+
+    if (response.ok) {
+      // If successful, redirect to the profile page
+      window.location.href = '{% url "user:profile" %}';
+    } else {
+      // Log error details if the request fails
+      const errorData = await response.json();
+      console.error('Login failed:', errorData);
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+  }
+});
+</script>
 </body>
 </html>

@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,6 +144,12 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
 PASSWORD_HASHERS = ['main.hashers.PlainTextPasswordHasher',]
 AUTH_USER_MODEL = 'user.User'
 
@@ -189,6 +197,13 @@ CSRF_TRUSTED_ORIGINS = [
     "https://ictsun.ir",
     "https://www.ictsun.ir",
 ]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365 * 100),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365 * 100),
+    # Other settings...
+}
+
 #CORS_ALLOWED_ORIGINS = ['http://192.168.114.102:3000', 'http://127.0.0.1:3000', 'http://localhost:3000']
 
 #CORS_ALLOW_HEADERS = []       # add custom headers here
@@ -214,3 +229,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Tehran'  # Must match your Django TIME_ZONE if possible
 CELERY_ENABLE_UTC = False
 CELERYD_HIJACK_ROOT_LOGGER = False  # django controls logs
+
+CELERY_TASK_SEND_SENT_EVENT = True  # now if flower task receiving, runing, ending is more clear
+CELERY_TASK_TRACK_STARTED = True

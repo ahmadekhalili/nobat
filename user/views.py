@@ -4,8 +4,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 from jdatetime import datetime as jdatetime
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import AccessToken
+
+import json
 
 from .models import *
 from .methods import generate_activation_code
@@ -30,6 +35,22 @@ def login_account(request):
         else:
             message, message_status = "کد ملی یا پسورد اشتباه است.", 1
         return render(request, 'app1/login.html', {'user': user, 'message': message, 'message_status': message_status})
+
+
+def login_account2(request):
+    user, message, message_status = object(), "", 0
+    if request.method == 'GET':
+        return render(request, 'app1/login.html', {'message': message, 'message_status': message_status})
+
+    if request.method == "POST":
+        data = data = json.loads(request.body.decode('utf-8'))
+        access_token = AccessToken(data['token'])
+        user_id = access_token.get('user_id')
+        user = User.objects.get(pk=user_id)
+
+        # If tokens are valid, log the user in using Django's session
+        login(request, user)  # from django.contrib.auth import login
+        return redirect('user:profile')
 
 
 def logout_account(request):
@@ -65,9 +86,24 @@ def activate(request, pk):
                 message = f".کاربر با کد ملی {user.username} با موفقیت فعال شد"
         return render(request, 'app1/activate_form.html', {'user': user, 'message': message, 'message_status': message_status})
 
+def test(request):
+    return render(request, 'app1/index.html', {'product': 'p'})
 
-@staff_member_required(login_url='/user/login')
+class Protected(APIView):
+    def get(self, request):
+        user = request.user
+        data = {
+            'message': f'Hello, {user.username}. You have accessed a protected endpoint.',
+            'user_id': user.id,
+            'email': user.username,
+        }
+        return Response(data)
+
+
+#@staff_member_required(login_url='/user/login')
+@csrf_exempt
 def profile(request):
+    print('YYYYYYYYYYYYYYYY', request.headers)
     customer_time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(7, 17) for minute in range(0, 60, 10) if not (hour == 16 and minute > 0)]
     time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(0, 24) for minute in range(0, 60, 10)]
     if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
