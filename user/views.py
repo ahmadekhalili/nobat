@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from jdatetime import datetime as jdatetime
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 import json
 
@@ -24,7 +24,7 @@ def login_account(request):
 
     elif request.method == 'POST':
         data = request.POST
-        user = authenticate(request, username=data['cdmeli'], password=data['password'])
+        user = authenticate(request, username=data['username'], password=data['password'])
         if user is not None:
             login(request, user)
             if request.user.is_staff:
@@ -37,7 +37,7 @@ def login_account(request):
         return render(request, 'app1/login.html', {'user': user, 'message': message, 'message_status': message_status})
 
 
-def login_account2(request):
+def login_account2(request):    # telegram logint happens here (auto from referesh token) (value send via js in login.html)
     user, message, message_status = object(), "", 0
     if request.method == 'GET':
         return render(request, 'app1/login.html', {'message': message, 'message_status': message_status})
@@ -56,6 +56,13 @@ def login_account2(request):
 def logout_account(request):
     if request.method == 'GET':
         logout(request)
+
+        refresh_token = request.POST.get('refresh_token')
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception as e:
+            print("Token already blacklisted or invalid:", e)
         return redirect('user:login')
 
 
@@ -101,12 +108,10 @@ class Protected(APIView):
 
 
 #@staff_member_required(login_url='/user/login')
-@csrf_exempt
 def profile(request):
-    print('YYYYYYYYYYYYYYYY', request.headers)
     customer_time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(7, 17) for minute in range(0, 60, 10) if not (hour == 16 and minute > 0)]
     time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(0, 24) for minute in range(0, 60, 10)]
-    if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
         return render(request, 'app1/licence_time.html', {})
     else:
         if request.method == 'GET':  # 'user' auto fills in templates if user logged in

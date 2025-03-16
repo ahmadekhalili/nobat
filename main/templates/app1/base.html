@@ -214,7 +214,17 @@
             <button class="my-button"><a href="{% url 'main:licence-time' %}?customer={{ customer.id }}" class="main-link" >زمان لایسنس</a></button>
             <button class="my-button"><a href="{% url 'user:edit-customer' %}?{{ request.GET.urlencode }}" class="main-link">ویرایش مشخصات</a>
             </button>
-            <button class="my-button"><a href="{% url 'user:logout' %}" class="main-link">خروج</a></button>
+<form id="logoutForm" action="{% url 'user:logout' %}" method="GET">
+  {% csrf_token %}
+  <button type="submit" class="my-button main-link">خروج</button>
+</form>
+<script>
+  //remove refresh token and access token
+  document.getElementById('logoutForm').addEventListener('submit', function() {
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('access_token');
+  });
+</script>
           </div>
         </div>
       </div>
