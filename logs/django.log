@@ -10348,3 +10348,267 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
 [2025-03-17 09:12:07] ERROR [django.server:213] "GET / HTTP/1.0" 500 76470
+[2025-03-17 09:32:35] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 09:32:36] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 09:32:36] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:36] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 09:32:36] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:32:36] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 09:32:36] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 09:32:36] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:32:37] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:32:37] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:37] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:32:38] INFO [django.server:213] "GET /add/? HTTP/1.0" 200 24144
+[2025-03-17 09:32:39] WARNING [django.request:248] Not Found: /add/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:39] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 09:32:39] WARNING [django.server:213] "GET /add/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5549
+[2025-03-17 09:32:39] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:32:39] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 09:32:43] INFO [django.server:213] "GET /customers/? HTTP/1.0" 200 11025
+[2025-03-17 09:32:43] WARNING [django.request:248] Not Found: /customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:43] WARNING [django.server:213] "GET /customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5567
+[2025-03-17 09:32:43] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:32:46] INFO [django.server:213] "GET /main/licence_time/? HTTP/1.0" 200 12791
+[2025-03-17 09:32:46] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:46] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 09:32:46] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:32:50] ERROR [django.request:248] Internal Server Error: /edit/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'customer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 178, in edit_customer
+    customer = Customer.objects.get(id=request.GET['customer'])
+                                       ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'customer'
+[2025-03-17 09:32:50] ERROR [django.server:213] "GET /edit/? HTTP/1.0" 500 84955
+[2025-03-17 09:32:56] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 09:32:56] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 09:32:56] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:56] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 09:32:56] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:32:56] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 09:32:56] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 09:32:57] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:32:57] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:32:57] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:32:57] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:32:58] ERROR [django.request:248] Internal Server Error: /edit/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'customer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 178, in edit_customer
+    customer = Customer.objects.get(id=request.GET['customer'])
+                                       ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'customer'
+[2025-03-17 09:32:58] ERROR [django.server:213] "GET /edit/? HTTP/1.0" 500 84936
+[2025-03-17 09:33:02] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 09:33:03] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:03] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 09:33:03] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 09:33:03] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 09:33:03] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 09:33:03] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:33:04] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:33:04] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:04] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:33:04] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:05] INFO [django.server:213] "GET /?customer=2 HTTP/1.0" 200 12830
+[2025-03-17 09:33:06] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:06] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:33:06] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:11] INFO [django.server:213] "GET /edit/?customer=2 HTTP/1.0" 200 31330
+[2025-03-17 09:33:11] WARNING [django.request:248] Not Found: /edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:11] WARNING [django.server:213] "GET /edit/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5552
+[2025-03-17 09:33:11] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 09:33:11] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:11] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 09:33:16] INFO [django.server:213] "GET /main/licence_time/?customer=2 HTTP/1.0" 200 12831
+[2025-03-17 09:33:16] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:16] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 09:33:16] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:17] INFO [django.server:213] "GET /add/?customer=2 HTTP/1.0" 200 24184
+[2025-03-17 09:33:17] WARNING [django.request:248] Not Found: /add/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:17] WARNING [django.server:213] "GET /add/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5549
+[2025-03-17 09:33:17] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 09:33:17] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:18] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 09:33:20] INFO [django.server:213] "GET /main/licence_time/?customer=2 HTTP/1.0" 200 12831
+[2025-03-17 09:33:20] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:20] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 09:33:20] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:23] INFO [django.server:213] "GET /edit/?customer=2 HTTP/1.0" 200 31330
+[2025-03-17 09:33:23] WARNING [django.request:248] Not Found: /edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:23] WARNING [django.server:213] "GET /edit/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5552
+[2025-03-17 09:33:23] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 09:33:23] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:24] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 09:33:29] INFO [django.server:213] "GET /customers/?customer=2 HTTP/1.0" 200 11065
+[2025-03-17 09:33:30] WARNING [django.request:248] Not Found: /customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:30] WARNING [django.server:213] "GET /customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5567
+[2025-03-17 09:33:30] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:31] INFO [django.server:213] "GET /2/customer/? HTTP/1.0" 200 15942
+[2025-03-17 09:33:31] INFO [django.server:213] "GET /media/result_images/screenshot_CLUI4D.png HTTP/1.0" 200 54492
+[2025-03-17 09:33:31] WARNING [django.request:248] Not Found: /2/customer/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:31] WARNING [django.server:213] "GET /2/customer/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5570
+[2025-03-17 09:33:31] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:34] INFO [django.server:213] "GET /main/licence_time/? HTTP/1.0" 200 12791
+[2025-03-17 09:33:34] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:33:34] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 09:33:34] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:33:37] ERROR [django.request:248] Internal Server Error: /edit/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'customer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 178, in edit_customer
+    customer = Customer.objects.get(id=request.GET['customer'])
+                                       ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'customer'
+[2025-03-17 09:33:37] ERROR [django.server:213] "GET /edit/? HTTP/1.0" 500 84955
+[2025-03-17 09:34:06] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 09:34:07] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 09:34:07] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:34:07] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 09:34:07] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:34:07] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 09:34:07] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 09:34:07] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:34:08] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:34:08] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:34:08] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:34:13] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/urls.py changed, reloading.
+[2025-03-17 09:34:15] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 09:35:01] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/urls.py changed, reloading.
+[2025-03-17 09:35:03] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 09:35:15] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/urls.py changed, reloading.
+[2025-03-17 09:35:17] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 09:35:31] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/urls.py changed, reloading.
+[2025-03-17 09:35:33] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 09:36:17] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/urls.py changed, reloading.
+[2025-03-17 09:36:18] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 09:45:37] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/views.py changed, reloading.
+[2025-03-17 09:45:38] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 09:45:54] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 09:45:55] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 09:45:55] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:45:55] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 09:45:55] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:45:55] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 09:45:55] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 09:45:55] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 09:45:56] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:45:56] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:45:56] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:45:59] INFO [django.server:213] "GET /?customer=2 HTTP/1.0" 200 12830
+[2025-03-17 09:46:00] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:00] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 09:46:00] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:00] INFO [django.server:213] "GET /edit/?customer=2 HTTP/1.0" 200 31330
+[2025-03-17 09:46:01] WARNING [django.request:248] Not Found: /edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:01] WARNING [django.server:213] "GET /edit/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5552
+[2025-03-17 09:46:01] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 09:46:01] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:01] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 09:46:03] INFO [django.server:213] "GET /main/licence_time/?customer=2 HTTP/1.0" 200 12831
+[2025-03-17 09:46:03] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:03] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 09:46:03] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:11] INFO [django.server:213] "GET /add/?customer=2 HTTP/1.0" 200 24184
+[2025-03-17 09:46:11] WARNING [django.request:248] Not Found: /add/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:11] WARNING [django.server:213] "GET /add/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5549
+[2025-03-17 09:46:11] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 09:46:11] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:11] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 09:46:15] INFO [django.server:213] "GET /customers/?customer=2 HTTP/1.0" 200 11065
+[2025-03-17 09:46:15] WARNING [django.request:248] Not Found: /customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:15] WARNING [django.server:213] "GET /customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5567
+[2025-03-17 09:46:15] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:17] INFO [django.server:213] "GET /customers/?customer=2 HTTP/1.0" 200 11065
+[2025-03-17 09:46:17] WARNING [django.request:248] Not Found: /customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:17] WARNING [django.server:213] "GET /customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5567
+[2025-03-17 09:46:17] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:19] INFO [django.server:213] "GET /2/customer/? HTTP/1.0" 200 15942
+[2025-03-17 09:46:19] WARNING [django.request:248] Not Found: /2/customer/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:19] WARNING [django.server:213] "GET /2/customer/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5570
+[2025-03-17 09:46:19] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:23] INFO [django.server:213] "GET /customers/? HTTP/1.0" 200 11025
+[2025-03-17 09:46:23] WARNING [django.request:248] Not Found: /customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:23] WARNING [django.server:213] "GET /customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5567
+[2025-03-17 09:46:23] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:26] INFO [django.server:213] "GET /main/licence_time/? HTTP/1.0" 200 12791
+[2025-03-17 09:46:26] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:46:26] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 09:46:26] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 09:46:27] ERROR [django.request:248] Internal Server Error: /edit/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 184, in edit_customer
+    customer = Customer.objects.get(id=request.GET.get('customer'))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/db/models/query.py", line 649, in get
+    raise self.model.DoesNotExist(
+user.models.Customer.DoesNotExist: Customer matching query does not exist.
+[2025-03-17 09:46:27] ERROR [django.server:213] "GET /edit/? HTTP/1.0" 500 85562
+[2025-03-17 09:48:00] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/views.py changed, reloading.

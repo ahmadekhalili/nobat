@@ -127,8 +127,11 @@ def profile(request):
 @staff_member_required(login_url='/user/login')
 def customers_list(request):
     if request.method == 'GET':
-        customers = request.user.customers.all()
-        return render(request, 'app1/customer_list.html', {'customers': customers})
+        try:
+            customers = request.user.customers.all()
+            return render(request, 'app1/customer_list.html', {'customers': customers})
+        except:
+            redirect('user:profile')
 
 
 @staff_member_required(login_url='/user/login')
@@ -142,7 +145,10 @@ def customer_detail(request, pk):
 def add_customer(request):       # error of form submition available in browser console
     message = ''
     if request.method == 'GET':
-        return render(request, 'app1/add_customer.html', {'console': ''})
+        try:
+            return render(request, 'app1/add_customer.html', {'console': ''})
+        except:
+            return redirect('user:profile')
 
     elif request.method == 'POST':
         data = request.POST
@@ -175,7 +181,10 @@ def add_customer(request):       # error of form submition available in browser 
 @staff_member_required(login_url='/user/login')
 def edit_customer(request):       # error of form submition available in browser console
     message = ''
-    customer = Customer.objects.get(id=request.GET['customer'])
+    try:
+        customer = Customer.objects.get(id=request.GET.get('customer'))
+    except:  # sometimes customer_id stale(lost) in query parameters
+        return redirect('user:profile')
     current_state, current_town, current_service, current_center = StateSerializer(customer.state).data, TownSerializer(customer.town).data, ServiceTypeSerializer(customer.service_type).data, {'id': customer.service_center.id, 'name': customer.service_center.title}
     states, towns, services = StateSerializer(State.objects.all(), many=True).data, TownSerializer(customer.state.towns.all(), many=True).data, ServiceTypeSerializer(ServiceType.objects.all(), many=True).data
 

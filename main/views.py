@@ -222,14 +222,17 @@ class CentersByTownService(APIView):
 @staff_member_required(login_url='/user/login')
 def licence(request):
     if request.method == 'GET':
-        if request.user.expiration_date:
-            total_seconds = remain_secs(request.user.expiration_date)  # if total_seconds <=0 its expired (negative time)
-            abs_seconds = abs(total_seconds)
-            days = abs_seconds // 86400
-        else:
-            total_seconds = 0
-            days = 0
-        return render(request, 'app1/licence_time.html', {'days_remaining': days, 'secs_remaining': total_seconds})
+        try:
+            if request.user.expiration_date:
+                total_seconds = remain_secs(request.user.expiration_date)  # if total_seconds <=0 its expired (negative time)
+                abs_seconds = abs(total_seconds)
+                days = abs_seconds // 86400
+            else:
+                total_seconds = 0
+                days = 0
+            return render(request, 'app1/licence_time.html', {'days_remaining': days, 'secs_remaining': total_seconds})
+        except:
+            return redirect('user:profile')
 
 
 class StartButtonSquares(APIView):

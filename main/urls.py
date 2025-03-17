@@ -13,6 +13,6 @@ urlpatterns = [
     path('selected_centers/', views.CentersByTownService.as_view(), name='selected_centers'),
     path('crawl/', views.CrawlCustomer.as_view(), name='crawl_customer'),
     path('stop_crawl/', views.StopCrawl.as_view(), name='stop_crawl'),
-    path('licence_time/', views.licence, name='licence-time'),
+    path('licence_time/', views.licence, name='licence-time'),    # menu 4
     path('square_nums/', views.StartButtonSquares.as_view(), name='square_nums'),
 ]
