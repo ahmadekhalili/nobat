@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.translation import gettext_lazy as _
+from django import forms
 
 from .models import Customer, User, Pelak
 from .forms import AccountUserChangeForm
@@ -25,7 +26,8 @@ class AcountUserAdmin(UserAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         # Modify the help text of the 'expiration_date' field
-        form.base_fields['expiration_date'].help_text = "Field format: 18d 00:00:00 or 18d"
+        if 'expiration_date' in form.base_fields:  # raise error in add user form
+            form.base_fields['expiration_date'].help_text = "Field format: 18d 00:00:00 or 18d"
         return form
 admin.site.register(User, AcountUserAdmin)
 
@@ -48,7 +50,8 @@ admin.site.register(Customer, CustomerUserAdmin)
 
 class PelakAdmin(admin.ModelAdmin):
     # Using the default form, so no extra ModelForm is needed
-    css = {
-        'all': ('admin/css/rtl_sup..css',)  # Path relative to your static files
-    }
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'number':
+            kwargs['widget'] = forms.TextInput(attrs={'dir': 'rtl'})
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 admin.site.register(Pelak, PelakAdmin)

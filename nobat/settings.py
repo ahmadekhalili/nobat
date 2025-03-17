@@ -93,6 +93,14 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'verbose',
         },
+        'celery_file': {  # <-- ADD THIS HANDLER
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+            'formatter': 'verbose',
+        },
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
@@ -109,6 +117,11 @@ LOGGING = {
         'explicit': {
             'handlers': ['explicit_file', 'console'],
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        'celery': {  # <-- ADD THIS LOGGER
+            'handlers': ['celery_file', 'console'],
+            'level': 'INFO',
             'propagate': False,
         },
     },

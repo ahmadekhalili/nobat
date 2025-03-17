@@ -9077,3 +9077,1274 @@ django.utils.datastructures.MultiValueDictKeyError: 'customer'
 [2025-03-16 22:01:00] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 31
 [2025-03-16 22:01:07] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
 [2025-03-16 22:01:45] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-16 22:01:47] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-16 22:02:14] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-16 22:02:19] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-16 22:02:21] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68399
+[2025-03-16 22:02:21] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:02:21] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:02:22] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:02:22] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:02:24] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11180
+[2025-03-16 22:02:25] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:02:25] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:02:25] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-16 22:02:31] INFO [django.server:213] "GET /user/edit/?customer=2 HTTP/1.1" 200 31451
+[2025-03-16 22:02:32] WARNING [django.request:248] Not Found: /user/edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:02:32] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-16 22:02:32] WARNING [django.server:213] "GET /user/edit/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8124
+[2025-03-16 22:02:32] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:02:32] INFO [django.server:213] "GET /service_list/ HTTP/1.1" 200 839
+[2025-03-16 22:02:36] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68399
+[2025-03-16 22:02:37] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:02:37] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:02:37] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:02:37] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:00] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-16 22:03:04] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11180
+[2025-03-16 22:03:05] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:05] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:05] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-16 22:03:07] INFO [django.server:213] "GET /user/edit/?customer=2 HTTP/1.1" 200 31446
+[2025-03-16 22:03:08] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:08] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-16 22:03:08] WARNING [django.request:248] Not Found: /user/edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:08] WARNING [django.server:213] "GET /user/edit/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8124
+[2025-03-16 22:03:08] INFO [django.server:213] "GET /service_list/ HTTP/1.1" 200 839
+[2025-03-16 22:03:13] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68370
+[2025-03-16 22:03:13] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:13] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:03:13] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:03:13] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:27] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68370
+[2025-03-16 22:03:27] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:27] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:03:27] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:27] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:03:29] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11180
+[2025-03-16 22:03:29] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:29] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-16 22:03:29] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:31] INFO [django.server:213] "GET /user/edit/?customer=2 HTTP/1.1" 200 31446
+[2025-03-16 22:03:31] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-16 22:03:32] WARNING [django.request:248] Not Found: /user/edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:32] WARNING [django.server:213] "GET /user/edit/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8124
+[2025-03-16 22:03:32] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:03:32] INFO [django.server:213] "GET /service_list/ HTTP/1.1" 200 839
+[2025-03-16 22:03:34] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68370
+[2025-03-16 22:03:35] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:03:35] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:03:35] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:03:35] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:05:51] INFO [django.server:213] "POST /crawl/ HTTP/1.1" 302 0
+[2025-03-16 22:12:56] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/crawl.py changed, reloading.
+[2025-03-16 22:12:59] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-16 22:14:50] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/crawl.py changed, reloading.
+[2025-03-16 22:14:51] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-16 22:19:05] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/crawl.py changed, reloading.
+[2025-03-16 22:19:07] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-16 22:23:01] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/crawl.py changed, reloading.
+[2025-03-16 22:23:04] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-16 22:23:16] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-16 22:23:16] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:23:16] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:23:16] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:23:17] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:23:18] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11121
+[2025-03-16 22:23:18] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:23:18] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-16 22:23:18] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:23:21] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-16 22:23:22] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:23:22] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:23:22] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:23:22] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:23:26] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-16 22:25:40] INFO [django.server:213] "POST /crawl/ HTTP/1.1" 302 0
+[2025-03-16 22:25:40] INFO [django.server:213] "GET /user/profile/ HTTP/1.1" 200 68307
+[2025-03-16 22:27:58] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/crawl.py changed, reloading.
+[2025-03-16 22:28:00] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-16 22:28:07] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-16 22:28:07] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:28:07] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:28:08] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:28:08] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:28:08] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-16 22:28:11] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-16 22:28:11] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:28:11] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:28:11] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:28:11] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:28:16] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11121
+[2025-03-16 22:28:17] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:28:17] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:28:17] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-16 22:28:19] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-16 22:28:19] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:28:19] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:28:19] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:28:19] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:28:20] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-16 22:30:18] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-16 22:30:20] INFO [django.server:213] "POST /crawl/ HTTP/1.1" 302 0
+[2025-03-16 22:30:20] INFO [django.server:213] "GET /user/profile/ HTTP/1.1" 200 68307
+[2025-03-16 22:46:25] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-16 22:46:25] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:46:25] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-16 22:46:25] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-16 22:46:25] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:46:27] INFO [django.server:213] "GET /user/edit/?customer=2 HTTP/1.1" 200 31440
+[2025-03-16 22:46:27] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-16 22:46:27] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:46:27] WARNING [django.request:248] Not Found: /user/edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:46:27] WARNING [django.server:213] "GET /user/edit/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8124
+[2025-03-16 22:46:27] INFO [django.server:213] "GET /service_list/ HTTP/1.1" 200 839
+[2025-03-16 22:46:29] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11121
+[2025-03-16 22:46:29] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-16 22:46:29] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-16 22:46:29] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-16 22:49:38] WARNING [django.request:248] Not Found: /
+[2025-03-16 22:49:38] WARNING [django.server:213] "GET / HTTP/1.0" 404 5473
+[2025-03-17 04:23:00] WARNING [django.request:248] Not Found: /
+[2025-03-17 04:23:00] WARNING [django.server:213] "GET / HTTP/1.0" 404 5473
+[2025-03-17 05:22:56] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 05:26:52] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11121
+[2025-03-17 05:26:52] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:26:52] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-17 05:26:52] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:26:55] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68369
+[2025-03-17 05:26:55] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:26:55] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:26:55] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:26:55] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:29:15] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-17 05:29:24] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11121
+[2025-03-17 05:29:24] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:29:24] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-17 05:29:24] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:29:26] INFO [django.server:213] "GET /user/edit/?customer=2 HTTP/1.1" 200 31440
+[2025-03-17 05:29:26] WARNING [django.request:248] Not Found: /user/edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:29:26] WARNING [django.server:213] "GET /user/edit/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8124
+[2025-03-17 05:29:27] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:29:27] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-17 05:29:27] INFO [django.server:213] "GET /service_list/ HTTP/1.1" 200 839
+[2025-03-17 05:29:29] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68370
+[2025-03-17 05:29:29] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:29:29] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:29:29] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:29:29] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:29:54] INFO [django.server:213] "POST /crawl/ HTTP/1.1" 302 0
+[2025-03-17 05:30:01] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-17 05:30:04] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68370
+[2025-03-17 05:30:04] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:30:04] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:30:04] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:30:04] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:30:06] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68370
+[2025-03-17 05:30:06] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:30:06] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:30:06] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:30:06] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:30:33] INFO [django.server:213] "POST /crawl/ HTTP/1.1" 302 0
+[2025-03-17 05:31:14] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-17 05:31:16] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 05:31:37] WARNING [django.request:248] Not Found: /
+[2025-03-17 05:31:37] WARNING [django.server:213] "GET / HTTP/1.0" 404 5473
+[2025-03-17 05:33:05] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68379
+[2025-03-17 05:33:05] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:33:05] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:33:05] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:33:05] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:33:07] INFO [django.server:213] "GET /user/customers/?customer=2 HTTP/1.1" 200 11180
+[2025-03-17 05:33:07] WARNING [django.request:248] Not Found: /user/customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:33:07] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:33:07] WARNING [django.server:213] "GET /user/customers/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8139
+[2025-03-17 05:33:09] INFO [django.server:213] "GET /user/2/customer/? HTTP/1.1" 200 16047
+[2025-03-17 05:33:09] INFO [django.server:213] "GET /media/result_images/screenshot_CLUI4D.png HTTP/1.1" 200 54492
+[2025-03-17 05:33:09] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:33:09] WARNING [django.request:248] Not Found: /user/2/customer/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:33:09] WARNING [django.server:213] "GET /user/2/customer/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8142
+[2025-03-17 05:33:11] ERROR [django.request:248] Internal Server Error: /user/edit/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'customer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 178, in edit_customer
+    customer = Customer.objects.get(id=request.GET['customer'])
+                                       ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'customer'
+[2025-03-17 05:33:11] ERROR [django.server:213] "GET /user/edit/? HTTP/1.1" 500 82917
+[2025-03-17 05:33:15] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68379
+[2025-03-17 05:33:15] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:33:15] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:33:16] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:33:16] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:33:18] INFO [django.server:213] "GET /user/edit/?customer=2 HTTP/1.1" 200 31451
+[2025-03-17 05:33:18] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-17 05:33:19] WARNING [django.request:248] Not Found: /user/edit/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:33:19] WARNING [django.server:213] "GET /user/edit/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8124
+[2025-03-17 05:33:19] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:33:19] INFO [django.server:213] "GET /service_list/ HTTP/1.1" 200 839
+[2025-03-17 05:33:25] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68379
+[2025-03-17 05:33:25] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:33:25] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:33:25] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:33:25] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:45:38] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 05:46:14] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68379
+[2025-03-17 05:46:15] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:46:15] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:46:15] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:46:15] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:46:24] INFO [django.server:213] "GET /admin/user/customer/2/change/ HTTP/1.1" 200 90819
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/css/base.css HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/core.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /states/ HTTP/1.1" 200 1125
+[2025-03-17 05:46:25] INFO [django.server:213] "GET /towns_by_state/?province=9 HTTP/1.1" 200 236
+[2025-03-17 05:46:35] INFO [django.server:213] "POST /admin/user/customer/2/change/ HTTP/1.1" 302 0
+[2025-03-17 05:46:35] INFO [django.server:213] "GET /admin/user/customer/ HTTP/1.1" 200 16527
+[2025-03-17 05:46:35] INFO [django.server:213] "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+[2025-03-17 05:46:35] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 05:46:35] INFO [django.server:213] "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+[2025-03-17 05:46:35] INFO [django.server:213] "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+[2025-03-17 05:46:35] INFO [django.server:213] "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+[2025-03-17 05:46:37] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-17 05:46:42] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-17 05:46:44] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68377
+[2025-03-17 05:46:44] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:46:44] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:46:44] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:46:44] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:47:43] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68377
+[2025-03-17 05:47:43] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:47:43] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:47:43] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:47:43] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:47:44] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-17 05:47:45] INFO [django.server:213] "POST /square_nums/ HTTP/1.1" 200 0
+[2025-03-17 05:47:49] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68378
+[2025-03-17 05:47:49] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:47:49] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:47:49] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 31
+[2025-03-17 05:47:49] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:47:53] INFO [django.server:213] "GET /stop_crawl/?customer=2 HTTP/1.1" 200 21
+[2025-03-17 05:47:56] ERROR [django.request:248] Internal Server Error: /crawl/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 445, in request
+    self.endheaders()
+  File "/usr/lib/python3.11/http/client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/usr/lib/python3.11/http/client.py", line 1058, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.11/http/client.py", line 996, in send
+    self.connect()
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x7ff70447f610>: Failed to establish a new connection: [Errno 111] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/main/views.py", line 157, in post
+    crawl_func(customer_id, customer_date, customer_time, test)
+  File "/home/akh/shared/nobat/main/views.py", line 74, in crawl_func
+    success = LocationStep(driver, report).run(customer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/main/crawl.py", line 270, in run
+    self.driver.get('https://nobat.epolice.ir/')
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/webdriver.py", line 454, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/webdriver.py", line 427, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=34247): Max retries exceeded with url: /session/e8318454a5ead188efa99bc74cad8783/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff70447f610>: Failed to establish a new connection: [Errno 111] Connection refused'))
+[2025-03-17 05:47:59] ERROR [django.request:248] Internal Server Error: /crawl/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 493, in _make_request
+    conn.request(
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 445, in request
+    self.endheaders()
+  File "/usr/lib/python3.11/http/client.py", line 1298, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/usr/lib/python3.11/http/client.py", line 1058, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.11/http/client.py", line 996, in send
+    self.connect()
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x7ff70450b4d0>: Failed to establish a new connection: [Errno 111] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/main/views.py", line 157, in post
+    crawl_func(customer_id, customer_date, customer_time, test)
+  File "/home/akh/shared/nobat/main/views.py", line 74, in crawl_func
+    success = LocationStep(driver, report).run(customer)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/main/crawl.py", line 270, in run
+    self.driver.get('https://nobat.epolice.ir/')
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/webdriver.py", line 454, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/webdriver.py", line 427, in execute
+    response = self.command_executor.execute(driver_command, params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/selenium/webdriver/remote/remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=48223): Max retries exceeded with url: /session/b73a0bc2d670260390000fab116a9497/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7ff70450b4d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+[2025-03-17 05:49:32] WARNING [django.request:248] Not Found: /
+[2025-03-17 05:49:32] WARNING [django.server:213] "GET / HTTP/1.0" 404 5473
+[2025-03-17 05:49:33] INFO [django.server:213] "GET /user/profile/?customer=2 HTTP/1.1" 200 68377
+[2025-03-17 05:49:33] WARNING [django.request:248] Not Found: /user/profile/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:49:33] WARNING [django.server:213] "GET /user/profile/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 8133
+[2025-03-17 05:49:33] INFO [django.server:213] "GET /square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:49:33] INFO [django.server:213] "GET /user/api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:53:03] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/urls.py changed, reloading.
+[2025-03-17 05:53:05] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 05:53:11] INFO [django.server:213] "GET /?customer=2 HTTP/1.1" 200 68351
+[2025-03-17 05:53:12] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:53:12] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 05:53:12] INFO [django.server:213] "GET /main/square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:53:12] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:53:13] INFO [django.server:213] "GET /?customer=2 HTTP/1.1" 200 68351
+[2025-03-17 05:53:14] INFO [django.server:213] "GET /main/square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:53:14] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:53:14] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 05:53:14] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 05:53:28] INFO [django.server:213] "GET /?customer=2 HTTP/1.1" 200 68351
+[2025-03-17 05:53:28] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 05:53:28] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 05:53:28] INFO [django.server:213] "GET /main/square_nums/?customer=2 HTTP/1.1" 200 20
+[2025-03-17 05:53:28] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 06:27:13] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-17 06:27:14] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:28:05] WARNING [django.request:248] Not Found: /celery/
+[2025-03-17 06:28:05] WARNING [django.server:213] "GET /celery/ HTTP/1.1" 404 5489
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /main/celery/ HTTP/1.1" 200 5226
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+[2025-03-17 06:28:14] INFO [django.server:213] "GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+[2025-03-17 06:32:05] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/nobat/settings.py changed, reloading.
+[2025-03-17 06:32:06] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:32:24] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/nobat/settings.py changed, reloading.
+[2025-03-17 06:32:25] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:36:07] INFO [django.server:213] "GET /main/celery/ HTTP/1.1" 200 5226
+[2025-03-17 06:39:15] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-17 06:39:16] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:39:27] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:39:42] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-17 06:39:44] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:41:12] INFO [django.server:213] "GET /main/celery/ HTTP/1.1" 200 5226
+[2025-03-17 06:41:43] INFO [django.server:213] "GET /main/celery/ HTTP/1.1" 200 5226
+[2025-03-17 06:45:33] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-17 06:45:35] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:46:34] INFO [django.server:213] "GET /main/celery/ HTTP/1.1" 200 5226
+[2025-03-17 06:49:21] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/nobat/celery.py changed, reloading.
+[2025-03-17 06:53:06] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:53:36] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/main/views.py changed, reloading.
+[2025-03-17 06:53:38] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 06:53:59] INFO [django.server:213] "GET /main/celery/ HTTP/1.1" 200 5226
+[2025-03-17 06:56:43] INFO [django.server:213] "GET /admin/user/center/ HTTP/1.1" 200 92962
+[2025-03-17 06:56:43] INFO [django.server:213] "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+[2025-03-17 06:56:43] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:56:43] INFO [django.server:213] "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+[2025-03-17 06:57:02] INFO [django.server:213] "GET /admin/user/center/360/change/ HTTP/1.1" 200 36024
+[2025-03-17 06:57:02] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:57:57] INFO [django.server:213] "GET /admin/user/center/ HTTP/1.1" 200 92962
+[2025-03-17 06:57:57] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:01] INFO [django.server:213] "GET /admin/user/customer/ HTTP/1.1" 200 16306
+[2025-03-17 06:58:01] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:10] INFO [django.server:213] "GET /admin/user/customer/2/change/ HTTP/1.1" 200 90658
+[2025-03-17 06:58:10] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:10] INFO [django.server:213] "GET /main/states/ HTTP/1.1" 200 1125
+[2025-03-17 06:58:10] INFO [django.server:213] "GET /main/towns_by_state/?province=9 HTTP/1.1" 200 236
+[2025-03-17 06:58:19] INFO [django.server:213] "GET /admin/user/user/ HTTP/1.1" 200 18568
+[2025-03-17 06:58:19] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:19] INFO [django.server:213] "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /admin/user/user/1/change/ HTTP/1.1" 200 35278
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/js/SelectBox.js HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/img/selector-icons.svg HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+[2025-03-17 06:58:20] INFO [django.server:213] "GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+[2025-03-17 06:58:32] INFO [django.server:213] "POST /admin/user/user/1/change/ HTTP/1.1" 302 0
+[2025-03-17 06:58:32] INFO [django.server:213] "GET /admin/user/user/ HTTP/1.1" 200 18766
+[2025-03-17 06:58:32] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:33] INFO [django.server:213] "GET /admin/user/user/1/change/ HTTP/1.1" 200 35280
+[2025-03-17 06:58:33] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:39] INFO [django.server:213] "POST /admin/user/user/1/change/ HTTP/1.1" 302 0
+[2025-03-17 06:58:39] INFO [django.server:213] "GET /admin/user/user/ HTTP/1.1" 200 18766
+[2025-03-17 06:58:39] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:40] INFO [django.server:213] "GET /admin/user/user/1/change/ HTTP/1.1" 200 35278
+[2025-03-17 06:58:40] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:58:45] INFO [django.server:213] "GET /?customer=2 HTTP/1.1" 200 12830
+[2025-03-17 06:58:45] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 06:58:45] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 06:58:45] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 06:59:23] ERROR [django.request:248] Internal Server Error: /admin/user/user/add/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 718, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1959, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1818, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1853, in _changeform_view
+    ModelForm = self.get_form(
+                ^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/admin.py", line 28, in get_form
+    form.base_fields['expiration_date'].help_text = "Field format: 18d 00:00:00 or 18d"
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'expiration_date'
+[2025-03-17 06:59:23] ERROR [django.server:213] "GET /admin/user/user/add/ HTTP/1.1" 500 163211
+[2025-03-17 06:59:27] ERROR [django.request:248] Internal Server Error: /admin/user/user/add/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 718, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1959, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1818, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1853, in _changeform_view
+    ModelForm = self.get_form(
+                ^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/admin.py", line 28, in get_form
+    form.base_fields['expiration_date'].help_text = "Field format: 18d 00:00:00 or 18d"
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'expiration_date'
+[2025-03-17 06:59:27] ERROR [django.server:213] "GET /admin/user/user/add/ HTTP/1.1" 500 163175
+[2025-03-17 06:59:42] ERROR [django.request:248] Internal Server Error: /admin/user/user/add/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 718, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1959, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1818, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1853, in _changeform_view
+    ModelForm = self.get_form(
+                ^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/admin.py", line 28, in get_form
+    form.base_fields['expiration_date'].help_text = "Field format: 18d 00:00:00 or 18d"
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'expiration_date'
+[2025-03-17 06:59:42] ERROR [django.server:213] "GET /admin/user/user/add/ HTTP/1.1" 500 163175
+[2025-03-17 06:59:44] INFO [django.server:213] "GET /admin/user/user/1/change/ HTTP/1.1" 200 35278
+[2025-03-17 06:59:46] INFO [django.server:213] "GET /admin/user/user/ HTTP/1.1" 200 18568
+[2025-03-17 06:59:46] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 06:59:49] ERROR [django.request:248] Internal Server Error: /admin/user/user/add/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 718, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/views/decorators/debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 121, in add_view
+    return self._add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/admin.py", line 149, in _add_view
+    return super().add_view(request, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1959, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1818, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1853, in _changeform_view
+    ModelForm = self.get_form(
+                ^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/admin.py", line 28, in get_form
+    form.base_fields['expiration_date'].help_text = "Field format: 18d 00:00:00 or 18d"
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'expiration_date'
+[2025-03-17 06:59:49] ERROR [django.server:213] "GET /admin/user/user/add/ HTTP/1.1" 500 163202
+[2025-03-17 07:03:17] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/admin.py changed, reloading.
+[2025-03-17 07:03:20] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 07:03:26] INFO [django.server:213] "GET /admin/user/user/add/ HTTP/1.1" 200 19240
+[2025-03-17 07:03:26] INFO [django.server:213] "GET /static/admin/css/unusable_password_field.css HTTP/1.1" 200 663
+[2025-03-17 07:03:26] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:03:26] INFO [django.server:213] "GET /static/admin/js/unusable_password_field.js HTTP/1.1" 200 1480
+[2025-03-17 07:03:47] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/admin.py changed, reloading.
+[2025-03-17 07:03:49] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 07:04:04] INFO [django.server:213] "POST /admin/user/user/add/ HTTP/1.1" 302 0
+[2025-03-17 07:04:04] INFO [django.server:213] "GET /admin/user/user/2/change/ HTTP/1.1" 200 35429
+[2025-03-17 07:04:04] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:04:13] INFO [django.server:213] "GET /admin/user/user/2/password/ HTTP/1.1" 200 16165
+[2025-03-17 07:04:25] INFO [django.server:213] "POST /admin/user/user/2/password/ HTTP/1.1" 200 16439
+[2025-03-17 07:04:35] INFO [django.server:213] "POST /admin/user/user/2/password/ HTTP/1.1" 302 0
+[2025-03-17 07:04:35] INFO [django.server:213] "GET /admin/user/user/2/change/ HTTP/1.1" 200 35340
+[2025-03-17 07:04:35] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:04:41] INFO [django.server:213] "GET /admin/user/town/ HTTP/1.1" 200 43418
+[2025-03-17 07:04:41] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:04:44] INFO [django.server:213] "GET /admin/user/town/316/change/ HTTP/1.1" 200 19110
+[2025-03-17 07:04:44] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:04:48] INFO [django.server:213] "GET /admin/user/state/ HTTP/1.1" 200 24588
+[2025-03-17 07:04:48] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:04:51] INFO [django.server:213] "GET /admin/user/pelak/ HTTP/1.1" 200 15968
+[2025-03-17 07:04:51] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:04:52] INFO [django.server:213] "GET /admin/user/pelak/1/change/ HTTP/1.1" 200 16349
+[2025-03-17 07:04:52] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:10:20] WARNING [django.request:248] Not Found: /.env
+[2025-03-17 07:10:20] WARNING [django.server:213] "GET /.env HTTP/1.0" 404 5476
+[2025-03-17 07:10:24] WARNING [django.request:248] Not Found: /.env
+[2025-03-17 07:10:24] WARNING [django.server:213] "GET /.env HTTP/1.0" 404 5476
+[2025-03-17 07:11:17] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/admin.py changed, reloading.
+[2025-03-17 07:11:19] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 07:11:27] INFO [django.server:213] "GET /admin/user/pelak/1/change/ HTTP/1.1" 200 16349
+[2025-03-17 07:11:27] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:11:28] INFO [django.server:213] "GET /admin/user/pelak/1/change/ HTTP/1.1" 200 16349
+[2025-03-17 07:11:29] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:12:59] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/admin.py changed, reloading.
+[2025-03-17 07:13:01] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 07:13:14] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/admin.py changed, reloading.
+[2025-03-17 07:13:16] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 07:13:22] INFO [django.server:213] "GET /admin/user/pelak/1/change/ HTTP/1.1" 200 16340
+[2025-03-17 07:13:23] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:13:43] INFO [django.utils.autoreload:266] /home/akh/shared/nobat/user/admin.py changed, reloading.
+[2025-03-17 07:13:45] INFO [django.utils.autoreload:668] Watching for file changes with StatReloader
+[2025-03-17 07:13:53] INFO [django.server:213] "GET /admin/user/user/ HTTP/1.1" 200 19019
+[2025-03-17 07:13:53] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:14:26] INFO [django.server:213] "GET /?customer=2 HTTP/1.1" 200 12830
+[2025-03-17 07:14:26] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:14:26] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:14:26] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 07:14:28] INFO [django.server:213] "GET /logout/?csrfmiddlewaretoken=ea4QwylfTUj5qIsEsN2anbJMFLNs7294PlVFupehowC1wIsXFU2cdcuIt8qAzcLl HTTP/1.1" 302 0
+[2025-03-17 07:14:28] INFO [django.server:213] "GET /login/ HTTP/1.1" 200 8822
+[2025-03-17 07:14:28] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:14:28] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5564
+[2025-03-17 07:14:38] WARNING [django.request:248] Not Found: /activate
+[2025-03-17 07:14:38] WARNING [django.server:213] "GET /activate HTTP/1.1" 404 5492
+[2025-03-17 07:14:50] INFO [django.server:213] "GET /admin/user/user/2/change/ HTTP/1.1" 302 0
+[2025-03-17 07:14:50] INFO [django.server:213] "GET /admin/login/?next=/admin/user/user/2/change/ HTTP/1.1" 200 4202
+[2025-03-17 07:14:51] INFO [django.server:213] "GET /static/admin/css/login.css HTTP/1.1" 304 0
+[2025-03-17 07:14:57] INFO [django.server:213] "POST /admin/login/?next=/admin/user/user/2/change/ HTTP/1.1" 302 0
+[2025-03-17 07:14:57] INFO [django.server:213] "GET /admin/user/user/2/change/ HTTP/1.1" 200 35204
+[2025-03-17 07:14:57] INFO [django.server:213] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2025-03-17 07:15:11] INFO [django.server:213] "GET /2/activate HTTP/1.1" 301 0
+[2025-03-17 07:15:11] INFO [django.server:213] "GET /2/activate/ HTTP/1.1" 200 5016
+[2025-03-17 07:15:12] WARNING [django.request:248] Not Found: /2/activate/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:15:12] WARNING [django.server:213] "GET /2/activate/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5579
+[2025-03-17 07:15:17] INFO [django.server:213] "POST /admin/logout/ HTTP/1.1" 200 3559
+[2025-03-17 07:15:20] INFO [django.server:213] "GET /2/activate/ HTTP/1.1" 200 5016
+[2025-03-17 07:15:20] WARNING [django.request:248] Not Found: /2/activate/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:15:20] WARNING [django.server:213] "GET /2/activate/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5579
+[2025-03-17 07:15:21] INFO [django.server:213] "GET /2/activate/ HTTP/1.1" 200 5016
+[2025-03-17 07:15:21] WARNING [django.request:248] Not Found: /2/activate/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:15:21] WARNING [django.server:213] "GET /2/activate/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5579
+[2025-03-17 07:15:26] INFO [django.server:213] "POST /1/activate/ HTTP/1.1" 200 5501
+[2025-03-17 07:15:26] WARNING [django.request:248] Not Found: /1/activate/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:15:26] WARNING [django.server:213] "GET /1/activate/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5579
+[2025-03-17 07:15:48] INFO [django.server:213] "POST /1/activate/ HTTP/1.1" 200 5558
+[2025-03-17 07:15:48] WARNING [django.request:248] Not Found: /1/activate/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:15:48] WARNING [django.server:213] "GET /1/activate/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5579
+[2025-03-17 07:15:58] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:15:58] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:15:58] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:15:59] INFO [django.server:213] "GET /main/square_nums/ HTTP/1.1" 200 0
+[2025-03-17 07:16:05] WARNING [django.security.csrf:248] Forbidden (CSRF token from POST incorrect.): /admin/logout/
+[2025-03-17 07:16:05] WARNING [django.server:213] "POST /admin/logout/ HTTP/1.1" 403 2503
+[2025-03-17 07:16:10] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 4515
+[2025-03-17 07:16:10] INFO [django.server:213] "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+[2025-03-17 07:16:12] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:16:12] INFO [django.server:213] "GET /main/square_nums/ HTTP/1.1" 200 0
+[2025-03-17 07:16:12] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:16:12] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:16:14] INFO [django.server:213] "GET /logout/?csrfmiddlewaretoken=yT79rO1Qd8vkP3Ksr2NlyMs0o2GTYIwQ0gkkc0uR8emNDyXSiMLs1x0HbB3KlD3G HTTP/1.1" 302 0
+[2025-03-17 07:16:14] INFO [django.server:213] "GET /login/ HTTP/1.1" 200 8822
+[2025-03-17 07:16:14] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:16:14] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5564
+[2025-03-17 07:16:19] WARNING [django.request:248] Unauthorized: /api/token/
+[2025-03-17 07:16:19] WARNING [django.server:213] "POST /api/token/ HTTP/1.1" 401 63
+[2025-03-17 07:16:19] INFO [django.server:213] "POST /login/ HTTP/1.1" 200 8856
+[2025-03-17 07:16:21] WARNING [django.request:248] Unauthorized: /api/token/
+[2025-03-17 07:16:21] WARNING [django.server:213] "POST /api/token/ HTTP/1.1" 401 63
+[2025-03-17 07:16:21] INFO [django.server:213] "POST /login/ HTTP/1.1" 200 8856
+[2025-03-17 07:16:29] INFO [django.server:213] "POST /api/token/ HTTP/1.1" 200 483
+[2025-03-17 07:16:29] INFO [django.server:213] "POST /login/ HTTP/1.1" 302 0
+[2025-03-17 07:16:29] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:16:29] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:16:29] INFO [django.server:213] "GET /main/square_nums/ HTTP/1.1" 200 0
+[2025-03-17 07:16:30] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:16:30] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:16:40] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 4515
+[2025-03-17 07:16:41] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 4515
+[2025-03-17 07:16:42] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 4515
+[2025-03-17 07:16:43] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 4515
+[2025-03-17 07:16:53] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:16:53] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:16:53] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:16:53] INFO [django.server:213] "GET /main/square_nums/ HTTP/1.1" 200 0
+[2025-03-17 07:16:54] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:16:54] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:16:54] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:16:54] INFO [django.server:213] "GET /main/square_nums/ HTTP/1.1" 200 0
+[2025-03-17 07:16:58] INFO [django.server:213] "GET / HTTP/1.1" 200 67674
+[2025-03-17 07:16:58] INFO [django.server:213] "GET /main/square_nums/ HTTP/1.1" 200 0
+[2025-03-17 07:16:58] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:16:58] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:17:00] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 4515
+[2025-03-17 07:17:07] INFO [django.server:213] "POST /admin/logout/ HTTP/1.1" 200 3559
+[2025-03-17 07:17:09] ERROR [django.request:248] Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 114, in profile
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/functional.py", line 253, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
+[2025-03-17 07:17:09] ERROR [django.server:213] "GET / HTTP/1.1" 500 77780
+[2025-03-17 07:17:26] INFO [django.server:213] "GET /admin/ HTTP/1.1" 302 0
+[2025-03-17 07:17:27] INFO [django.server:213] "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4164
+[2025-03-17 07:17:34] INFO [django.server:213] "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+[2025-03-17 07:17:34] INFO [django.server:213] "GET /admin/ HTTP/1.1" 200 19703
+[2025-03-17 07:17:58] INFO [django.server:213] "GET / HTTP/1.1" 200 12790
+[2025-03-17 07:17:58] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.1" 200 126
+[2025-03-17 07:17:58] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 07:17:58] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.1" 404 5546
+[2025-03-17 07:42:32] ERROR [django.request:248] Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 114, in profile
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/functional.py", line 253, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
+[2025-03-17 07:42:32] ERROR [django.server:213] "GET / HTTP/1.0" 500 76470
+[2025-03-17 07:48:14] WARNING [django.request:248] Not Found: /.env
+[2025-03-17 07:48:14] WARNING [django.server:213] "GET /.env HTTP/1.0" 404 5476
+[2025-03-17 07:48:17] WARNING [django.request:248] Not Found: /localhost/.env
+[2025-03-17 07:48:17] WARNING [django.server:213] "GET /localhost/.env HTTP/1.0" 404 5506
+[2025-03-17 07:48:19] WARNING [django.request:248] Not Found: /laravel/.env.production
+[2025-03-17 07:48:19] WARNING [django.server:213] "GET /laravel/.env.production HTTP/1.0" 404 5533
+[2025-03-17 07:48:21] WARNING [django.request:248] Not Found: /local/.env.prod
+[2025-03-17 07:48:21] WARNING [django.server:213] "GET /local/.env.prod HTTP/1.0" 404 5509
+[2025-03-17 08:13:29] ERROR [django.request:248] Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 114, in profile
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/functional.py", line 253, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
+[2025-03-17 08:13:29] ERROR [django.server:213] "GET / HTTP/1.0" 500 76786
+[2025-03-17 08:14:57] ERROR [django.request:248] Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 114, in profile
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/functional.py", line 253, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
+[2025-03-17 08:14:57] ERROR [django.server:213] "GET / HTTP/1.0" 500 76470
+[2025-03-17 08:41:11] WARNING [django.request:248] Not Found: /.env
+[2025-03-17 08:41:11] WARNING [django.server:213] "GET /.env HTTP/1.0" 404 5476
+[2025-03-17 08:45:23] WARNING [django.request:248] Not Found: /user/login/
+[2025-03-17 08:45:23] WARNING [django.server:213] "GET /user/login/ HTTP/1.0" 404 5492
+[2025-03-17 08:45:24] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:45:24] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:46:14] WARNING [django.request:248] Not Found: /user/login/
+[2025-03-17 08:46:14] WARNING [django.server:213] "GET /user/login/ HTTP/1.0" 404 5492
+[2025-03-17 08:46:15] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:46:15] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:46:29] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 08:46:30] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:46:30] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:46:30] ERROR [django.request:248] Internal Server Error: /login2/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework_simplejwt/backends.py", line 160, in decode
+    return jwt.decode(
+           ^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/jwt/api_jwt.py", line 211, in decode
+    decoded = self.decode_complete(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/jwt/api_jwt.py", line 163, in decode_complete
+    self._validate_claims(
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/jwt/api_jwt.py", line 249, in _validate_claims
+    self._validate_exp(payload, now, leeway)
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/jwt/api_jwt.py", line 307, in _validate_exp
+    raise ExpiredSignatureError("Signature has expired")
+jwt.exceptions.ExpiredSignatureError: Signature has expired
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework_simplejwt/tokens.py", line 64, in __init__
+    self.payload = token_backend.decode(token, verify=verify)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework_simplejwt/backends.py", line 175, in decode
+    raise TokenBackendExpiredToken(_("Token is expired")) from ex
+rest_framework_simplejwt.exceptions.TokenBackendExpiredToken: Token is expired
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 47, in login_account2
+    access_token = AccessToken(data['token'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/rest_framework_simplejwt/tokens.py", line 66, in __init__
+    raise ExpiredTokenError(_("Token is expired"))
+rest_framework_simplejwt.exceptions.ExpiredTokenError: Token is expired
+[2025-03-17 08:46:30] ERROR [django.server:213] "POST /login2/ HTTP/1.0" 500 112387
+[2025-03-17 08:46:30] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:46:30] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:46:39] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 08:46:39] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 08:46:39] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:46:39] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:46:39] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:46:39] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:46:39] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:46:40] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:46:40] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:46:40] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:46:40] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:53:56] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 9143
+[2025-03-17 08:53:56] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:53:56] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:53:56] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 08:53:56] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:53:56] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:53:56] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:53:57] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:53:57] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:53:57] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:53:57] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:54:07] ERROR [django.request:248] Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 114, in profile
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/functional.py", line 253, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
+[2025-03-17 08:54:07] ERROR [django.server:213] "GET / HTTP/1.0" 500 76470
+[2025-03-17 08:54:58] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 9143
+[2025-03-17 08:54:58] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 08:54:58] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:54:58] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:54:59] INFO [django.server:213] "GET / HTTP/1.0" 200 13110
+[2025-03-17 08:54:59] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:54:59] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:54:59] INFO [django.server:213] "GET / HTTP/1.0" 200 13110
+[2025-03-17 08:54:59] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:54:59] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:54:59] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:56:26] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 9143
+[2025-03-17 08:56:26] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 08:56:27] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:56:27] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:56:27] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:56:27] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:56:27] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:56:27] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:56:27] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:56:27] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:56:27] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:58:16] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 08:58:16] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 08:58:17] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:17] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:58:17] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:58:17] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:58:17] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:58:17] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:58:17] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:58:17] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:17] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:58:21] ERROR [django.request:248] Internal Server Error: /edit/
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'customer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 178, in edit_customer
+    customer = Customer.objects.get(id=request.GET['customer'])
+                                       ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'customer'
+[2025-03-17 08:58:21] ERROR [django.server:213] "GET /edit/? HTTP/1.0" 500 84936
+[2025-03-17 08:58:26] INFO [django.server:213] "GET /login/ HTTP/1.0" 200 8822
+[2025-03-17 08:58:26] INFO [django.server:213] "POST /login2/ HTTP/1.0" 302 0
+[2025-03-17 08:58:27] WARNING [django.request:248] Not Found: /login/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:27] WARNING [django.server:213] "GET /login/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5555
+[2025-03-17 08:58:27] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:58:27] WARNING [django.request:248] Not Found: /favicon.ico
+[2025-03-17 08:58:27] WARNING [django.server:213] "GET /favicon.ico HTTP/1.0" 404 5492
+[2025-03-17 08:58:27] INFO [django.server:213] "GET / HTTP/1.0" 200 12790
+[2025-03-17 08:58:27] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:27] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:58:27] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:58:29] INFO [django.server:213] "GET /?customer=2 HTTP/1.0" 200 12830
+[2025-03-17 08:58:29] WARNING [django.request:248] Not Found: /fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:29] WARNING [django.server:213] "GET /fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5537
+[2025-03-17 08:58:29] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:58:31] INFO [django.server:213] "GET /main/licence_time/?customer=2 HTTP/1.0" 200 12831
+[2025-03-17 08:58:31] WARNING [django.request:248] Not Found: /main/licence_time/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:31] WARNING [django.server:213] "GET /main/licence_time/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 8131
+[2025-03-17 08:58:32] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:58:33] INFO [django.server:213] "GET /add/?customer=2 HTTP/1.0" 200 24184
+[2025-03-17 08:58:33] WARNING [django.request:248] Not Found: /add/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:33] INFO [django.server:213] "GET /main/states/ HTTP/1.0" 200 1125
+[2025-03-17 08:58:33] WARNING [django.server:213] "GET /add/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5549
+[2025-03-17 08:58:33] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 08:58:33] INFO [django.server:213] "GET /main/service_list/ HTTP/1.0" 200 839
+[2025-03-17 08:58:42] INFO [django.server:213] "GET /customers/?customer=2 HTTP/1.0" 200 11065
+[2025-03-17 08:58:43] WARNING [django.request:248] Not Found: /customers/fonts/Vazir-Regular-UI.ttf
+[2025-03-17 08:58:43] WARNING [django.server:213] "GET /customers/fonts/Vazir-Regular-UI.ttf HTTP/1.0" 404 5567
+[2025-03-17 08:58:43] INFO [django.server:213] "GET /api/all_users_json/ HTTP/1.0" 200 126
+[2025-03-17 09:12:07] ERROR [django.request:248] Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/shared/nobat/user/views.py", line 114, in profile
+    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/akh/.virtualenvs/work/lib/python3.11/site-packages/django/utils/functional.py", line 253, in inner
+    return func(_wrapped, *args)
+           ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUser' object has no attribute 'expiration_date'
+[2025-03-17 09:12:07] ERROR [django.server:213] "GET / HTTP/1.0" 500 76470

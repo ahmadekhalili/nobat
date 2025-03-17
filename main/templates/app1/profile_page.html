@@ -573,8 +573,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusSquares = document.getElementById("status_squares");
 
   async function addSquare() {
-          // 94% chance for green, 6% chance for red
-    const isGreen = Math.random() < 0.94;
+          // 100% chance for green, 0% chance for red
+    const isGreen = Math.random() < 1;
     const colorClass = isGreen ? "green" : "red";
     const response = await fetch("{% url 'main:square_nums' %}", {
       method: "POST",

@@ -710,9 +710,7 @@ class LastStep:
             try:
                 # captcha detection
                 try:
-                    captcha_img = WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, "img.captcha_image_reserve"))
-                    )
+                    captcha_img = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//img[contains(@class, 'captcha_image')]")))
                     # Save screenshot of just that <img> to "captcha.png"
                     captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
                     captcha_img.screenshot(captcha_path)
@@ -783,9 +781,21 @@ class LastStep:
                         print('nobat reservation ended but in getting the cd_peigiry problem happended')
                         return False
 
-                print(f'retry: {i}/{max_lim} times')    # submits failed, loop again (just captcha input resets)
+                try:
+                    print(f'try refreshing captcha')
+                    refresh_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//i[contains(@onclick, 'refresh_captcha')]")))
+                    refresh_button.click()
+                except:
+                    try:
+                        print(f'try another way refreshing captcha')
+                        refresh_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//i[contains(@onclick, 'refresh_captcha')]")))
+                        ActionChains(driver).move_to_element(refresh_button).click().perform()
+                    except:
+                        print(f'error refreshing the captcha totall')
+                print(f'retry: {i}/{max_lim} times')  # submits failed, loop again (just captcha input resets)
             except:
-                print(f'captcha fails: {i}/{max_lim} times')
+                print(f'captcha fails: {i}/{max_lim} times')  # possibilty not happens
+
             i += 1
         return False
 

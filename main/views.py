@@ -20,13 +20,13 @@ from user.models import Customer, State, Town, Center,  ServiceType
 
 logger = get_task_logger(__name__)
 logging = py_logging.getLogger('explicit')
-
+cl_logging = py_logging.getLogger('celery')
 
 @shared_task
 def sample_task():
-    logging.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
-    print("Task runnnnnnnnnnn")
-    return None
+    logger.info("QQQQQQQQQQ")
+    print("WWWWWWWWW")
+    return True
 
 
 class test_celery(APIView):
@@ -141,7 +141,7 @@ class CrawlCustomer(APIView):
 
     def post(self, request, *args, **kwargs):
         post = request.POST
-        test = False     # you can pass test=True for test porpuse (only finall submit not click)
+        test = True     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
         print('form data: ', request.POST)
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..
@@ -150,6 +150,7 @@ class CrawlCustomer(APIView):
         pre_datetimes = [convert_jalali_to_gregorian(dates_times.get(f"date{i}"), dates_times.get(f"time{i}")) for i in range(1, 5)]
         datetimes = [date_time for date_time in pre_datetimes if date_time]
         print(f"datetimes for schedules: {len(datetimes)}")
+        add_square(customer_id, color_class='green')
         customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
         print(f"dates updated, customer id: {customer_id}, datetimes: {dates_times}")
         if not datetimes:   # crawl normal inside django
