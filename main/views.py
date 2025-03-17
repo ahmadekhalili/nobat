@@ -19,12 +19,14 @@ from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
 
 logger = get_task_logger(__name__)
-logging = py_logging.getLogger('explicit')
+logging = py_logging.getLogger('explicit')  # show in both celery and django console
 cl_logging = py_logging.getLogger('celery')
 
 @shared_task
 def sample_task():
-    logger.info("QQQQQQQQQQ")
+    logger.info("AAAAAAAAA")
+    logging.info("BBBBBBBBBB")
+    py_logging.info("CCCCCCCCCCC")
     print("WWWWWWWWW")
     return True
 
@@ -54,7 +56,7 @@ def crawl_func(customer_id, customer_date, customer_time, test):
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
     driver = setup()
-    print('started crawl')
+    logging.info('started the crawl')
     # we dont want unwanted subsequnce requests came after complete crawl, to make status stop
     if customer.status == 'stop':
         customer.status = 'start'
@@ -63,7 +65,7 @@ def crawl_func(customer_id, customer_date, customer_time, test):
         active_browsers[customer.id] += [driver]
     else:
         active_browsers[customer.id] = [driver]
-    print('----active browsers of user: ', len(active_browsers[customer.id]))
+    logging.info('----active browsers of user: ', len(active_browsers[customer.id]))
     if not hasattr(customer, 'drivers'):
         customer.drivers = [driver]
     else:
@@ -87,10 +89,10 @@ def crawl_func(customer_id, customer_date, customer_time, test):
                     print('active browsers: ', len(active_browsers))
                     peigiry_path = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
 
+                    customer.cd_peigiri = peigiry_path[0] if peigiry_path[0] else "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"  # we can fail getting cd_peigiry but success in reserve and take screenshot
                     if peigiry_path:  # (cd_peily, full_image_path)
                         print(f"cd peigiry, image url to save in model: {peigiry_path}")
                         customer.status = 'complete'
-                        customer.cd_peigiri = peigiry_path[0]
                         customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
                         print(f"specefic selected date$time to save in customer model: {success_datetime}")
                         if success_datetime[0] and success_datetime[1]:
@@ -141,7 +143,7 @@ class CrawlCustomer(APIView):
 
     def post(self, request, *args, **kwargs):
         post = request.POST
-        test = True     # you can pass test=True for test porpuse (only finall submit not click)
+        test = False     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
         print('form data: ', request.POST)
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..

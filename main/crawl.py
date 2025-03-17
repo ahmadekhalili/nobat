@@ -21,6 +21,7 @@ from urllib.parse import quote
 from PIL import Image
 
 import jdatetime
+import logging as py_logging
 import random
 import string
 import time
@@ -31,6 +32,7 @@ from user.models import Center
 from .methods import image_to_text, HumanMouseMove
 from user.models import ServiceType, PELAK_LETTER_OPTIONS
 
+logging = py_logging.getLogger('explicit') 
 #driver_path = ChromeDriverManager().install()
 
 
@@ -101,7 +103,7 @@ def setup2():
 def setup():
     options = Options()
     winpath_driver, winpath_chrome = r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe", r"C:/chrome/chrome_browser_134.0.6998.35/chrome.exe"
-    linuxpath_driver, linuxpath_chrome = r"/home/akh/shared/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/akh/shared/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
+    linuxpath_driver, linuxpath_chrome = r"/home/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
     service = Service(driver_path=linuxpath_driver)
     options.binary_location = linuxpath_chrome  # C:\chrome\chrome_browser_134.0.6998.35
     options.add_argument("--incognito")  # Enable incognito mode
@@ -135,7 +137,7 @@ def crawl_login(driver, phone, password):
                 password_input = wait.until(EC.visibility_of_element_located((By.NAME, "password")))
                 password_input.send_keys(password)
             except:
-                print("Error finding phone, password elements")
+                logging.info("Error finding phone, password elements")
             try:
                 captcha_image = wait.until(EC.visibility_of_element_located((By.XPATH, "//img[contains(@class, 'captcha_image')]")))
                 captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
@@ -143,7 +145,7 @@ def crawl_login(driver, phone, password):
                 text = image_to_text(captcha_path).replace(' ', '')
             except:
                 text = False
-                print('Error save and convert captcha to text')
+                logging.info('Error save and convert captcha to text')
             if not text:
                 # Locate the refresh button using XPath (by matching part of the onclick attribute)
                 try:
@@ -152,7 +154,7 @@ def crawl_login(driver, phone, password):
                     ))
                     refresh_button.click()
                 except:
-                    print(f'error refreshing the captcha try {max_iter-i} more times')
+                    logging.info(f'error refreshing the captcha try {max_iter-i} more times')
             else:
                 # Locate and fill the "کد کپچا" input (captcha)
                 try:
@@ -164,13 +166,13 @@ def crawl_login(driver, phone, password):
                     ))
                     ActionChains(driver).move_to_element(submit_button).click().perform()
                     try:  # if find element we are not logged in, continue looping
-                        print('search captcha input:')
+                        logging.info('search captcha input:')
                         time.sleep(5)  # wait a bit to leave the page and load sec page ((important)
                         # elements = driver.find_elements(By.XPATH, "//span[text()='ورود به حساب کاربری']")
                         captcha_input = wait.until(EC.visibility_of_element_located((By.NAME, "sec_code_login")))
                     except:  # we logged in
                         message = "ورود موفق آمیز بود."
-                        print(message)
+                        logging.info(message)
                         return message
                 except:
                     print(f"Error in entering captcha and submit, try {max_iter-i} more times")
@@ -182,7 +184,7 @@ def crawl_login(driver, phone, password):
             return False
         else:
             message = "ورود موفق آمیز بود."
-            print(message)
+            logging.info(message)
             return True
     except:
         print("Error finding elements of login page")
@@ -211,10 +213,10 @@ def select_dropdown_items(driver):
     # Retrieve all li elements within the ul
     li_elements = dropdown_ul.find_elements(By.TAG_NAME, "li")
 
-    print([li.text for li in li_elements])
+    logging.info([li.text for li in li_elements])
     # Filter li elements by checking if their text contains the target string.
     matching_li_elements = [li for li in li_elements if li_text in li.text]
-    print([li.text for li in matching_li_elements])
+    logging.info([li.text for li in matching_li_elements])
     # Click on each matching li element in order.
     for li in matching_li_elements:
         # Optionally scroll the element into view before clicking.
@@ -234,7 +236,7 @@ class LocationStep:
         try:
             dropdowns = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "span.select2-selection__rendered")))
             for i, dropdown in enumerate(dropdowns):
-                print(f'Successfully got dropdown {i+1} to click: ', dropdown.get_attribute('outerHTML'))
+                logging.info(f'Successfully got dropdown {i+1} to click: ', dropdown.get_attribute('outerHTML'))
                 value, ul_id = four_section[i]['value'], four_section[i]['ul_id']
                 ActionChains(driver).move_to_element(dropdown).click().perform()
                 # Locate the state by text
@@ -255,14 +257,14 @@ class LocationStep:
                     try:
                         state_li = ul_element.find_element(By.XPATH, f".//li[text()='{value}']")
                     except:
-                        print(f"Unable location dropdown {i + 1} item: {value}")
+                        logging.info(f"Unable location dropdown {i + 1} item: {value}")
                         return False
                     state_li.click()
                 # time.sleep(0.5)
             else:
                 return True
         except:
-            print(f"An error occurred in location step")
+            logging.info(f"An error occurred in location step")
             return False
 
     def run(self, customer):
@@ -309,7 +311,7 @@ class CenterStep:
                         link.click()
                         message = f"مرکز {search_text} با موفقیت انتخاب شد. مرحله بعد انتخاب روز."
                         self.report.append(('pub', message))
-                        print(message)
+                        logging.info(message)
                         break
                 except:
                     continue  # Skip cart if elements not found, handles in else
@@ -317,7 +319,7 @@ class CenterStep:
             else:
                 message = f"مرکز {search_text} برای این سرویس و استان وجود در دسترس نیست. لطفا مرکز دیگری را انتخاب نمایید"
                 self.report.append(('pub', message))
-                print(message)
+                logging.info(message)
                 return False
 
             try:
@@ -342,18 +344,18 @@ class CenterStep:
                     )
                     ActionChains(driver).move_to_element(clickable_input).click().perform()
                     self.report.append(('سرویس', service_type))
-                    print(f"Successfully clicked the input for {service_type}")
+                    logging.info(f"Successfully clicked the input for {service_type}")
                     return True
                 else:
-                    print(f"Label with text {service_type} not found.")
+                    logging.info(f"Label with text {service_type} not found.")
                     return False
 
             except Exception as e:
-                print(f"An error occurred: {e}")
+                logging.info(f"An error occurred: {e}")
                 return False
 
         except:
-            print("Timed out waiting for page elements to load")
+            logging.info("Timed out waiting for page elements to load")
             return False
 
     def run(self, customer):
@@ -385,12 +387,12 @@ class DateTimeStep:
         message, reserveday_links = None, None
         wait = WebDriverWait(driver, 10)  # Wait up to 10 seconds
         try:    # obtain very fast at first, next switch to slow
-            print('Fast mode, date finding')
+            logging.info('Fast mode, date finding')
             time.sleep(0.1)
             reserveday_links = driver.find_elements(By.CSS_SELECTOR, "a.reserveday")
             raise  # came to except to continue
         except:
-            print('switched slow mode, date finding')
+            logging.info('switched slow mode, date finding')
             try:
                 # 1. Wait for the presence of 'reserveday' links (Best Practice: Explicit Wait)
                 try:
@@ -398,7 +400,7 @@ class DateTimeStep:
                         reserveday_links = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a.reserveday")))
                         print(f"Found {len(reserveday_links)} 'reserveday' links.")
                 except:
-                    print(f"Raise error finding date container")
+                    logging.info(f"Raise error finding date container")
                     raise
 
                 # 2. Iterate through the links and find the one with the specific date
@@ -422,16 +424,16 @@ class DateTimeStep:
                             else:
                                 message = f"No any match dates founded. your date: {requested_date} founded dates: {[link.get_attribute('data-load') for link in reserveday_links]}"
                                 self.report.append(('dev', 'date', message))
-                                print(message)
+                                logging.info(message)
                                 return False
                     except:
-                        print("Error in getting link elements.")
+                        logging.info("Error in getting link elements.")
 
 
 
                 else:
                     dates_list = [link.get_attribute("data-load") for link in reserveday_links]
-                    print(f"all Founded valid dates: {dates_list}")
+                    logging.info(f"all Founded valid dates: {dates_list}")
                     smallest_date = (0, self.string_to_obj(reserveday_links[0].get_attribute("data-load")))
                     for i, link in enumerate(reserveday_links):
                         current_date = (i, self.string_to_obj(link.get_attribute("data-load")))
@@ -445,18 +447,18 @@ class DateTimeStep:
 
             except:
                 message = '.نوبت در روز تخصیص یافته وجود ندارد'
-                print(message)
+                logging.info(message)
                 self.report.append(('date', message))
                 return False
 
     def get_time_container(self, driver):
         try:
             message = "Fast mode, time finding"
-            print(message)
+            logging.info(message)
             try:
                 time.sleep(0.1)
                 buttons = driver.find_elements(By.CSS_SELECTOR, ".reservelist-item a")
-                print(f"Founded green time button numbers: {len(buttons)}")
+                logging.info(f"Founded green time button numbers: {len(buttons)}")
                 if len(buttons) < 1:
                     raise    # continue in except
 
@@ -464,17 +466,17 @@ class DateTimeStep:
 
             except:
                 message = "Fast mode, Unable|0 to find green time elements, lets try gray color."
-                print(message)
+                logging.info(message)
                 reservelist_items = WebDriverWait(driver, 10).until(
                     EC.visibility_of_all_elements_located((By.CSS_SELECTOR, "div.reservelist-item"))
                 )
-                print(f"Founded gray time reserve links numbers: {len(reservelist_items)}")
+                logging.info(f"Founded gray time reserve links numbers: {len(reservelist_items)}")
                 buttons = [item.find_element(By.TAG_NAME, "button") for item in reservelist_items]
-                print(f"Founded gray time button numbers: {len(buttons)}")
+                logging.info(f"Founded gray time button numbers: {len(buttons)}")
                 return buttons
 
         except:
-            print('switched slow mode, time finding')
+            logging.info('switched slow mode, time finding')
             try:
                 try:
                     buttons = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".reservelist-item a")))
@@ -482,17 +484,17 @@ class DateTimeStep:
 
                 except:
                     message = "Unable to find green time elements, lets try gray color."
-                    print(message)
+                    logging.info(message)
                     self.report.append(('dev', message))
                     buttons = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located(
                         (By.XPATH, "//button[@type='submit' and @class='btn btn-default ltr']")))
                     return buttons
             except:
                 message = "Last tried, Unable to find green time elements too."
-                print(message)
+                logging.info(message)
                 self.report.append(('dev', message))
                 message = "نوبت در زمان مورد نظر وجود ندارد"
-                print(message)
+                logging.info(message)
                 self.report.append(('pub', message))
                 return False
 
@@ -513,26 +515,26 @@ class DateTimeStep:
                         if button_text == time_str:
                             ActionChains(driver).move_to_element(button).click().perform()
                             message = f"با موفقیت زمان {time_str} انتخاب شد"
-                            print(message)
+                            logging.info(message)
                             self.report.append(('pub', message))
                             return time_str
                     else:
                         message = f"نوبت در زمان مورد نظر وجود ندارد"
                         self.report.append(('pub', message))
                         message = f"Selected time not founded. searched times: {button_texts}"
-                        print(message)
+                        logging.info(message)
                         self.report.append(('dev', message))
                         screenshot_folder = os.path.join(settings.BASE_DIR, "media", "log_images")
                         if not os.path.exists(screenshot_folder):
                             os.makedirs(screenshot_folder)
                         screenshot_path = os.path.join(screenshot_folder, f"time_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png")
-                        print(f'Screen shots of the times has taken at: {screenshot_path}')
+                        logging.info(f'Screen shots of the times has taken at: {screenshot_path}')
                         self.report.append(('dev', message))
                         driver.save_screenshot(screenshot_path)
                         return False
             except:
                 message = f"Error in founding time elements"
-                print(message)
+                logging.info(message)
                 self.report.append(('dev', message))
                 return False
 
@@ -546,13 +548,13 @@ class DateTimeStep:
 
                 if len(buttons) == 0:
                     message = f"نوبت در زمان مورد نظر وجود ندارد"
-                    print(message)
+                    logging.info(message)
                     self.report.append(('pub', message))
                     screenshot_folder = os.path.join(settings.BASE_DIR, "media", "log_images")
                     if not os.path.exists(screenshot_folder):
                         os.makedirs(screenshot_folder)
                     screenshot_path = os.path.join(screenshot_folder, f"time_{''.join(random.choices(string.ascii_uppercase + string.digits, k=4))}.png")
-                    print(f'Screen shots of the times has taken at: {screenshot_path}')
+                    logging.info(f'Screen shots of the times has taken at: {screenshot_path}')
                     self.report.append(('dev', message))
                     driver.save_screenshot(screenshot_path)
                     return False
@@ -569,13 +571,13 @@ class DateTimeStep:
 
                 ActionChains(driver).move_to_element(samallest_button).click().perform()
                 message = f"با موفقیت زودترین زمان {samallest_time_str} انتخاب شد"
-                print(message)
+                logging.info(message)
                 self.report.append(('pub', message))
                 return samallest_time_str
 
             except Exception as e:
                 message = f"Error in founding time elements {e}"
-                print(message)
+                logging.info(message)
                 self.report.append(('dev', message))
                 return False
 
@@ -610,17 +612,17 @@ class LastStep:
                 select_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "type_pelak")))
                 dropdown = Select(select_element)
                 dropdown.select_by_value(vehicle_cat)  # or .select_by_visible_text for option text
-                print(f"successfully selected vehicle_cat: {vehicle_cat}")
+                logging.info(f"successfully selected vehicle_cat: {vehicle_cat}")
             except:
                 try:
-                    print(f"failed select vehicle_cat: {vehicle_cat}, try with js")
+                    logging.info(f"failed select vehicle_cat: {vehicle_cat}, try with js")
                     select_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "type_pelak")))
                     driver.execute_script(
                         "arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));",
                         select_element, vehicle_cat)
-                    print(f"successfully selected vehicle_cat: {vehicle_cat}, by js")
+                    logging.info(f"successfully selected vehicle_cat: {vehicle_cat}, by js")
                 except:
-                    print(f"failed select vehicle_cat: {vehicle_cat}")
+                    logging.info(f"failed select vehicle_cat: {vehicle_cat}")
                     return False
 
             if vehicle_cat == 'موتور سیکلت':
@@ -647,7 +649,7 @@ class LastStep:
                     input2.send_keys(pelak_nums[1])  # Replace with your desired 5-digit number
 
                 except Exception as e:
-                    print(f"motor siklet pelak section failed")
+                    logging.info(f"motor siklet pelak section failed")
 
             else:
                 try:
@@ -659,23 +661,23 @@ class LastStep:
                     # 2. dropdown pelak (pelak letter)
                     try:
                         pelak2_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, "txtnation2")))
-                        print(f"pelak letter element: {select_element.get_attribute('outerHTML')}")
+                        logging.info(f"pelak letter element: {select_element.get_attribute('outerHTML')}")
                         dropdown = Select(pelak2_element)
                         dropdown.select_by_value(pelak_nums[1])
-                        print(f"successfully selected pelak value: {pelak_nums[1]}")
+                        logging.info(f"successfully selected pelak value: {pelak_nums[1]}")
                     except:
                         try:
-                            print(f"failed select pelak value: {pelak_nums[1]}, try with js")
+                            logging.info(f"failed select pelak value: {pelak_nums[1]}, try with js")
                             pelak2_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "txtnation2")))
-                            print(f"pelak letter element: {select_element.get_attribute('outerHTML')}")
+                            logging.info(f"pelak letter element: {select_element.get_attribute('outerHTML')}")
                             driver.execute_script(
                                 "arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));",
                                 pelak2_element, pelak_nums[1]
                             ) # Select dropdown pelak
 
-                            print(f"successfully selected pelak value: {pelak_nums[1]}, by js")
+                            logging.info(f"successfully selected pelak value: {pelak_nums[1]}, by js")
                         except:
-                            print(f"failed select pelak value: {pelak_nums[1]}")
+                            logging.info(f"failed select pelak value: {pelak_nums[1]}")
                             return False
                     # 3. Input field
                     input_pelak3 = driver.find_element(By.NAME, "txtnation3")  # Locate by name (no ID)
@@ -683,9 +685,9 @@ class LastStep:
                     # 4. Input field
                     input_pelak4 = driver.find_element(By.NAME, "txtnation0")  # Locate by name (no ID)
                     input_pelak4.send_keys(pelak_nums[3])  # Enter the desired value (e.g., "34")
-                    print(f"successfully selected and filled pelak (by js): {pelak_nums}")
+                    logging.info(f"successfully selected and filled pelak (by js): {pelak_nums}")
                 except:
-                    print(f'car pelak section fails')
+                    logging.info(f'car pelak section fails')
 
             # code meli input
             input_codemeli = driver.find_element(By.NAME, "codemeli_kharidar")
@@ -697,10 +699,10 @@ class LastStep:
             )
             driver.execute_script("arguments[0].scrollIntoView(true);", checkbox)
             checkbox.click()
-            print('Successfully clicked on agreement checkbox')
+            logging.info('Successfully clicked on agreement checkbox')
         except:
             message = "raise error in main menu"
-            print(message)
+            logging.info(message)
             return False
 
         # Captcha part
@@ -715,12 +717,12 @@ class LastStep:
                     captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
                     captcha_img.screenshot(captcha_path)
                     text = image_to_text(captcha_path).replace(' ', '')
-                    print('Captcha uploaded to: captcha.png')
+                    logging.info('Captcha uploaded to: captcha.png')
                 except:
                     text = None
-                    print('raised error in captcha image saving: {i}/{max_lim}')
+                    logging.info('raised error in captcha image saving: {i}/{max_lim}')
                 if not text:
-                    print(f'captcha solving was blank: {text}, retry: {i+1}/{max_lim}')
+                    logging.info(f'captcha solving was blank: {text}, retry: {i+1}/{max_lim}')
                     continue
                 else:
                     # captcha input
@@ -729,9 +731,9 @@ class LastStep:
                             EC.presence_of_element_located((By.ID, "sec_code_reserve"))
                         )
                         sec_code_input.send_keys(text)  # replace with your code
-                        print(f'successfully entered captcha text: {text}')
+                        logging.info(f'successfully entered captcha text: {text}')
                     except:
-                        print(f'raised error in captcha input finding: {i+1}/{max_lim}')
+                        logging.info(f'raised error in captcha input finding: {i+1}/{max_lim}')
 
                 # Click the “ثبت نوبت” button
                 submit_button = WebDriverWait(driver, 10).until(
@@ -739,18 +741,18 @@ class LastStep:
                 )
 
                 if test:
-                    print('reserve received successfully in test')
+                    logging.info('reserve received successfully in test')
                     screenshot_folder = os.path.join(settings.BASE_DIR, "media", "saved_nobats")
                     if not os.path.exists(screenshot_folder):
                         os.makedirs(screenshot_folder)
                     screenshot_path = os.path.join(screenshot_folder, f"screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png")
                     driver.save_screenshot(screenshot_path)
-                    print(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
+                    logging.info(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
                     message = "کد پیگیری test_cd_gen با موفقیت ثبت شد"
                     return (message, screenshot_path)   # return true to make button element be 'completion'
                 else:   # finalize reservation
                     submit_button.click()
-                    print('Pressed reserve receiving submit button')
+                    logging.info('Pressed reserve receiving submit button')
                 time.sleep(5)
                 try:
                     submit_button = WebDriverWait(driver, 10).until(
@@ -767,34 +769,34 @@ class LastStep:
                             os.makedirs(screenshot_folder)
                         screenshot_path = os.path.join(screenshot_folder, f"screenshot_{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}.png")
                         driver.save_screenshot(screenshot_path)
-                        print(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
+                        logging.info(f'Screen shot of nobat and its cd peigiry has taken at: {screenshot_path}')
 
                         span_element = WebDriverWait(driver, 10).until(
                             EC.presence_of_element_located((By.XPATH, "//div[@class='alert alert-success']/span")))
                         cd_peigiry_message = span_element.text
                         message = f"کاربر با کد ملی {cd_meli} پلاک {pelak_nums} ووسیله نقلی {vehicle_cat} ثبت و نوبت دریافت شد."
-                        print(message)
+                        logging.info(message)
                         self.report(('pub', message))
 
                         return (cd_peigiry_message, screenshot_path)
                     except:
-                        print('nobat reservation ended but in getting the cd_peigiry problem happended')
-                        return False
+                        logging.info('nobat reservation ended but in getting the cd_peigiry problem happended')
+                        return (None ,screenshot_path)
 
                 try:
-                    print(f'try refreshing captcha')
+                    logging.info(f'try refreshing captcha')
                     refresh_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//i[contains(@onclick, 'refresh_captcha')]")))
                     refresh_button.click()
                 except:
                     try:
-                        print(f'try another way refreshing captcha')
+                        logging.info(f'try another way refreshing captcha')
                         refresh_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//i[contains(@onclick, 'refresh_captcha')]")))
                         ActionChains(driver).move_to_element(refresh_button).click().perform()
                     except:
-                        print(f'error refreshing the captcha totall')
-                print(f'retry: {i}/{max_lim} times')  # submits failed, loop again (just captcha input resets)
+                        logging.info(f'error refreshing the captcha totall')
+                logging.info(f'retry: {i}/{max_lim} times')  # submits failed, loop again (just captcha input resets)
             except:
-                print(f'captcha fails: {i}/{max_lim} times')  # possibilty not happens
+                logging.info(f'captcha fails: {i}/{max_lim} times')  # possibilty not happens
 
             i += 1
         return False

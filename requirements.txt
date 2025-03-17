@@ -21,3 +21,5 @@ flower
 pytz      # localize timezone to work celery ok
 # celery  # install by django-celery-beat
 djangorestframework-simplejwt
+gunicorn
+# install redis-server in ubuntu server

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-0&b_%=x-!_j*akq%o0o2u3tnj#z&&%wkf&5!j(&(otqq&#+%pa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['pelakok.ir', 'www.pelakok.ir', '87.107.104.227', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -207,8 +207,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
-    "https://ictsun.ir",
-    "https://www.ictsun.ir",
+    'https://pelakok.ir',
+    'https://www.pelakok.ir',
 ]
 
 SIMPLE_JWT = {
@@ -245,3 +245,6 @@ CELERYD_HIJACK_ROOT_LOGGER = False  # django controls logs
 
 CELERY_TASK_SEND_SENT_EVENT = True  # now if flower task receiving, runing, ending is more clear
 CELERY_TASK_TRACK_STARTED = True
+
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

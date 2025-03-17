@@ -194,8 +194,23 @@
                                     <input type="text" id="firstName" name="first_name" value="{{ customer.first_name }}" class="my-input" placeholder="نام خود را وارد کنید" />
                                 </div>
                             </div>
-                        </div>
 
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="vehicle_type">وسیله نقلیه</label>
+                <select id="vehicle_type" name="vehicle_type" class="custom-select" required>
+                    {% for key, value in vehicles.items %}
+                        {% if key == current_vehicle.id %}
+                            <option value="{{ key }}" selected>{{ value }}</option>
+                        {% else %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+</div>
                         <button type="submit" class="submit-btn">ثبت اطلاعات</button>
                     </form>
 
@@ -203,75 +218,65 @@
                     <script>console.log("{{ console }}")</script>
                 </div>
 
+<!-- In your Django template, before your JS code -->
+<script>
+  var current_service = {{ current_service|default:"null"|safe }};
+</script>
 <script>
 // Function: populateSelectOptions
 // Purpose: Populate the 'province' and 'serviceType' select elements with data fetched from the server.
 async function populateSelectOptions() {
-  // Get the 'province' select element by its ID.
+  // Populate the 'province' select element
   const selectElement = document.getElementById('province');
-  // Clear any existing options.
-  //selectElement.innerHTML = '';
-  // Create a document fragment to hold the new options for better performance.
   const fragment = document.createDocumentFragment();
 
-  // Fetch the list of states (provinces) from the server.
   const response_state = await fetch("{% url 'main:states' %}");
   if (!response_state.ok) {
     console.error('Network error:', response_state.statusText);
     return;
   }
-  // Parse the response as JSON.
   const states = await response_state.json();
-
-  // Loop through each state and create an <option> element.
   states.forEach(state => {
     const option = document.createElement('option');
-    option.value = state.id;         // Set the option's value.
-    option.textContent = state.name;   // Set the visible text.
-    fragment.appendChild(option);      // Append the option to the document fragment.
+    option.value = state.id;
+    option.textContent = state.name;
+    fragment.appendChild(option);
   });
-
-  // Append all state options to the province select element at once.
   selectElement.appendChild(fragment);
 
-
-  // --- Populate serviceType select ---
+  // Populate the 'serviceType' select element
   const serviceElement = document.getElementById('serviceType');
-  // Clear any existing options.
   serviceElement.innerHTML = '';
-  // Create a document fragment to hold service type options.
   const fragment_service = document.createDocumentFragment();
 
   try {
-    // Fetch the service type list from the server.
     const response_service = await fetch("{% url 'main:service_list' %}");
     if (!response_service.ok) {
       console.error('Network error:', response_service.statusText);
       return;
     }
-    // Parse the response as JSON.
     const data = await response_service.json();
-
-    // Loop through each service type item and create an <option> element.
     data.forEach(item => {
       const option = document.createElement('option');
-      option.value = item.id;          // Set the service type's id as value.
-      option.textContent = item.name;    // Set the service type's name as the display text.
+      option.value = item.id;
+      option.textContent = item.name;
+
+      // Use the globally defined variable for checking current_service
+      if (current_service && current_service.id === item.id) {
+        option.selected = true;
+      }
       fragment_service.appendChild(option);
     });
-
-    // Append all service type options to the serviceType select element.
     serviceElement.appendChild(fragment_service);
   } catch (error) {
     console.error('Error fetching or parsing data:', error);
   }
 }
 
-
-// Run populateSelectOptions after the DOM has loaded.
 document.addEventListener('DOMContentLoaded', function() {
   populateSelectOptions();
 });
+
 
 
 // Province (State) change event listener to update the city select element.

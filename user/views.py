@@ -111,16 +111,19 @@ class Protected(APIView):
 def profile(request):
     customer_time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(7, 17) for minute in range(0, 60, 10) if not (hour == 16 and minute > 0)]
     time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(0, 24) for minute in range(0, 60, 10)]
-    if request.user.expiration_date and request.user.expiration_date < jdatetime.now() or not request.user.is_staff:
-        return render(request, 'app1/licence_time.html', {})
+    if request.user.is_authenticated:
+        if request.user.expiration_date and request.user.expiration_date < jdatetime.now() and not request.user.is_staff:
+            return render(request, 'app1/licence_time.html', {})
+        else:
+            if request.method == 'GET':  # 'user' auto fills in templates if user logged in
+                message_status = 0
+                if request.GET.get('customer'):
+                    customer = Customer.objects.get(id=request.GET['customer'])
+                else:
+                    customer = None
+                return render(request, 'app1/profile_page.html', {'customer': customer, 'time_slots': time_slots, 'customer_time_slots': customer_time_slots})
     else:
-        if request.method == 'GET':  # 'user' auto fills in templates if user logged in
-            message_status = 0
-            if request.GET.get('customer'):
-                customer = Customer.objects.get(id=request.GET['customer'])
-            else:
-                customer = None
-            return render(request, 'app1/profile_page.html', {'customer': customer, 'time_slots': time_slots, 'customer_time_slots': customer_time_slots})
+        return redirect('user:login')
 
 
 
@@ -168,7 +171,7 @@ def add_customer(request):       # error of form submition available in browser 
             state, town = State.objects.get(id=data['state']), Town.objects.get(id=data['town'])
         except Exception as e:
             state, town = None, None
-        dic_data = {'username': data.get('username'), 'password': data.get('password'), 'phone': data.get('phone'), 'state': state, 'town': town, 'service_type': service, 'service_center': center, 'pelak': pelak, 'user': request.user, 'first_name': data.get('first_name'), 'last_name': data.get('last_name')}
+        dic_data = {'username': data.get('username'), 'password': data.get('password'), 'phone': data.get('phone'), 'state': state, 'town': town, 'service_type': service, 'service_center': center, 'pelak': pelak, 'user': request.user, 'first_name': data.get('first_name'), 'last_name': data.get('last_name'), 'vehicle_cat': 'khodro'}
         try:
             customer = Customer.objects.create(**dic_data)
             message = '.کاربر با موفقیت ثبت شد'
@@ -187,11 +190,11 @@ def edit_customer(request):       # error of form submition available in browser
         return redirect('user:profile')
     current_state, current_town, current_service, current_center = StateSerializer(customer.state).data, TownSerializer(customer.town).data, ServiceTypeSerializer(customer.service_type).data, {'id': customer.service_center.id, 'name': customer.service_center.title}
     states, towns, services = StateSerializer(State.objects.all(), many=True).data, TownSerializer(customer.state.towns.all(), many=True).data, ServiceTypeSerializer(ServiceType.objects.all(), many=True).data
+    vehicles = dict(VehicleCatChoices.choices)  # is like: {'khodro': 'نقلیه شخصی', ..}
+    current_vehicle = {'id': customer.vehicle_cat, 'name': vehicles[customer.vehicle_cat]}  # is like {'khodro': 'نقلیه شخصی'}
 
-    pre_pop_params = {'customer': customer, 'states': states, 'towns': towns, 'services': services, 'current_state': current_state, 'current_town': current_town, 'current_service': current_service, 'current_center': current_center}
+    pre_pop_params = {'customer': customer, 'states': states, 'towns': towns, 'services': services, 'vehicles': vehicles, 'current_state': current_state, 'current_town': current_town, 'current_service': current_service, 'current_center': current_center, 'current_vehicle': current_vehicle}
     if request.method == 'GET':
-
-
         return render(request, 'app1/edit_customer.html', {**pre_pop_params})
 
     else:
@@ -212,16 +215,21 @@ def edit_customer(request):       # error of form submition available in browser
             state, town = State.objects.get(id=data['state']), Town.objects.get(id=data['town'])
         except Exception as e:
             state, town = None, None
-        dic_data = {'username': data.get('username'), 'password': data.get('password'), 'phone': data.get('phone'), 'state': state, 'town': town, 'service_type': service, 'service_center': center, 'pelak': pelak, 'user': request.user, 'first_name': data.get('first_name', ''), 'last_name': data.get('last_name', '')}
+        try:
+            current_vehicle = {'id': data['vehicle_type'], 'name': vehicles[data['vehicle_type']]}
+        except Exception as e:
+            current_vehicle = None
+        dic_data = {'username': data.get('username'), 'password': data.get('password'), 'phone': data.get('phone'), 'state': state, 'town': town, 'service_type': service, 'service_center': center, 'pelak': pelak, 'user': request.user, 'first_name': data.get('first_name', ''), 'last_name': data.get('last_name', ''), 'vehicle_cat': data.get('vehicle_type', '')}
+
         try:
             Customer.objects.filter(id=request.GET['customer']).update(**dic_data)
             message = '.کاربر با موفقیت ثبت شد'
-            params = {**pre_pop_params, 'current_state': StateSerializer(state).data if state else None, 'current_town': TownSerializer(town).data if town else None, 'current_service': ServiceTypeSerializer(service).data if service else None, 'current_center': {'id': center.id, 'name': center.title} if center else None}
-            return render(request, 'app1/add_customer.html', {**params, 'message': message, 'console': ''})
+            params = {**pre_pop_params, 'current_state': StateSerializer(state).data if state else None, 'current_town': TownSerializer(town).data if town else None, 'current_service': ServiceTypeSerializer(service).data if service else None, 'current_center': {'id': center.id, 'name': center.title} if center else None, 'current_vehicle': current_vehicle}
+            return render(request, 'app1/edit_customer.html', {**params, 'message': message, 'console': ''})
         except Exception as e:
             message = '.اطلاعات وارد شده صحیح نمی باشد'
-            params = {**pre_pop_params, 'current_state': StateSerializer(state).data if state else None, 'current_town': TownSerializer(town).data if town else None, 'current_service': ServiceTypeSerializer(service).data if service else None, 'current_center': {'id': center.id, 'name': center.title} if center else None}
-            return render(request, 'app1/add_customer.html', {**params, 'message': message, 'console': str(e)})
+            params = {**pre_pop_params, 'current_state': StateSerializer(state).data if state else None, 'current_town': TownSerializer(town).data if town else None, 'current_service': ServiceTypeSerializer(service).data if service else None, 'current_center': {'id': center.id, 'name': center.title} if center else None, 'current_vehicle': current_vehicle}
+            return render(request, 'app1/edit_customer.html', {**params, 'message': message, 'console': str(e)})
 
 
 
