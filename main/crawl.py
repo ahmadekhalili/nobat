@@ -20,8 +20,10 @@ from selenium_stealth import stealth
 from urllib.parse import quote
 from PIL import Image
 
+from pathlib import Path
 import jdatetime
 import logging as py_logging
+import environ
 import random
 import string
 import time
@@ -32,6 +34,9 @@ from user.models import Center
 from .methods import image_to_text, HumanMouseMove
 from user.models import ServiceType, PELAK_LETTER_OPTIONS
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 logging = py_logging.getLogger('explicit') 
 #driver_path = ChromeDriverManager().install()
 
@@ -104,20 +109,22 @@ def setup():
     options = Options()
     winpath_driver, winpath_chrome = r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe", r"C:/chrome/chrome_browser_134.0.6998.35/chrome.exe"
     linuxpath_driver, linuxpath_chrome = r"/home/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
-    service = Service(driver_path=linuxpath_driver)
-    options.binary_location = linuxpath_chrome  # C:\chrome\chrome_browser_134.0.6998.35
+    service = Service(driver_path=env('DRIVER_PATH'))
+    options.binary_location = env('CHROME_PATH')  # C:\chrome\chrome_browser_134.0.6998.35
     options.add_argument("--incognito")  # Enable incognito mode
-    options.add_argument("--headless")
+    if not env.bool('WINDOWS_CRAWL', default=False):
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--disable-extensions')
     options.add_argument('--dns-prefetch-disable')
-    options.add_argument("--disable-gpu")
     user_agent = UserAgent().random
     options.add_argument(f"--user-agent={user_agent}")
 
     driver = webdriver.Chrome(service=service, options=options)
+    driver.delete_all_cookies()  # Clear all cookies
     driver.maximize_window()
     return driver
 

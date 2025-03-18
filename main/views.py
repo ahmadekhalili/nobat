@@ -143,7 +143,7 @@ class CrawlCustomer(APIView):
 
     def post(self, request, *args, **kwargs):
         post = request.POST
-        test = False     # you can pass test=True for test porpuse (only finall submit not click)
+        test = env.bool('TEST_RESERVATION', True)     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
         print('form data: ', request.POST)
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..
