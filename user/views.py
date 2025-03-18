@@ -112,7 +112,9 @@ def profile(request):
     customer_time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(7, 17) for minute in range(0, 60, 10) if not (hour == 16 and minute > 0)]
     time_slots = [f"{hour:02d}:{minute:02d}" for hour in range(0, 24) for minute in range(0, 60, 10)]
     if request.user.is_authenticated:
-        if request.user.expiration_date and request.user.expiration_date < jdatetime.now() and not request.user.is_staff:
+        if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+            return render(request, 'app1/licence_time.html', {})
+        elif not request.user.is_staff:
             return render(request, 'app1/licence_time.html', {})
         else:
             if request.method == 'GET':  # 'user' auto fills in templates if user logged in
