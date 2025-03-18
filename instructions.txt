@@ -1,3 +1,5 @@
+# setup redis-server local
+# create logs folder with at least 664 perms in root, sudo chmod -R 664 logs/
 python manage.py makemigrations
 python manage.py migrate
 

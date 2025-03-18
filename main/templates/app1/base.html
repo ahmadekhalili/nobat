@@ -301,7 +301,7 @@
               <ul class="dropdown-menu" id="customer-list" aria-labelledby="customerDropdown" style="direction: rtl;">
                 {% if not request.user.is_superuser %}
                   {% for customer in user.customers.all %}
-                    <li><a class="dropdown-item text-end" href="{% url 'user:profile' %}?{{ request.GET.urlencode }}">{% if customer.first_name and customer.last_name %}{{ customer.first_name }} {{ customer.last_name }} - {{ customer.username }}{% else %}کاربر {{ forloop.counter }} - {{ customer.username }}{% endif %}</a></li>
+                    <li><a class="dropdown-item text-end" href="{% url 'user:profile' %}?customer={{ customer.id }}">{% if customer.first_name and customer.last_name %}{{ customer.first_name }} {{ customer.last_name }} - {{ customer.username }}{% else %}کاربر {{ forloop.counter }} - {{ customer.username }}{% endif %}</a></li>
                   {% endfor %}
                {% endif %}
               </ul>
