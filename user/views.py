@@ -131,6 +131,9 @@ def profile(request):
 
 @staff_member_required(login_url='/user/login')
 def customers_list(request):
+    if request.user and request.user.is_authenticated:
+        if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+            return render(request, 'app1/licence_time.html', {})
     if request.method == 'GET':
         try:
             customers = request.user.customers.all()
@@ -141,6 +144,9 @@ def customers_list(request):
 
 @staff_member_required(login_url='/user/login')
 def customer_detail(request, pk):
+    if request.user and request.user.is_authenticated:
+        if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+            return render(request, 'app1/licence_time.html', {})
     if request.method == 'GET':
         customer, message_status = Customer.objects.get(id=pk), 0
         return render(request, 'app1/customer_detail.html', {'customer': customer})
@@ -148,6 +154,9 @@ def customer_detail(request, pk):
 
 @staff_member_required(login_url='/user/login')
 def add_customer(request):       # error of form submition available in browser console
+    if request.user and request.user.is_authenticated:
+        if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+            return render(request, 'app1/licence_time.html', {})
     message = ''
     if request.method == 'GET':
         try:
@@ -185,6 +194,9 @@ def add_customer(request):       # error of form submition available in browser 
 
 @staff_member_required(login_url='/user/login')
 def edit_customer(request):       # error of form submition available in browser console
+    if request.user and request.user.is_authenticated:
+        if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
+            return render(request, 'app1/licence_time.html', {})
     message = ''
     try:
         customer = Customer.objects.get(id=request.GET.get('customer'))
