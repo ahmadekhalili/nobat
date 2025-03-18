@@ -120,11 +120,11 @@ def setup():
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--disable-extensions')
     options.add_argument('--dns-prefetch-disable')
-    user_agent = UserAgent().random
-    options.add_argument(f"--user-agent={user_agent}")
+    #user_agent = UserAgent().random
+    #options.add_argument(f"--user-agent={user_agent}")
 
     driver = webdriver.Chrome(service=service, options=options)
-    driver.delete_all_cookies()  # Clear all cookies
+    #driver.delete_all_cookies()  # Clear all cookies
     driver.maximize_window()
     return driver
 
@@ -616,6 +616,8 @@ class LastStep:
         driver = self.driver
         try:
             try:
+                time.sleep(5)
+                logging.info('waited 5 sec for last page')
                 select_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "type_pelak")))
                 dropdown = Select(select_element)
                 dropdown.select_by_value(vehicle_cat)  # or .select_by_visible_text for option text
