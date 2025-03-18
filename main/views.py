@@ -89,8 +89,9 @@ def crawl_func(customer_id, customer_date, customer_time, test):
                     print('active browsers: ', len(active_browsers))
                     peigiry_path = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
 
-                    customer.cd_peigiri = peigiry_path[0] if peigiry_path[0] else "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"  # we can fail getting cd_peigiry but success in reserve and take screenshot
-                    if peigiry_path:  # (cd_peily, full_image_path)
+                    if peigiry_path:  # (cd_peily, full_image_path), is False is seriouse fails
+                        customer.cd_peigiri = peigiry_path[0] if peigiry_path[0] else "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"  # we can fail getting cd_peigiry but success in reserve and take screenshot
+
                         print(f"cd peigiry, image url to save in model: {peigiry_path}")
                         customer.status = 'complete'
                         customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
