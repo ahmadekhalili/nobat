@@ -22,5 +22,6 @@ pytz      # localize timezone to work celery ok
 # celery  # install by django-celery-beat
 django-environ
 djangorestframework-simplejwt
+python-telegram-bot[socks]      # for telegram bot, socks required in linux
 gunicorn
 # install redis-server in ubuntu server

@@ -43,7 +43,7 @@ def login_account2(request):    # telegram logint happens here (auto from refere
         return render(request, 'app1/login.html', {'message': message, 'message_status': message_status})
 
     if request.method == "POST":
-        data = data = json.loads(request.body.decode('utf-8'))
+        data = json.loads(request.body.decode('utf-8'))
         access_token = AccessToken(data['token'])
         user_id = access_token.get('user_id')
         user = User.objects.get(pk=user_id)
@@ -248,19 +248,13 @@ def edit_customer(request):       # error of form submition available in browser
 
 
 class all_users_json(APIView):
-    def get(self, request, *args, **kwargs):
-        # Use prefetch_related to optimize fetching of related customers
-        users = User.objects.prefetch_related('customers').all()
+    def get(self, request, *args, **kwargs):  # get all users to show in "متقاضی های ذخیره شده"
         data = []
-        for user in users:
-            for customer in user.customers.all():
-                # Prepare display name based on available customer data
-                if customer.first_name and customer.last_name:
-                    display_name = f"{customer.first_name} {customer.last_name} - {customer.username}"
-                else:
-                    display_name = f"کاربر - {customer.username}"
-                data.append({
-                    'id': customer.id,
-                    'display_name': display_name,
-                })
+        if request.user.is_authenticated and request.user.is_superuser:
+            users = User.objects.prefetch_related('customers').all()
+            for user in users:
+                for customer in user.customers.all():
+                    data.append(CustomerLinkSerializer(customer).data)
+        elif request.user.is_authenticated and request.user.is_staff:
+            data = list(CustomerLinkSerializer(request.user.customers.all(), many=True).data)
         return Response({'customers': data})

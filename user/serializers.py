@@ -31,3 +31,13 @@ class ServiceTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceType
         fields = ['id', 'name']
+
+
+class CustomerLinkSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    display_name = serializers.SerializerMethodField()
+
+    def get_display_name(self, obj):
+        if obj.first_name and obj.last_name:
+            return f"{obj.first_name} {obj.last_name} - {obj.username}"
+        return f"کاربر - {obj.username}"

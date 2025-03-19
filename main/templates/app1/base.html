@@ -296,16 +296,13 @@
 
           <div class="sidebar-buttons">
             <!-- Dropdown: متقاضی های ذخیره شده -->
-            <div class="dropdown">
+            <div class="dropdown"> <!-- for superuser, request to user:all_users_json to get all possible customers -->
               <button class="my-button dropdown-toggle" type="button" id="customerDropdown" data-bs-toggle="dropdown" aria-expanded="false">متقاضی های ذخیره شده</button>
               <ul class="dropdown-menu" id="customer-list" aria-labelledby="customerDropdown" style="direction: rtl;">
-                {% if not request.user.is_superuser %}
-                  {% for customer in user.customers.all %}
-                    <li><a class="dropdown-item text-end" href="{% url 'user:profile' %}?customer={{ customer.id }}">{% if customer.first_name and customer.last_name %}{{ customer.first_name }} {{ customer.last_name }} - {{ customer.username }}{% else %}کاربر {{ forloop.counter }} - {{ customer.username }}{% endif %}</a></li>
-                  {% endfor %}
-               {% endif %}
               </ul>
             </div>
+
+            <!-- متقاضی های ثبت شده -->
             <button class="my-button"><a href="{% url 'user:customers-list' %}?{{ request.GET.urlencode }}" class="main-link">لیست متقاضی های ثبت شده</a></button>
             <button class="my-button" type="submit"><a href="{% url 'user:add-customer' %}?{{ request.GET.urlencode }}" class="main-link">فرم</a></button>
             <button class="my-button"><a href="{% url 'main:licence-time' %}?{{ request.GET.urlencode }}" class="main-link" >زمان لایسنس</a></button>
@@ -332,10 +329,17 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!--fill ul with all available users if current user is superuser, otherwise it will fill by django template -->
-{% if request.user.is_superuser %}
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      fetch("{% url 'user:all_users_json' %}")
+      const token = localStorage.getItem('access_token');
+      fetch("{% url 'user:all_users_json' %}", {
+        method: 'GET',
+        credentials: 'include',  // ensures cookies (e.g., sessionid) are sent
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => response.json())
         .then(data => {
           const customerList = document.getElementById('customer-list');
@@ -348,6 +352,5 @@
         .catch(error => console.error('Error fetching customers:', error));
     });
   </script>
-{% endif %}
 </body>
 </html>
