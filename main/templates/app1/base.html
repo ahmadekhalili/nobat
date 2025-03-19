@@ -296,14 +296,14 @@
 
           <div class="sidebar-buttons">
             <!-- Dropdown: متقاضی های ذخیره شده -->
-            <div class="dropdown"> <!-- for superuser, request to user:all_users_json to get all possible customers -->
+            <div class="dropdown"> <!-- request to user:new_customers_list to get customers -->
               <button class="my-button dropdown-toggle" type="button" id="customerDropdown" data-bs-toggle="dropdown" aria-expanded="false">متقاضی های ذخیره شده</button>
               <ul class="dropdown-menu" id="customer-list" aria-labelledby="customerDropdown" style="direction: rtl;">
               </ul>
             </div>
 
             <!-- متقاضی های ثبت شده -->
-            <button class="my-button"><a href="{% url 'user:customers-list' %}?{{ request.GET.urlencode }}" class="main-link">لیست متقاضی های ثبت شده</a></button>
+            <button class="my-button"><a href="{% url 'user:reserved_customers_list' %}?{{ request.GET.urlencode }}" class="main-link">لیست متقاضی های ثبت شده</a></button>
             <button class="my-button" type="submit"><a href="{% url 'user:add-customer' %}?{{ request.GET.urlencode }}" class="main-link">فرم</a></button>
             <button class="my-button"><a href="{% url 'main:licence-time' %}?{{ request.GET.urlencode }}" class="main-link" >زمان لایسنس</a></button>
             <button class="my-button"><a href="{% url 'user:edit-customer' %}?{{ request.GET.urlencode }}" class="main-link">ویرایش مشخصات</a>
@@ -332,7 +332,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const token = localStorage.getItem('access_token');
-      fetch("{% url 'user:all_users_json' %}", {
+      fetch("{% url 'user:new_customers_list' %}", {
         method: 'GET',
         credentials: 'include',  // ensures cookies (e.g., sessionid) are sent
         headers: {

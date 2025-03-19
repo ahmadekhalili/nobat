@@ -20,6 +20,8 @@ from .serializers import *
 def login_account(request):
     user, message, message_status = object(), "", 0
     if request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('main:profile')
         return render(request, 'app1/login.html', {'message': message, 'message_status': message_status})
 
     elif request.method == 'POST':
@@ -130,13 +132,13 @@ def profile(request):
 
 
 @staff_member_required(login_url='/user/login')
-def customers_list(request):
+def reserved_customers(request):
     if request.user and request.user.is_authenticated:
         if request.user.expiration_date and request.user.expiration_date < jdatetime.now():
             return render(request, 'app1/licence_time.html', {})
     if request.method == 'GET':
         try:
-            customers = request.user.customers.all()
+            customers = request.user.customers.filter(status='complete')
             return render(request, 'app1/customer_list.html', {'customers': customers})
         except:
             redirect('user:profile')
@@ -247,14 +249,14 @@ def edit_customer(request):       # error of form submition available in browser
 
 
 
-class all_users_json(APIView):
+class NewCustomers(APIView):
     def get(self, request, *args, **kwargs):  # get all users to show in "متقاضی های ذخیره شده"
         data = []
         if request.user.is_authenticated and request.user.is_superuser:
             users = User.objects.prefetch_related('customers').all()
             for user in users:
-                for customer in user.customers.all():
+                for customer in user.customers.exclude(status='complete'):
                     data.append(CustomerLinkSerializer(customer).data)
         elif request.user.is_authenticated and request.user.is_staff:
-            data = list(CustomerLinkSerializer(request.user.customers.all(), many=True).data)
+            data = list(CustomerLinkSerializer(request.user.customers.exclude(status='complete'), many=True).data)
         return Response({'customers': data})
