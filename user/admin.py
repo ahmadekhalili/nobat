@@ -9,6 +9,7 @@ from .forms import AccountUserChangeForm
 
 
 class AcountUserAdmin(UserAdmin):
+    change_form_template = "admin/user/change_form.html"
     form = AccountUserChangeForm
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
