@@ -21,7 +21,7 @@ def login_account(request):
     user, message, message_status = object(), "", 0
     if request.method == 'GET':
         if request.user.is_authenticated:
-            return redirect('main:profile')
+            return redirect('user:profile')
         return render(request, 'app1/login.html', {'message': message, 'message_status': message_status})
 
     elif request.method == 'POST':
