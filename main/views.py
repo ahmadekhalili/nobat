@@ -86,23 +86,23 @@ def crawl_func(customer_id, customer_date, customer_time, test):
                         finall_message = "در روز/ساعت انتخابی نوبت خالی وجود ندارد"
                 if success_datetime[0] and success_datetime[1]:
                     j_datetime = convert_str_jdatetime(success_datetime[0], success_datetime[1])
-                    print('active browsers: ', len(active_browsers))
+                    logging.info("active browsers: %d", len(active_browsers))
                     peigiry_path = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
 
                     if peigiry_path:  # (cd_peily, full_image_path), is False is seriouse fails
                         customer.cd_peigiri = peigiry_path[0] if peigiry_path[0] else "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"  # we can fail getting cd_peigiry but success in reserve and take screenshot
 
-                        print(f"cd peigiry, image url to save in model: {peigiry_path}")
+                        logging.info("cd peigiry, image url to save in model: %s", peigiry_path)
                         customer.status = 'complete'
                         customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
-                        print(f"specefic selected date$time to save in customer model: {success_datetime}")
+                        logging.info("specefic selected date$time to save in customer model: %s", success_datetime)
                         if success_datetime[0] and success_datetime[1]:
                             customer.customer_date, customer.customer_time = success_datetime[0], success_datetime[1]
                         with open(peigiry_path[1], 'rb') as f:
                             # This ensures Django uses the 'upload_to' path and handles the file storage correctly.
                             customer.result_image.save(os.path.basename(peigiry_path[1]), File(f), save=True)
                         customer.save()
-                        print(f"everthing done successfully and saved to the model(customer)")
+                        logging.info("everthing done successfully and saved to the model(customer)")
                         return True
                     else:
                         driver.quit()
@@ -146,16 +146,16 @@ class CrawlCustomer(APIView):
         post = request.POST
         test = env.bool('TEST_RESERVATION', True)     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
-        print('form data: ', request.POST)
+        logging.info(f"form data: {request.POST}")
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..
         customer_time, customer_date = post.get('customer_time', ''), post.get('customer_date', '')  # customer_time like: 07:33  customer_date like: 1404/4/5
         customer = Customer.objects.filter(id=customer_id)
         pre_datetimes = [convert_jalali_to_gregorian(dates_times.get(f"date{i}"), dates_times.get(f"time{i}")) for i in range(1, 5)]
         datetimes = [date_time for date_time in pre_datetimes if date_time]
-        print(f"datetimes for schedules: {len(datetimes)}")
+        logging.info("datetimes for schedules: %d", len(datetimes))
         add_square(customer_id, color_class='green')
         customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
-        print(f"dates updated, customer id: {customer_id}, datetimes: {dates_times}")
+        logging.info("dates updated, customer id: %s, datetimes: %s", customer_id, dates_times)
         if not datetimes:   # crawl normal inside django
             crawl_func(customer_id, customer_date, customer_time, test)
         else:              # crawl schedule date time by celery
@@ -168,7 +168,7 @@ class CrawlCustomer(APIView):
                 date_time_aware = local_tz.localize(date_time)
                 task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
                 #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
-                print(f'Celery rask created for run in: {task_date} {task_time}')
+                logging.info("Celery rask created for run in: %s %s", task_date, task_time)
         return redirect('user:profile')  # رزرو موفقیت آمیر نبود دوباره تلاش کنید
 
 
@@ -179,7 +179,7 @@ class StopCrawl(APIView):
         customer.status = 'stop'       # now customer can add another nobar reservation (afte complete status)
         customer.save()
         customer_active_browsers = active_browsers.get(customer.id, [])
-        print(f"----Active browsers to close: {len(customer_active_browsers)}")
+        logging.info(f"----Active browsers to close: {len(customer_active_browsers)}")
         fails, success = 0, 0
         for driver in customer_active_browsers:
             try:
@@ -187,7 +187,7 @@ class StopCrawl(APIView):
                 success += 1
             except:
                 fails += 1
-        print(f"----Failed closing: {fails}, success closing: {success}")
+        logging.info(f"----Failed closing: {fails}, success closing: {success}")
         active_browsers[customer.id] = []
         return Response({'active_browsers': len(active_browsers)})
 
