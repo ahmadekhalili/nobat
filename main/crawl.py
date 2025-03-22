@@ -724,7 +724,7 @@ class LastStep:
                     captcha_img = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//img[contains(@class, 'captcha_image')]")))
                     # Save screenshot of just that <img> to "captcha.png"
                     captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
-                    image_binary = captcha_img.screenshot_as_png
+                    image_binary = captcha_img.screenshot_as_png  # captcha_img.screenshot referesh the captcha!
                     with open(captcha_path, "wb") as f:
                         f.write(image_binary)
                     text = image_to_text(captcha_path).replace(' ', '')

@@ -154,5 +154,7 @@ class Customer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customers', related_query_name='customer')
 
     def __str__(self):
-        return f'Customer ({self.id}) - {self.username}'
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name} - {self.username}"
+        return f"کاربر - {self.username}"
 
