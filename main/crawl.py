@@ -723,10 +723,26 @@ class LastStep:
                 try:
                     captcha_img = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//img[contains(@class, 'captcha_image')]")))
                     # Save screenshot of just that <img> to "captcha.png"
-                    captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
-                    captcha_img.screenshot(captcha_path)
+                    # Get location and size
+                    location = captcha_img.location
+                    size = captcha_img.size
+                    full_page_path = os.path.join(settings.BASE_DIR, "media", "full_page_captcha.png")
+                    driver.save_screenshot(full_page_path)  # captcha_img.screenshot refresh the captcha and made fails
+                    logging.info('full page uploaded to: media/full_page_captcha.png')
+
+                    # Crop using Pillow
+                    full_img = Image.open(full_page_path)
+                    left = location['x']
+                    top = location['y']
+                    right = left + size['width']
+                    bottom = top + size['height']
+
+                    captcha_img = full_img.crop((left, top, right, bottom))
+                    captcha_path = os.path.join(settings.BASE_DIR, "media", "captcha.png")
+                    captcha_img.save(captcha_path)
+
                     text = image_to_text(captcha_path).replace(' ', '')
-                    logging.info('Captcha uploaded to: captcha.png')
+                    logging.info('Captcha uploaded to: media/captcha.png')
                 except:
                     text = None
                     logging.info('raised error in captcha image saving: {i}/{max_lim}')
