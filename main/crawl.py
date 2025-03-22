@@ -724,7 +724,9 @@ class LastStep:
                     captcha_img = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//img[contains(@class, 'captcha_image')]")))
                     # Save screenshot of just that <img> to "captcha.png"
                     captcha_path = os.path.join(settings.BASE_DIR, "captcha.png")
-                    captcha_img.screenshot(captcha_path)
+                    image_binary = captcha_img.screenshot_as_png
+                    with open(captcha_path, "wb") as f:
+                        f.write(image_binary)
                     text = image_to_text(captcha_path).replace(' ', '')
                     logging.info('Captcha uploaded to: captcha.png')
                 except:
@@ -972,7 +974,7 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
                     state_li = states_ul.find_element(By.XPATH, f".//li[text()='{state_name}']")
                     state_li.click()
                 except StaleElementReferenceException:
-                    logging.info('Error clicking on the state item, try again.')
+                    print('Error clicking on the state item, try again.')
                     states_ul = WebDriverWait(driver, 10).until(
                         EC.visibility_of_element_located((By.ID, "select2-zone_home-results"))
                     )
@@ -985,7 +987,7 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
                     town_dropdown = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "select2-subzone_home-container")))
                     ActionChains(driver).move_to_element(town_dropdown).click().perform()
                 except:
-                    logging.info('Error clicking the town dropdown.')
+                    print('Error clicking the town dropdown.')
 
                 try:
                     towns_ul = WebDriverWait(driver, 10).until(
@@ -994,7 +996,7 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
                     town_li = towns_ul.find_element(By.XPATH, f".//li[text()='{town}']")
                     town_li.click()
                 except:
-                    logging.info("Error clicking the town's item. will referesh and try again.")
+                    print("Error clicking the town's item. will referesh and try again.")
                     driver.get('https://nobat.epolice.ir/')
                     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "select2-zone_home-container"))).click()  # click state dropdown to open ul
                     states_ul = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "select2-zone_home-results")))
@@ -1011,7 +1013,7 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
                                                        "//span[@class='caption' and normalize-space(text())='جستجو']")
                     ActionChains(driver).move_to_element(submit_element).click().perform()
                 except:
-                    logging.info("Error clicking the submit element (state/town form).")
+                    print("Error clicking the submit element (state/town form).")
 
 
                 ######################
@@ -1024,7 +1026,7 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
 
                     all_centers += len(carts)
                     find_carts = []
-                    logging.info(f'    {town} found {len(carts)} carts!')
+                    print(f'    {town} found {len(carts)} carts!')
                     for cart in carts:
                         try:
                             # Find cart title element
@@ -1040,7 +1042,7 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
                             find_carts.append({'title': title_txt, 'code': office_code, 'address': address})
                             passed_centers += 1
                         except NoSuchElementException:
-                            logging.info('Error in grabbing card specs.')
+                            print('Error in grabbing card specs.')
                             continue  # Skip cart if elements not found
 
                     if find_carts:
@@ -1052,18 +1054,18 @@ def get_all_pre_centers(driver):  # crawl and get all centers from the site (ser
                 except Exception as e:
                     error_message = (
                             "Error in page 2 (center section). Screenshot saved as error_screenshot.png.")
-                    logging.info(error_message)
+                    print(error_message)
                     screenshot_name = "error_screenshot.png"
                     driver.save_screenshot(screenshot_name)
 
 
-        logging.info()
-        logging.info(f'Successfully crawled {towns_counter} towns and {len(state_names)-start_index} States -- crawled centers: {passed_centers}/{all_centers}')
+        print()
+        print(f'Successfully crawled {towns_counter} towns and {len(state_names)-start_index} States -- crawled centers: {passed_centers}/{all_centers}')
 
     except Exception as e:
         screenshot_name = "error_screenshot.png"
         driver.save_screenshot(screenshot_name)
-        logging.info(f"An error occurred. Screenshot saved as {screenshot_name}. \n{e}")
+        print(f"An error occurred. Screenshot saved as {screenshot_name}. \n{e}")
     finally:
         driver.quit()
 
@@ -1112,7 +1114,7 @@ def get_all_states_towns():  # crawl and get from the site
         # Skip the default "all states" option if present
         start_index = 1 if state_names[0] == "تمام استان ها" else 0
         for i, state_name in enumerate(state_names[start_index:]):
-            logging.info(f"Processing state: {state_name} {i+1}/{(len(state_names)-start_index)}")
+            print(f"Processing state: {state_name} {i+1}/{(len(state_names)-start_index)}")
             # Reopen state dropdown
             state_dropdown = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.ID, "select2-zone_home-container"))
@@ -1153,7 +1155,7 @@ def get_all_states_towns():  # crawl and get from the site
             time.sleep(0.5)  # Brief pause to ensure stability
 
     except Exception as e:
-        logging.info(f"Error: {e}")
+        print(f"Error: {e}")
     finally:
         driver.quit()
 
