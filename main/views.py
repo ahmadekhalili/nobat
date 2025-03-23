@@ -7,20 +7,28 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 import pytz
+import sys
+import redis
 from datetime import timedelta
 import logging as py_logging
 from celery import shared_task
 from celery.utils.log import get_task_logger
-
+from celery.result import AsyncResult
 
 from .crawl import *
 from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime
 from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
+from nobat.celery import app
+
+
+if not sys.platform.startswith('win'):
+    r = redis.Redis(connection_pool=settings.REDIS_POOL)
 
 logger = get_task_logger(__name__)
 logging = py_logging.getLogger('explicit')  # show in both celery and django console
 cl_logging = py_logging.getLogger('celery')
+
 
 @shared_task
 def sample_task():
@@ -51,7 +59,7 @@ def index(request):
 
 
 active_browsers = {}
-def crawl_func(customer_id, customer_date, customer_time, test):
+def crawl_func(customer_id, customer_date, customer_time, test, celery_task=False):
     customer, report = Customer.objects.get(id=customer_id), []
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
@@ -61,11 +69,19 @@ def crawl_func(customer_id, customer_date, customer_time, test):
     if customer.status == 'stop':
         customer.status = 'start'
         customer.save()
-    if active_browsers.get(customer.id):
-        active_browsers[customer.id] += [driver]
+    logging.info('jsut runnig test')
+    if celery_task:
+        logging.info('free test')
+        logging.info('test %s', str(r))
+    if celery_task:
+        r.incr(f'customer:{customer_id}:active_drivers')
+        logging.info('----active browsers of user (celery env): %s', r.get(f'customer:{customer_id}:active_drivers'))
     else:
-        active_browsers[customer.id] = [driver]
-    logging.info('----active browsers of user: ', len(active_browsers[customer.id]))
+        if active_browsers.get(customer.id):
+            active_browsers[customer.id] += [driver]
+        else:
+            active_browsers[customer.id] = [driver]
+        logging.info('----active browsers of user (django env): ', len(active_browsers[customer.id]))
     if not hasattr(customer, 'drivers'):
         customer.drivers = [driver]
     else:
@@ -86,7 +102,6 @@ def crawl_func(customer_id, customer_date, customer_time, test):
                         finall_message = "در روز/ساعت انتخابی نوبت خالی وجود ندارد"
                 if success_datetime[0] and success_datetime[1]:
                     j_datetime = convert_str_jdatetime(success_datetime[0], success_datetime[1])
-                    logging.info("active browsers: %d", len(active_browsers))
                     peigiry_path = LastStep(driver, report).run(customer, test)  # could be fals or message like: "شماره پیگیری: 03177711307"
 
                     if peigiry_path:  # (cd_peily, full_image_path), is False is seriouse fails
@@ -110,11 +125,14 @@ def crawl_func(customer_id, customer_date, customer_time, test):
                         customer.cd_peigiri = ""
                         customer.finall_message = finall_message
                         customer.save()
-
                         return False
-        # DateTimeStep(driver, report).run(date_time='')
+
     driver.quit()
-    active_browsers.popitem()
+    if celery_task:
+        r.decr(f'customer:{customer_id}:active_drivers')
+    else:
+        if active_browsers:
+            active_browsers.popitem()
     if customer.status != 'complete':  # don't override the message in subsequence browsers came after successfull submit
         customer.finall_message = finall_message
         customer.status = status
@@ -122,10 +140,12 @@ def crawl_func(customer_id, customer_date, customer_time, test):
     return
 
 
-@shared_task
-def crawls_task(customer_id, customer_date, customer_time, test):
+@shared_task(bind=True)  # bind=True to access self (task instance)
+def crawls_task(self, customer_id, customer_date, customer_time, test):
     add_square(customer_id, color_class='green')  # add square to start button of profile page
-    return crawl_func(customer_id, customer_date, customer_time, test)
+    res = crawl_func(customer_id, customer_date, customer_time, test, celery_task=True)
+    r.srem(f'customer:{customer_id}:active_tasks', self.id)
+    return res
 
 
 class CrawlCustomer(APIView):
@@ -167,6 +187,7 @@ class CrawlCustomer(APIView):
                 local_tz = pytz.timezone('Asia/Tehran')
                 date_time_aware = local_tz.localize(date_time)
                 task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
+                r.sadd(f'customer:{customer_id}:active_tasks', task1.id)
                 #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
                 logging.info("Celery rask created for run in: %s %s", task_date, task_time)
         return redirect('user:profile')  # رزرو موفقیت آمیر نبود دوباره تلاش کنید
@@ -189,6 +210,25 @@ class StopCrawl(APIView):
                 fails += 1
         logging.info(f"----Failed closing: {fails}, success closing: {success}")
         active_browsers[customer.id] = []
+
+
+        if not sys.platform.startswith('win'):  # in windows we have not redis and proper celery setup
+            r.set(f'customer:{customer.id}:active_drivers', 0)
+            logging.info(f"----active browsers of user (celery env) reset: 0")
+
+            # Remove celery tasks forcely (panding or running tasks) completed
+            task_ids = r.smembers(f'customer:{customer.id}:active_tasks')
+            logging.info(f"----Active celery tasks to close: {len(task_ids)}")
+            fails, success = 0, 0
+            for task_id in task_ids:
+                try:
+                    app.control.revoke(task_id, terminate=True, signal='SIGKILL')
+                    r.srem(f'customer:{customer.id}:active_tasks', task_id)
+                    success += 1
+                except:
+                    fails += 1
+            logging.info(f"----Failed closing celery: {fails}, success closing: {success}")
+
         return Response({'active_browsers': len(active_browsers)})
 
 

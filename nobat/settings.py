@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import environ
+import redis
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -165,6 +166,14 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
+
+REDIS_POOL = redis.ConnectionPool(
+    host='localhost',  # Or your Redis server host
+    port=6379,         # Default Redis port
+    db=0,             # Default Redis database (0-15)
+    password=env('REDIS_PASS', None),     # If your Redis server has a password
+    decode_responses=True  # Automatically decode bytes to strings, r.get(key) is str
+)
 
 PASSWORD_HASHERS = ['main.hashers.PlainTextPasswordHasher',]
 AUTH_USER_MODEL = 'user.User'
