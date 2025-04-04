@@ -71,9 +71,6 @@ def crawl_func(customer_id, customer_date, customer_time, test, celery_task=Fals
         customer.save()
     logging.info('jsut runnig test')
     if celery_task:
-        logging.info('free test')
-        logging.info('test %s', str(r))
-    if celery_task:
         r.incr(f'customer:{customer_id}:active_drivers')
         logging.info('----active browsers of user (celery env): %s', r.get(f'customer:{customer_id}:active_drivers'))
     else:
