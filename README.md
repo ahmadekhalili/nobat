@@ -1,20 +1,33 @@
-# setup redis-server local
-# create .env in root of project:
-```
+# Project Setup Instructions
+
+## 1. Start Redis Server  
+Ensure `redis-server` is running locally.
+
+## 2. Create a `.env` File in the Project Root  
+```ini
 ALLOWED_HOSTS=*
-TEST_RESERVATION=True
-SECURE_SSL_REDIRECT=False
-DRIVER_PATH=your windows or linux path
-CHROME_PATH=your windows or linux path
-WINDOWS_CRAWL=True (in win) or False (in linux)
-REDIS_PASS= (redid db pass if set)
+TEST_RESERVATION=True  # if be True, last submit button will not be pressed (used for test environments)
+SECURE_SSL_REDIRECT=False  # False in test environments without ssl domain
+DRIVER_PATH=/path/to/driver
+CHROME_PATH=/path/to/chrome
+WINDOWS_CRAWL=True  # Set to False on Linux
+REDIS_PASS=         # Redis password if set
 ```
-# create logs folder with at least 664 perms in root, sudo chmod -R 664 logs/
+
+## 3. Set Up Logging Directory
+
+Create a logs/ directory with appropriate permissions:
+```sh
+mkdir logs
+sudo chmod -R 664 logs/
+```
+
+## 4. Apply Migrations and Initialize Data
+```
 python manage.py makemigrations
 python manage.py migrate
-
 python manage.py init
 python manage.py pre_centers
 python manage.py centers
 python manage.py createsuperuser
-
+```
