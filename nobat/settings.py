@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'user',
     'corsheaders',
     'django_jalali',
-    'django_celery_beat',
-    'django_celery_results',
+    #'django_celery_beat',
+    #'django_celery_results',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -231,17 +231,14 @@ PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Use your actual Redis URL
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
 # Accept only JSON content for security and performance.
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-
 # Set timezone (make sure this matches your Django TIME_ZONE if needed)
 CELERY_TIMEZONE = 'Asia/Tehran'  # Must match your Django TIME_ZONE if possible
 CELERY_ENABLE_UTC = False
 CELERYD_HIJACK_ROOT_LOGGER = False  # django controls logs
-
 CELERY_TASK_SEND_SENT_EVENT = True  # now if flower task receiving, runing, ending is more clear
 CELERY_TASK_TRACK_STARTED = True
 
