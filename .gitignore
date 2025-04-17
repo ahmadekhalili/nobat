@@ -2,6 +2,7 @@ __pycache__
 media/
 .idea/
 chrome/
-logs/
+logs/*
+!logs/
 .env
 db.sqlite3

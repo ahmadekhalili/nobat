@@ -288,3 +288,13 @@ class StartButtonSquares(APIView):
         add_square(customer_id, color_class)
         return Response()
 
+
+class test(APIView):
+    def get(self, request, *args, **kwargs):
+        driver = test_setup()
+        driver.get('https://softgozar.com')
+        time.sleep(2)
+        return Response()
+
+    def post(self, request, customer_id=None, *args, **kwargs):
+        return Response()

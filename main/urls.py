@@ -15,4 +15,6 @@ urlpatterns = [
     path('stop_crawl/', views.StopCrawl.as_view(), name='stop_crawl'),
     path('licence_time/', views.licence, name='licence-time'),    # menu 4
     path('square_nums/', views.StartButtonSquares.as_view(), name='square_nums'),
+    path('test/', views.test.as_view(), name='test'),
+
 ]

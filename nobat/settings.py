@@ -96,14 +96,6 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'verbose',
         },
-        'celery_file': {  # <-- ADD THIS HANDLER
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 5,
-            'formatter': 'verbose',
-        },
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
@@ -120,11 +112,6 @@ LOGGING = {
         'explicit': {
             'handlers': ['explicit_file', 'console'],
             'level': 'DEBUG',
-            'propagate': False,
-        },
-        'celery': {  # <-- ADD THIS LOGGER
-            'handlers': ['celery_file', 'console'],
-            'level': 'INFO',
             'propagate': False,
         },
     },
@@ -166,7 +153,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
-
+'''
 REDIS_POOL = redis.ConnectionPool(
     host='localhost',  # Or your Redis server host
     port=6379,         # Default Redis port
@@ -174,7 +161,7 @@ REDIS_POOL = redis.ConnectionPool(
     password=env('REDIS_PASS', None),     # If your Redis server has a password
     decode_responses=True  # Automatically decode bytes to strings, r.get(key) is str
 )
-
+'''
 PASSWORD_HASHERS = ['main.hashers.PlainTextPasswordHasher',]
 AUTH_USER_MODEL = 'user.User'
 

@@ -80,27 +80,11 @@ def advance_setup():
     return driver
 
 
-def setup2():
-    service = Service(driver_path=r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe")
-    options = uc.ChromeOptions()
-    options.binary_location = r'C:/chrome/chrome_browser_134.0.6998.35/chrome.exe'
-
-    options.add_argument("--incognito")  # Enable incognito mode
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--disable-extensions')
-    options.add_argument('--dns-prefetch-disable')
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-
-    user_agent = UserAgent().random  #"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-    options.add_argument(f"--user-agent={user_agent}")
-
-    driver = uc.Chrome(service=service, options=options)
-    driver.delete_all_cookies()  # Clear all cookies
-    driver.execute_script("window.localStorage.clear();")  # Clear local storage
-    driver.execute_script("window.sessionStorage.clear();")  # Clear session storage
+def test_setup():
+    service = Service(driver_path=env('DRIVER_PATH'))
+    options = Options()
+    options.binary_location = env('CHROME_PATH')
+    driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()
     return driver
 
