@@ -184,7 +184,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 TIME_ZONE = 'Asia/Tehran'  # must be same with celery confs
-USE_TZ = False
+USE_TZ = True
 
 LANGUAGE_CODE = 'en-us'
 

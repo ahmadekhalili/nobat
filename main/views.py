@@ -11,32 +11,21 @@ import sys
 import redis
 from datetime import timedelta
 import logging as py_logging
-from celery import shared_task
-from celery.utils.log import get_task_logger
-from celery.result import AsyncResult
 
 from .crawl import *
 from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime
+from .models import Job
 from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
-from nobat.celery import app
+#from nobat.celery import crawls_task
 
 
 if not sys.platform.startswith('win'):
     r = redis.Redis(connection_pool=settings.REDIS_POOL)
 
-logger = get_task_logger(__name__)
 logging = py_logging.getLogger('explicit')  # show in both celery and django console
 cl_logging = py_logging.getLogger('celery')
 
-
-@shared_task
-def sample_task():
-    logger.info("AAAAAAAAA")
-    logging.info("BBBBBBBBBB")
-    py_logging.info("CCCCCCCCCCC")
-    print("WWWWWWWWW")
-    return True
 
 
 class test_celery(APIView):
@@ -44,11 +33,10 @@ class test_celery(APIView):
         from datetime import datetime, timedelta
         all,p = [],''
         dt = datetime.utcnow() + timedelta(seconds=6)
-        task = sample_task.apply_async(eta=dt)
         #if all:
         #    with open('services.json', 'w', encoding='utf-8') as f:
         #        json.dump(all, f, ensure_ascii=False)
-        return Response({'task_id': task.id})
+        return Response({'task_id': ''})
 
 
 def index(request):
@@ -137,13 +125,6 @@ def crawl_func(customer_id, customer_date, customer_time, test, celery_task=Fals
     return
 
 
-@shared_task(bind=True)  # bind=True to access self (task instance)
-def crawls_task(self, customer_id, customer_date, customer_time, test):
-    add_square(customer_id, color_class='green')  # add square to start button of profile page
-    res = crawl_func(customer_id, customer_date, customer_time, test, celery_task=True)
-    r.srem(f'customer:{customer_id}:active_tasks', self.id)
-    return res
-
 
 class CrawlCustomer(APIView):
     #driver, message = crawl_login('09127761266', 'a13431343')
@@ -183,8 +164,8 @@ class CrawlCustomer(APIView):
                 task_time = jalali_date.strftime("%H:%M")  # Format Time (HH:MM)
                 local_tz = pytz.timezone('Asia/Tehran')
                 date_time_aware = local_tz.localize(date_time)
-                task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
-                r.sadd(f'customer:{customer_id}:active_tasks', task1.id)
+                #task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
+                #r.sadd(f'customer:{customer_id}:active_tasks', task1.id)
                 #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
                 logging.info("Celery rask created for run in: %s %s", task_date, task_time)
         return redirect('user:profile')  # رزرو موفقیت آمیر نبود دوباره تلاش کنید
@@ -289,10 +270,13 @@ class StartButtonSquares(APIView):
         return Response()
 
 
+def akh():
+    print('hi ahmad')
 class test(APIView):
     def get(self, request, *args, **kwargs):
-        driver = test_setup()
-        driver.get('https://softgozar.com')
+        #driver = test_setup()
+        #driver.get('https://softgozar.com')
+        Job.objects.create()
         time.sleep(2)
         return Response()
 
