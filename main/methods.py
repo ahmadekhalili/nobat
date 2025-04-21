@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 
 from user.models import Customer
@@ -5,13 +7,22 @@ from user.models import Customer
 import cv2
 import os
 import time
+import pytz
 import random
+import logging
+import psutil
+import win32con
+import win32gui
+import win32process
 import jdatetime
 import numpy as np
 from PIL import Image
+from pathlib import Path
 from scipy.special import expit
 from paddleocr import PaddleOCR       # pip install paddlepaddle paddleocr
 ocr = PaddleOCR(use_angle_cls=True, lang='en')
+BASE_DIR = Path(__file__).resolve().parent.parent
+logger = logging.getLogger('web')
 
 
 class HumanMouseMove:
@@ -147,6 +158,22 @@ def convert_str_jdatetime(date_str, time_str):  # convert date like: "1403-03-12
     except:
         return None
 
+
+def get_datetime(jdate, time):  # date is like: 1404/04/05, time is like: 07:33  returns awared datetime object
+    year, month, day = map(int, jdate.split("/"))
+    hour, minute = map(int, time.split(":"))
+
+    # 2. Create a jdatetime object
+    jdt = jdatetime.datetime(year, month, day, hour, minute)
+
+    # 3. Convert to Gregorian datetime
+    gregorian_dt = jdt.togregorian()  # Naive datetime (no timezone yet)
+
+    # 4. Make it timezone-aware (Asia/Tehran)
+    tehran_tz = pytz.timezone("Asia/Tehran")
+    return tehran_tz.localize(gregorian_dt)
+
+
 def add_square(customer_id, color_class='green'):
     if not customer_id:
         customer_id = customer_id
@@ -156,3 +183,243 @@ def add_square(customer_id, color_class='green'):
     else:
         customer.color_classes = color_class
     customer.save()
+
+
+import pygetwindow as gw
+from pywinauto.application import Application
+
+
+def maximize_chrome_window(title_keyword="1a"):
+    try:
+        # Find window that matches title
+        window = next((w for w in gw.getWindowsWithTitle(title_keyword) if w.title and title_keyword in w.title), None)
+        if not window:
+            return "Window not found"
+
+        app = Application(backend="uia").connect(handle=window._hWnd)
+        app_window = app.window(handle=window._hWnd)
+
+        app_window.set_focus()
+        app_window.maximize()
+
+        return "Window maximized"
+    except Exception as e:
+        return f"Error: {e}"
+
+
+def minimize_chrome_window(title_keyword="1a"):
+    try:
+        # Find window that matches title
+        window = next((w for w in gw.getWindowsWithTitle(title_keyword) if w.title and title_keyword in w.title), None)
+        if not window:
+            return "Window not found"
+
+        app = Application(backend="uia").connect(handle=window._hWnd)
+        app_window = app.window(handle=window._hWnd)
+
+        app_window.set_focus()
+        app_window.minimize()
+
+        return "Window minimized"
+    except Exception as e:
+        return f"Error: {e}"
+
+
+class WindowsHandler:     # handle via AutoHotkey software
+    path = r'C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe'
+    bridge_file = os.path.join(BASE_DIR, 'scripts', 'bridge_django_autokey.txt')
+
+    @staticmethod
+    def _minimize_hwnds(hwnds, delay: float = 0.0):
+        """
+        Minimizes each window handle in `hwnds`.
+        If `delay` > 0, sleeps that many seconds between windows.
+        """
+        for hwnd in hwnds:
+            # SW_MINIMIZE = 6
+            win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+            if delay:
+                time.sleep(delay)
+
+    @classmethod
+    def minimize_by_driver_id(cls, chromedriver_pid):
+        """
+        1) Finds all Chrome window HWNDs for given Chromedriver PID
+        2) Minimizes them
+        Returns the list of HWNDs it tried to minimize (empty if none found).
+        """
+        hwnds = cls.get_hwnds_by_pid(chromedriver_pid)
+        if hwnds:
+            cls._minimize_hwnds(hwnds)
+        return hwnds
+
+    @staticmethod
+    def _maximise_hwnds(hwnds, delay: float = 0.0):
+        """
+        Minimizes each window handle in `hwnds`.
+        If `delay` > 0, sleeps that many seconds between windows.
+        """
+        for hwnd in hwnds:
+            # SW_MINIMIZE = 6
+            win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+            if delay:
+                time.sleep(delay)
+
+    @classmethod
+    def maximise_by_driver_id(cls, chromedriver_pid):
+        """
+        1) Finds all Chrome window HWNDs for given Chromedriver PID
+        2) Minimizes them
+        Returns the list of HWNDs it tried to minimize (empty if none found).
+        """
+        hwnds = cls.get_hwnds_by_pid(chromedriver_pid)
+        if hwnds:
+            cls._minimize_hwnds(hwnds)
+        return hwnds
+
+    @staticmethod
+    def _hide_hwnds(hwnds):
+        """
+        Completely hides each window handle in `hwnds` (SW_HIDE).
+        If `delay` > 0, pauses between each.
+        """
+        for hwnd in hwnds:
+            win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
+
+    @staticmethod
+    def _show_hwnds(hwnds):
+        """
+        Restores each hidden window handle in `hwnds` (SW_SHOW).
+        If `delay` > 0, pauses between each.
+        """
+        for hwnd in hwnds:
+            win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
+
+    @classmethod
+    def hide_by_driver_id(cls, chromedriver_pid):
+        hwnds = cls.get_hwnds_by_pid(chromedriver_pid)
+        if hwnds:
+            cls._hide_hwnds(hwnds)
+        return hwnds
+
+    @classmethod
+    def show_by_driver_id(cls, chromedriver_pid):
+        hwnds = cls.get_hwnds_by_pid(int(chromedriver_pid))
+        if hwnds:
+            cls._show_hwnds(hwnds)
+        return hwnds
+
+    @staticmethod
+    def _move_hwnd(hwnd, x: int, y: int):
+        """
+        Moves the window to (x,y), keeping its current width/height.
+        """
+        left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+        width  = right - left
+        height = bottom - top
+        win32gui.SetWindowPos(
+            hwnd,
+            win32con.HWND_TOP,
+            x, y, width, height,
+            win32con.SWP_NOZORDER
+        )
+
+    @classmethod
+    def _move_offscreen(cls, hwnds, x: int = -32000, y: int = 0):
+        """
+        Slides each hwnd to (x,y), which defaults to far off the left of your screen.
+        """
+        for hwnd in hwnds:
+            cls._move_hwnd(hwnd, x, y)
+
+    @classmethod
+    def _restore_on_screen(cls, hwnds, x: int = 100, y: int = 100):
+        """
+        Moves each hwnd back to (x,y) on your primary screen.
+        You can customize x/y or track original positions if you need.
+        """
+        for hwnd in hwnds:
+            cls._move_hwnd(hwnd, x, y)
+
+
+    @classmethod
+    def move_off_chromedriver_pid(cls, chromedriver_pid, **kwargs): # show hide browser (while can crawl in background)
+        """
+        Finds Chrome HWNDs and either moves them offscreen or back onscreen.
+        `hide=True` → move_offscreen, else restore_on_screen.
+        """
+        hwnds = cls.get_hwnds_by_pid(chromedriver_pid)
+        logger.info(f"hwnds in move_off: {hwnds}")
+        if not hwnds:
+            return []
+        cls._move_offscreen(hwnds, **kwargs)
+        return hwnds
+
+    @classmethod
+    def restore_on_chromedriver_pid(cls, chromedriver_pid, **kwargs): # show hide browser (while can crawl in background)
+        """
+        Finds Chrome HWNDs and either moves them offscreen or back onscreen.
+        `hide=True` → move_offscreen, else restore_on_screen.
+        """
+        hwnds = cls.get_hwnds_by_pid(chromedriver_pid)
+        logger.info(f"hwnds in restore_on: {hwnds}")
+        if not hwnds:
+            return []
+        cls._restore_on_screen(hwnds, **kwargs)
+        return hwnds
+
+    def get_window(title):
+        window = next((w for w in gw.getWindowsWithTitle(title) if w.title and title in w.title), None)
+        if not window:
+            return None
+        return window
+
+    def save_hwnd(self, thread_id, hwnd):
+        # Ensure the directory exists, create it if it doesn't
+        os.makedirs(os.path.dirname(self.bridge_file), exist_ok=True)
+        with open(self.path, "a", encoding="utf-8") as f:
+            line = f"{thread_id} {hwnd}\n"
+            f.write(line)
+
+    @classmethod
+    def get_hwnds_by_pid(cls, target_pid):
+        hwnds = []
+        chrome_pids = cls._get_chrome_child_pids(target_pid)
+        if not chrome_pids:
+            return []
+
+        def callback(hwnd, _):
+            # get pid
+            _, pid = win32process.GetWindowThreadProcessId(hwnd)
+            if pid not in chrome_pids:
+                return True
+
+            # ۱. عنوان پنجره
+            title = win32gui.GetWindowText(hwnd).strip()
+            if not title:
+                return True
+
+            # ۲. کلاس پنجره
+            cls_name = win32gui.GetClassName(hwnd)
+            if cls_name != "Chrome_WidgetWin_1":
+                return True
+
+            # ۳. سبک پنجره: باید پنجره‌ی معمولی (با نوار عنوان) باشد
+            style = win32gui.GetWindowLong(hwnd, win32con.GWL_STYLE)
+            if not (style & win32con.WS_OVERLAPPEDWINDOW):
+                return True
+
+            # اگر به اینجا رسید، یک پنجره‌ی واقعی/مربوط است
+            hwnds.append(hwnd)
+            return True
+
+        win32gui.EnumWindows(callback, None)
+        return hwnds
+
+    @staticmethod
+    def _get_chrome_child_pids(chromedriver_pid):
+        # Chromedriver itself has no visible window, so chrome_pid returns blank hwnd (because didnt see any windows)
+        # chrome_pid = driver.service.process.pid,  get_hwnds_by_pid(chrome_pid) returns none always
+        parent = psutil.Process(chromedriver_pid)
+        # Look for chrome.exe children
+        return [c.pid for c in parent.children(recursive=True) if 'chrome.exe' in c.name().lower()]

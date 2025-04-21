@@ -13,6 +13,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, TimeoutException
 
+import pygetwindow as gw
 from fake_useragent import UserAgent
 from webdriver_manager.chrome import ChromeDriverManager
 import undetected_chromedriver as uc
@@ -31,13 +32,17 @@ import re
 import os
 
 from user.models import Center
-from .methods import image_to_text, HumanMouseMove
+from .models import Job
+from .methods import image_to_text, HumanMouseMove, WindowsHandler
 from user.models import ServiceType, PELAK_LETTER_OPTIONS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+extension_title_path = os.path.join(BASE_DIR, 'scripts', 'extension_close')
+
+
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-logging = py_logging.getLogger('explicit') 
+logging = py_logging.getLogger('web')
 #driver_path = ChromeDriverManager().install()
 
 
@@ -95,15 +100,15 @@ def setup():
     linuxpath_driver, linuxpath_chrome = r"/home/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
     service = Service(driver_path=env('DRIVER_PATH'))
     options.binary_location = env('CHROME_PATH')  # C:\chrome\chrome_browser_134.0.6998.35
-    options.add_argument("--incognito")  # Enable incognito mode
+    # options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
     if not env.bool('WINDOWS_CRAWL', default=False):
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--disable-extensions')
     options.add_argument('--dns-prefetch-disable')
+    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_close")
     #user_agent = UserAgent().random
     #options.add_argument(f"--user-agent={user_agent}")
 
@@ -113,13 +118,32 @@ def setup():
     return driver
 
 
-def crawl_login(driver, phone, password):
+def crawl_login(driver, job_id, phone, password, title):
     driver.get("https://nobat.epolice.ir/login")
     wait = WebDriverWait(driver, 10)
+    driver_process_id = driver.service.process.pid
+    if driver_process_id:
+        try:
+            WindowsHandler.hide_by_driver_id(driver_process_id)
+            logging.info(f"window successfully hidden, job id: {job_id}, title: {title}")
+        except:
+            logging.error(f"Failed hidding window for job id: {job_id}")
+
+        try:
+            job = Job.objects.get(id=job_id)
+            job.driver_process_id = driver_process_id
+            job.save()
+            logging.info(f"driver_process_id successfully saved")
+        except Exception as e:
+            logging.error(f"Failed save driver_process_id for job id: {job_id}")
+
+    else:
+        logging.error(f"driver_process_id not found, Failed hidding window.")
 
     try:
         i, max_iter = 0, 20
         while i < 20:
+            driver.execute_script(f"document.title = '{title}'")
             # Locate and fill the "شماره موبایل" input (mobile number)
             try:
                 mobile_input = wait.until(EC.visibility_of_element_located((By.NAME, "username")))
@@ -156,11 +180,12 @@ def crawl_login(driver, phone, password):
                         (By.XPATH, "//button[@type='submit' and contains(@class, 'btn-success') and text()='ورود']")
                     ))
                     ActionChains(driver).move_to_element(submit_button).click().perform()
+                    driver.execute_script(f"document.title = '{title}'")
                     try:  # if find element we are not logged in, continue looping
                         logging.info('search captcha input:')
-                        time.sleep(5)  # wait a bit to leave the page and load sec page ((important)
-                        # elements = driver.find_elements(By.XPATH, "//span[text()='ورود به حساب کاربری']")
-                        captcha_input = wait.until(EC.visibility_of_element_located((By.NAME, "sec_code_login")))
+                        #time.sleep(5)  # wait a bit to leave the page and load sec page ((important)
+                        # WebDriverWait(driver, 10), wait 10 sec in unrelated page
+                        captcha_input = WebDriverWait(driver, 4).until(EC.visibility_of_element_located((By.NAME, "sec_code_login")))
                     except:  # we logged in
                         message = "ورود موفق آمیز بود."
                         logging.info(message)
@@ -183,6 +208,7 @@ def crawl_login(driver, phone, password):
 
 
 def select_dropdown_items(driver):
+    logging.info("select_dropdown_items")
     wait = WebDriverWait(driver, 10)
 
     # 1. Locate and click the element based on its text.
@@ -218,9 +244,10 @@ def select_dropdown_items(driver):
 
 # fill state, town, service type and vehicle type in first stage for crawling
 class LocationStep:
-    def __init__(self, driver, report):
+    def __init__(self, driver, report, title):
         self.driver = driver
         self.report = report
+        self.title = title
 
     def handle_dropdown_location(self, four_section):
         driver, report = self.driver, self.report
@@ -261,6 +288,7 @@ class LocationStep:
     def run(self, customer):
         time.sleep(2)
         self.driver.get('https://nobat.epolice.ir/')
+        self.driver.execute_script(f"document.title = '{self.title}'")
         # note (optional): in 'select2-vehicle-mz-container', 'mz' part is variable. and in 'select2-specialty-aw-results', 'aw' part
         four_section_data = [{'ul_id': 'select2-zone_home', 'value': customer.state.name}, {'ul_id': 'select2-subzone_home', 'value': customer.town.name}, {'ul_id': 'select2-specialty-aw-results', 'value': customer.service_type.name}, {'ul_id': 'select2-vehicle-mz-container', 'value': customer.get_vehicle_cat_display()}]
         if self.handle_dropdown_location(four_section=four_section_data):
@@ -272,9 +300,10 @@ class LocationStep:
 
 # select center_location in second step (second page)
 class CenterStep:
-    def __init__(self, driver, report):
+    def __init__(self, driver, report, title):
         self.driver = driver
         self.report = report
+        self.title = title
 
     def handle_center(self, search_text, service_type):
         driver = self.driver
@@ -300,6 +329,7 @@ class CenterStep:
 
                         # Click the link
                         link.click()
+                        self.driver.execute_script(f"document.title = '{self.title}'")
                         message = f"مرکز {search_text} با موفقیت انتخاب شد. مرحله بعد انتخاب روز."
                         self.report.append(('pub', message))
                         logging.info(message)
@@ -350,14 +380,16 @@ class CenterStep:
             return False
 
     def run(self, customer):
+        self.driver.execute_script(f"document.title = '{self.title}'")
         return self.handle_center(customer.service_center.title, customer.service_type.name)
 
 
 # specify date and time in page 3 and page 4 of reserving process in the site
 class DateTimeStep:
-    def __init__(self, driver, report):
+    def __init__(self, driver, report, title):
         self.driver = driver
         self.report = report
+        self.title = title
 
     def string_to_obj(self, str_date):  # str to date obj, for date
         parts = str_date.split('-')
@@ -587,7 +619,9 @@ class DateTimeStep:
                     time_of_date = valid_times[valid_dates.index(date)]
                 else:    # if user not selected any date, select all times to reservation
                     valid_times = valid_times
-            return (date, self.time_handler(time_of_date))
+            tuple = (date, self.time_handler(time_of_date))  # in time step, title changes
+            self.driver.execute_script(f"document.title = '{self.title}'")
+            return tuple
         return (False, False)
 
 

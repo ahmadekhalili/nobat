@@ -9,12 +9,12 @@ from rest_framework.response import Response
 import pytz
 import sys
 import redis
-from datetime import timedelta
+from datetime import datetime, timedelta
 import logging as py_logging
 
 from .crawl import *
-from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime
-from .models import Job
+from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime, get_datetime, maximize_chrome_window, minimize_chrome_window
+from .models import Job, CrawlFuncArgs
 from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
 #from nobat.celery import crawls_task
@@ -23,9 +23,9 @@ from user.models import Customer, State, Town, Center,  ServiceType
 if not sys.platform.startswith('win'):
     r = redis.Redis(connection_pool=settings.REDIS_POOL)
 
-logging = py_logging.getLogger('explicit')  # show in both celery and django console
+logger = py_logging.getLogger('web')  # show in both celery and django console
 cl_logging = py_logging.getLogger('celery')
-
+tehran_tz = pytz.timezone('Asia/Tehran')
 
 
 class test_celery(APIView):
@@ -41,47 +41,48 @@ class test_celery(APIView):
 
 def index(request):
     if request.method == 'GET':
-        logging.info("Task runnnnnnnnnnn")
+        logger.info("Task runnnnnnnnnnn")
         py_logging.info("Task runnnnnnnnnnn")
         return render(request, 'app1/index.html', {'product': 'p'})
 
 
 active_browsers = {}
-def crawl_func(customer_id, customer_date, customer_time, test, celery_task=False):
+def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, title):
+    # this func only tuns in job_runner via thread_task
     customer, report = Customer.objects.get(id=customer_id), []
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
     driver = setup()
-    logging.info('started the crawl')
+    logger.info('started the crawl')
     # we dont want unwanted subsequnce requests came after complete crawl, to make status stop
     if customer.status == 'stop':
         customer.status = 'start'
         customer.save()
-    logging.info('jsut runnig test')
-    if celery_task:
+    logger.info('jut runnig test')
+    if False:
         r.incr(f'customer:{customer_id}:active_drivers')
-        logging.info('----active browsers of user (celery env): %s', r.get(f'customer:{customer_id}:active_drivers'))
+        logger.info('----active browsers of user (celery env): %s', r.get(f'customer:{customer_id}:active_drivers'))
     else:
         if active_browsers.get(customer.id):
             active_browsers[customer.id] += [driver]
         else:
             active_browsers[customer.id] = [driver]
-        logging.info('----active browsers of user (django env): ', len(active_browsers[customer.id]))
+        logger.info(f'----active browsers of user (django env): {len(active_browsers[customer.id])}')
     if not hasattr(customer, 'drivers'):
         customer.drivers = [driver]
     else:
         customer.append(driver)
-    success, finall_message = crawl_login(driver, str(customer.phone).strip(), customer.password), 'دریافت نوبت  موفقیت آمیز نبود دوباره تلاش کنید'
+    success, finall_message = crawl_login(driver, job_id, str(customer.phone).strip(), customer.password, title), 'دریافت نوبت  موفقیت آمیز نبود دوباره تلاش کنید'
     if success:
         # driver.get('https://nobat.epolice.ir/?mod=search&city=614&subzone=616&specialty=13&vehicle=0')
-        success = LocationStep(driver, report).run(customer)
+        success = LocationStep(driver, report, title).run(customer)
         if success:
-            success = CenterStep(driver, report).run(customer)
+            success = CenterStep(driver, report, title).run(customer)
             if success:
-                # only first index of date and times used for customer.customer_date&time
-                success_datetime = DateTimeStep(driver, report).run(dates=[customer_date], times=[[customer_time]])  # each date can have several times here only one
+                # only first index of date and times used for customer.customer_dates&time
+                success_datetime = DateTimeStep(driver, report, title).run(dates=[reserve_dates], times=[[reserve_times]])  # each date can have several times here only one
                 if not success_datetime[1]:   # time is better identifier is loop
-                    if customer_date and customer_time:
+                    if reserve_dates and reserve_times:
                         finall_message = "هیچ روز و ساعت خالی برای رزرو وجود ندارد"
                     else:
                         finall_message = "در روز/ساعت انتخابی نوبت خالی وجود ندارد"
@@ -92,17 +93,17 @@ def crawl_func(customer_id, customer_date, customer_time, test, celery_task=Fals
                     if peigiry_path:  # (cd_peily, full_image_path), is False is seriouse fails
                         customer.cd_peigiri = peigiry_path[0] if peigiry_path[0] else "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"  # we can fail getting cd_peigiry but success in reserve and take screenshot
 
-                        logging.info("cd peigiry, image url to save in model: %s", peigiry_path)
+                        logger.info("cd peigiry, image url to save in model: %s", peigiry_path)
                         customer.status = 'complete'
                         customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
-                        logging.info("specefic selected date$time to save in customer model: %s", success_datetime)
+                        logger.info("specefic selected date$time to save in customer model: %s", success_datetime)
                         if success_datetime[0] and success_datetime[1]:
                             customer.customer_date, customer.customer_time = success_datetime[0], success_datetime[1]
                         with open(peigiry_path[1], 'rb') as f:
                             # This ensures Django uses the 'upload_to' path and handles the file storage correctly.
                             customer.result_image.save(os.path.basename(peigiry_path[1]), File(f), save=True)
                         customer.save()
-                        logging.info("everthing done successfully and saved to the model(customer)")
+                        logger.info("everthing done successfully and saved to the model(customer)")
                         return True
                     else:
                         driver.quit()
@@ -113,7 +114,7 @@ def crawl_func(customer_id, customer_date, customer_time, test, celery_task=Fals
                         return False
 
     driver.quit()
-    if celery_task:
+    if False:
         r.decr(f'customer:{customer_id}:active_drivers')
     else:
         if active_browsers:
@@ -144,30 +145,42 @@ class CrawlCustomer(APIView):
         post = request.POST
         test = env.bool('TEST_RESERVATION', True)     # you can pass test=True for test porpuse (only finall submit not click)
         customer_id = post['customer']
-        logging.info(f"form data: {request.POST}")
+        logger.info(f"form data: {request.POST}")
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..
-        customer_time, customer_date = post.get('customer_time', ''), post.get('customer_date', '')  # customer_time like: 07:33  customer_date like: 1404/4/5
+        customer_time, customer_date = post.get('customer_time', ''), post.get('customer_date', '')  # customer_time like: 07:33  customer_date like: 1404/04/05
+
         customer = Customer.objects.filter(id=customer_id)
         pre_datetimes = [convert_jalali_to_gregorian(dates_times.get(f"date{i}"), dates_times.get(f"time{i}")) for i in range(1, 5)]
         datetimes = [date_time for date_time in pre_datetimes if date_time]
-        logging.info("datetimes for schedules: %d", len(datetimes))
+        logger.info("datetimes for schedules: %d", len(datetimes))
         add_square(customer_id, color_class='green')
-        customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
-        logging.info("dates updated, customer id: %s, datetimes: %s", customer_id, dates_times)
-        if not datetimes:   # crawl normal inside django
-            crawl_func(customer_id, customer_date, customer_time, test)
-        else:              # crawl schedule date time by celery
+        #customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
+        print('111111111111', customer_date, customer_time)
+        crawl_func_args = CrawlFuncArgs.objects.create(customer_id=int(customer_id),
+                                                       reserve_date=customer_date,
+                                                       reserve_time=customer_time,
+                                                       is_test=test)
+        logger.info("crawl_func is created date: %s, time: %s", customer_date, customer_time)
+        logger.info(f"datetimes: {datetimes}")
+        if not datetimes:   # crawl now
+            #crawl_func(customer_id, customer_date, customer_time, test, 'test_title')
+            Job.objects.create(start_time=datetime.now(tehran_tz), status='wait', func_args=crawl_func_args)
+            logger.info("job created successfully for now")
+
+        else:              # crawl schedule date time
             for date_time in datetimes:
-                date_time = date_time - timedelta(minutes=1)  # runs 1 minute faster because of login and captcha solve time wasting
-                jalali_date = jdatetime.datetime.fromgregorian(datetime=date_time)
-                task_date = jalali_date.strftime("%Y/%m/%d")
-                task_time = jalali_date.strftime("%H:%M")  # Format Time (HH:MM)
-                local_tz = pytz.timezone('Asia/Tehran')
-                date_time_aware = local_tz.localize(date_time)
+                date_time = date_time - timedelta(seconds=20)  # runs 1 minute faster because of login and captcha solve time wasting
+
+                Job.objects.create(start_time=datetime.now(tehran_tz), status='wait', func_args=crawl_func_args)
+
+                #jalali_date = jdatetime.datetime.fromgregorian(datetime=date_time)
+                #task_date = jalali_date.strftime("%Y/%m/%d")
+                #task_time = jalali_date.strftime("%H:%M")  # Format Time (HH:MM)
+                #date_time_aware = tehran_tz.localize(date_time)
                 #task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
                 #r.sadd(f'customer:{customer_id}:active_tasks', task1.id)
                 #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
-                logging.info("Celery rask created for run in: %s %s", task_date, task_time)
+                logger.info("Celery rask created for run in: %s %s")
         return redirect('user:profile')  # رزرو موفقیت آمیر نبود دوباره تلاش کنید
 
 
@@ -178,7 +191,7 @@ class StopCrawl(APIView):
         customer.status = 'stop'       # now customer can add another nobar reservation (afte complete status)
         customer.save()
         customer_active_browsers = active_browsers.get(customer.id, [])
-        logging.info(f"----Active browsers to close: {len(customer_active_browsers)}")
+        logger.info(f"----Active browsers to close: {len(customer_active_browsers)}")
         fails, success = 0, 0
         for driver in customer_active_browsers:
             try:
@@ -186,17 +199,17 @@ class StopCrawl(APIView):
                 success += 1
             except:
                 fails += 1
-        logging.info(f"----Failed closing: {fails}, success closing: {success}")
+        logger.info(f"----Failed closing: {fails}, success closing: {success}")
         active_browsers[customer.id] = []
 
 
         if not sys.platform.startswith('win'):  # in windows we have not redis and proper celery setup
             r.set(f'customer:{customer.id}:active_drivers', 0)
-            logging.info(f"----active browsers of user (celery env) reset: 0")
+            logger.info(f"----active browsers of user (celery env) reset: 0")
 
             # Remove celery tasks forcely (panding or running tasks) completed
             task_ids = r.smembers(f'customer:{customer.id}:active_tasks')
-            logging.info(f"----Active celery tasks to close: {len(task_ids)}")
+            logger.info(f"----Active celery tasks to close: {len(task_ids)}")
             fails, success = 0, 0
             for task_id in task_ids:
                 try:
@@ -205,7 +218,7 @@ class StopCrawl(APIView):
                     success += 1
                 except:
                     fails += 1
-            logging.info(f"----Failed closing celery: {fails}, success closing: {success}")
+            logger.info(f"----Failed closing celery: {fails}, success closing: {success}")
 
         return Response({'active_browsers': len(active_browsers)})
 
@@ -270,15 +283,84 @@ class StartButtonSquares(APIView):
         return Response()
 
 
-def akh():
-    print('hi ahmad')
-class test(APIView):
-    def get(self, request, *args, **kwargs):
-        #driver = test_setup()
-        #driver.get('https://softgozar.com')
-        Job.objects.create()
+def akh(title):
+    while True:
+        logger.info("akhhhhhhhhh")
         time.sleep(2)
-        return Response()
+    driver = test_setup()
+    driver.get('https://softgozar.com')
+
+    driver.quit()
+
+import signal
+import subprocess
+class test(APIView):
+
+    def get(self, request, *args, **kwargs):
+        message, title = '', '1a'
+        #message = minimize_chrome_window('1a')  #maximize_chrome_window('1a')
+
+        #driver = setup()
+        #driver.get('https://nobat.epolice.ir/')
+        #chrome_pid = driver.service.process.pid
+        chrome_pid = Job.objects.get(id=6).driver_process_id
+        logger.info(f"chrome_pid: {chrome_pid}")
+        WindowsHandler.show_by_driver_id(chrome_pid)
+        time.sleep(2)
+        #windows = gw.getWindowsWithTitle(title)
+
+
+        #print(CrawlFuncArgs.objects.get(id=2).get_reserve_dates_times())
+        #os.kill(int(Job.objects.first().process_id), signal.SIGTERM)
+        #subprocess.run([r'C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe',r'C:\Users\akh\Downloads\shared_folder\nobat\scripts\minimize_chrome.ahk'])
+        time.sleep(2)
+
+        return Response({'message response:': message})
 
     def post(self, request, customer_id=None, *args, **kwargs):
+        return Response()
+
+
+class BrowserIconList(APIView):
+    def get(self, request, *args, **kwargs):
+        # return driver_process_id that are not None
+        jobs = Job.objects.exclude(status='close').filter(driver_process_id__isnull=False).values_list(
+            'driver_process_id', 'status')
+        # Return dict: {id: status, ...} for JS consumption
+        statuses = {str(id): status for id, status in jobs}
+        logger.info(f"id_status: {statuses}")
+        return Response({'statuses': statuses})
+
+    def post(self, request, customer_id=None, *args, **kwargs):
+        driver_id = request.POST.get('id')  # is sent via js
+        request.session['last_driver_id'] = driver_id
+        real_driver_id = driver_id if driver_id else request.session['last_driver_id']
+        logger.info(f"id of driver for maximize window: {real_driver_id}")
+
+        WindowsHandler.show_by_driver_id(request.session['last_driver_id'])
+        return Response()
+
+
+class BrowserStatus(APIView):
+    def get(self, request, *args, **kwargs):
+
+        # Get active jobs: exclude closed, must have driver_process_id
+        jobs = Job.objects.exclude(status='close').filter(driver_process_id__isnull=False).values_list('driver_process_id', 'status')
+        # Return dict: {id: status, ...} for JS consumption
+        statuses = {str(id): status for id, status in jobs}
+        logger.info(f"id_status: {statuses}")
+        return Response({'statuses': statuses})
+
+
+class CloseBrowsers(APIView):
+    def get(self, request, *args, **kwargs):
+        return Response()
+    def post(self, request, customer_id=None, *args, **kwargs):
+        print("id of driver for set 'close' job")
+        driver_id = request.session.get('last_driver_id')
+        logger.info(f"id of the driver for set 'close' job: {driver_id}")
+        if driver_id:
+            job = Job.objects.get(driver_process_id=driver_id)
+            job.status = 'close'
+            job.save()
         return Response()

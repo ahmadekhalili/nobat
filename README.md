@@ -14,11 +14,12 @@ WINDOWS_CRAWL=True  # Set to False on Linux
 REDIS_PASS=         # Redis password if set
 ```
 
-## 3. Set Up Logging Directory
+## 3. Set Up Logging Directory and  log files
 
 Create a logs/ directory with appropriate permissions:
 ```sh
 mkdir logs
+touch logs/threads.log logs/web.log
 sudo chmod -R 664 logs/
 ```
 

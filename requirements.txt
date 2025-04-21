@@ -1,3 +1,4 @@
+# run "pywin32_postinstall -install" command in last
 django
 djangorestframework
 django-cors-headers
@@ -14,14 +15,22 @@ paddlepaddle
 paddleocr
 webdriver-manager
 fake-useragent
-django-celery-beat
-django-celery-results
-redis  # for linux
-flower
 pytz      # localize timezone to work celery ok
-# celery  # install by django-celery-beat
 django-environ
 djangorestframework-simplejwt
 python-telegram-bot[socks]      # for telegram bot, socks required in linux
 gunicorn
+pygetwindow pywinauto
+psutil
+pywin32    # win32con win32gui must be installed by so run below command inside env:
+channels
+#daphne
+#whitenoise
+#pywin32_postinstall -install
+
+#django-celery-beat
+#django-celery-results
+#redis  # for linux
+#flower
+# celery  # install by django-celery-beat
 # install redis-server in ubuntu server

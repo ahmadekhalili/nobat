@@ -16,5 +16,8 @@ urlpatterns = [
     path('licence_time/', views.licence, name='licence-time'),    # menu 4
     path('square_nums/', views.StartButtonSquares.as_view(), name='square_nums'),
     path('test/', views.test.as_view(), name='test'),
+    path('browser_list/', views.BrowserIconList.as_view(), name='browser_list'),
+    path('close_browser/', views.CloseBrowsers.as_view(), name='close_browser'),
+    path('browser_status/', views.BrowserStatus.as_view(), name='browser_status'),
 
 ]

@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Window Close Hook",
+  "version": "1.0",
+  "permissions": [
+    "windows"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

@@ -49,12 +49,19 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'channels',
     'django.contrib.staticfiles',
 ]
-
+ASGI_APPLICATION = 'nobat.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",  # ← no Redis needed
+    },
+}
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,11 +94,11 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'verbose',
         },
-        # Handler for explicit logs (you decide when to log)
-        'explicit_file': {
+        # Handler for web logs (you decide when to log)
+        'web_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'explicit.log'),
+            'filename': os.path.join(BASE_DIR, 'logs', 'web.log'),
             'maxBytes': 1024 * 1024 * 5,  # 5 MB per file
             'backupCount': 5,
             'formatter': 'verbose',
@@ -108,9 +115,9 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        # Logger for explicit logging: use this when you explicitly call logging.getLogger('explicit')
-        'explicit': {
-            'handlers': ['explicit_file', 'console'],
+        # Logger for web logging: use this when you explicitly call logging.getLogger('web')
+        'web': {
+            'handlers': ['web_file', 'console'],
             'level': 'DEBUG',
             'propagate': False,
         },
@@ -184,7 +191,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 TIME_ZONE = 'Asia/Tehran'  # must be same with celery confs
-USE_TZ = True
+USE_TZ = True   # this make uses TIME_ZONE, otherwise server or local time zone will be used
+# if set False auto_now, auto_now_create will be used datetime.now() that use local timezone (not suitable for distibuted servers if different locations)
+# if set True, user.created or .. datetime fields will be retures as UTC time zone, but in template rendering auto converting will be done ({{ user.created }}))
 
 LANGUAGE_CODE = 'en-us'
 
