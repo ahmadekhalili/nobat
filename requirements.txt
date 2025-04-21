@@ -1,4 +1,5 @@
-# run "pywin32_postinstall -install" command in last
+# run "pywin32_postinstall -install" command in last, win32con win32gui must be installed
+
 django
 djangorestframework
 django-cors-headers
@@ -20,14 +21,18 @@ django-environ
 djangorestframework-simplejwt
 python-telegram-bot[socks]      # for telegram bot, socks required in linux
 gunicorn
-pygetwindow pywinauto
 psutil
-pywin32    # win32con win32gui must be installed by so run below command inside env:
+pywin32
 channels
-#daphne
-#whitenoise
-#pywin32_postinstall -install
+pywinauto
+pygetwindow
+daphne  # daphne -b 0.0.0.0 -p 8000 nobat.asgi:application
+channels_postgres  # required for socket CHANNEL_LAYERS, if set on postgres
+psycopg2-binary
+psycopg
+#whitenoise    # if put in middleware some socket functions not works, in production use nginx
 
+#pywin32_postinstall -install
 #django-celery-beat
 #django-celery-results
 #redis  # for linux

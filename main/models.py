@@ -14,7 +14,7 @@ class CrawlFuncArgs(models.Model):
     reserve_date = models.CharField(max_length=30, blank=True)  # reservation time
     reserve_time = models.CharField(max_length=30, blank=True)
     is_test = models.BooleanField(default=True)
-    title_ids = models.TextField(blank=True)  # structure: 1a,1b,2a,2b
+    #title_ids = models.TextField(blank=True)  # sims useless, structure: 1a,1b,2a,2b
 
     def get_reserve_dates_times(self):
         dates, times = [], []
@@ -31,7 +31,7 @@ class Job(models.Model):  # every process one job
     end_time = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=10, db_index=True, default='wait', blank=True)  # wait, finish, close
     func_args = models.ForeignKey(CrawlFuncArgs, on_delete=models.SET_NULL, null=True, blank=True)
-    process_id = models.IntegerField(null=True, blank=True)  # used to kill process if needed
+    process_id = models.IntegerField(null=True, blank=True)  # used to kill python process if needed
     driver_process_id = models.IntegerField(null=True, blank=True)  # used to get hwnd to control window
 
     class Meta:

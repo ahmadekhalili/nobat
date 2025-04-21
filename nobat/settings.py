@@ -35,13 +35,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 # Application definition
 
 INSTALLED_APPS = [
-    'main',
-    'user',
     'corsheaders',
-    'django_jalali',
-    #'django_celery_beat',
-    #'django_celery_results',
-    'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django.contrib.admin',
@@ -50,14 +44,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'channels',
+    'channels_postgres',
     'django.contrib.staticfiles',
+    'main',
+    'user',
+    'django_jalali',
+    # 'django_celery_beat',
+    # 'django_celery_results',
+    'rest_framework',
 ]
-ASGI_APPLICATION = 'nobat.asgi.application'
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",  # ← no Redis needed
-    },
-}
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -149,11 +146,30 @@ WSGI_APPLICATION = 'nobat.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django',
+        'USER': 'postgres',
+        'PASSWORD': 'a13431343',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    },
+    'channels_postgres': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydb',
+        'USER': 'postgres',
+        'PASSWORD': 'a13431343',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
+ASGI_APPLICATION = 'nobat.asgi.application'
+CHANNEL_LAYERS = {
+  'default': {
+    'BACKEND': 'channels_postgres.core.PostgresChannelLayer',
+    'CONFIG':  DATABASES['channels_postgres'],
+  },
+}
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

@@ -3,6 +3,7 @@ from asgiref.sync import async_to_sync
 
 
 def update_browser_status(statuses):
+    print(f"came to update_browser_status")
     # Sending message to WebSocket group (room)
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -12,3 +13,4 @@ def update_browser_status(statuses):
             'statuses': statuses,
         }
     )
+    print(f"Successfully created async_to_sync to send to cunsomer")

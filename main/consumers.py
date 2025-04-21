@@ -3,6 +3,7 @@ import json
 
 class BrowserStatusConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        print(f"cunsomer connect")
         self.room_name = 'browser_status_room'
         self.room_group_name = f'room_{self.room_name}'
 
@@ -27,8 +28,8 @@ class BrowserStatusConsumer(AsyncWebsocketConsumer):
 
     # Send status update to WebSocket
     async def send_status_update(self, event):
+        print(f"cunsomer send_status_update. event received: {event}")
         statuses = event['statuses']  # Get the status updates
-        print(f"Sending status update to WebSocket: {statuses}")
         await self.send(text_data=json.dumps({
             'statuses': statuses
         }))

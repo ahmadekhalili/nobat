@@ -111,7 +111,8 @@ def setup():
     options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_close")
     #user_agent = UserAgent().random
     #options.add_argument(f"--user-agent={user_agent}")
-
+    logging.info(f"DRIVER_PATH: {env('DRIVER_PATH')}")
+    logging.info(f"CHROME_PATH: {env('CHROME_PATH')}")
     driver = webdriver.Chrome(service=service, options=options)
     #driver.delete_all_cookies()  # Clear all cookies
     driver.maximize_window()

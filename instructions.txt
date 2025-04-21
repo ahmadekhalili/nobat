@@ -1,0 +1,8 @@
+install postgres server with pgadmin 4 
+add it to path: C:\Program Files\PostgreSQL\17\bin
+psql -U postgres
+CREATE DATABASE django OWNER postgres;
+CREATE DATABASE mydb OWNER postgres;
+python manage.py migrate
+python manage.py migrate channels_postgres --database=channels_postgres
+README.md

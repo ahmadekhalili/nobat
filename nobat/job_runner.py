@@ -32,8 +32,8 @@ letters = list(string.ascii_lowercase + string.ascii_uppercase)
 
 def thread_task(thread_id, job_id, fun_to_run):  # thread_id used to set title of browser page
     args_obj = Job.objects.select_related('func_args').get(id=job_id).func_args
-    args_obj.title_ids = thread_id
-    args_obj.save()
+    #args_obj.title_ids = thread_id
+    #args_obj.save()
     dates, times = args_obj.get_reserve_dates_times()
 
     logger.info(f"thread function: {thread_id} is starting. job id: {job_id} args_obj: {args_obj}")

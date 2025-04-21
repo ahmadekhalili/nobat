@@ -52,13 +52,13 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, title):
     customer, report = Customer.objects.get(id=customer_id), []
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
-    driver = setup()
+    driver = test_setup()
     logger.info('started the crawl')
     # we dont want unwanted subsequnce requests came after complete crawl, to make status stop
     if customer.status == 'stop':
         customer.status = 'start'
         customer.save()
-    logger.info('jut runnig test')
+    logger.info('just runnig test')
     if False:
         r.incr(f'customer:{customer_id}:active_drivers')
         logger.info('----active browsers of user (celery env): %s', r.get(f'customer:{customer_id}:active_drivers'))
@@ -132,7 +132,7 @@ class CrawlCustomer(APIView):
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(id=request.GET['customer'])
 
-        driver = setup()
+        driver = test_setup()
         driver.get('https://nobat.epolice.ir/?mod=search&city=8&subzone=595&specialty=0&vehicle=0')
         report = []
         # crawl_login('09380851842', 'a13431343')
@@ -155,7 +155,7 @@ class CrawlCustomer(APIView):
         logger.info("datetimes for schedules: %d", len(datetimes))
         add_square(customer_id, color_class='green')
         #customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
-        print('111111111111', customer_date, customer_time)
+        # pass customer_id, reserve_date, reserve_time to crawl_func(), if date and time is none, fastest time will be selected by crawl_func()
         crawl_func_args = CrawlFuncArgs.objects.create(customer_id=int(customer_id),
                                                        reserve_date=customer_date,
                                                        reserve_time=customer_time,
@@ -295,18 +295,17 @@ def akh(title):
 import signal
 import subprocess
 class test(APIView):
-
     def get(self, request, *args, **kwargs):
         message, title = '', '1a'
-        #message = minimize_chrome_window('1a')  #maximize_chrome_window('1a')
 
-        #driver = setup()
-        #driver.get('https://nobat.epolice.ir/')
+        #driver = test_setup()
+        #driver.get('https://softgozar.com/')
         #chrome_pid = driver.service.process.pid
-        chrome_pid = Job.objects.get(id=6).driver_process_id
-        logger.info(f"chrome_pid: {chrome_pid}")
-        WindowsHandler.show_by_driver_id(chrome_pid)
-        time.sleep(2)
+        job = Job.objects.get(id=2)
+        job.status = 'finish'
+        job.save()
+        logger.info(f"chrome_pid: {5}")
+        #time.sleep(2)
         #windows = gw.getWindowsWithTitle(title)
 
 
