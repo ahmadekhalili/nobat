@@ -52,7 +52,7 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, title):
     customer, report = Customer.objects.get(id=customer_id), []
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
-    driver = test_setup()
+    driver = advance_setup()
     logger.info('started the crawl')
     # we dont want unwanted subsequnce requests came after complete crawl, to make status stop
     if customer.status == 'stop':
@@ -132,12 +132,12 @@ class CrawlCustomer(APIView):
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(id=request.GET['customer'])
 
-        driver = test_setup()
-        driver.get('https://nobat.epolice.ir/?mod=search&city=8&subzone=595&specialty=0&vehicle=0')
+        #driver = test_setup()
+        #driver.get('https://nobat.epolice.ir/?mod=search&city=8&subzone=595&specialty=0&vehicle=0')
         report = []
         # crawl_login('09380851842', 'a13431343')
         # LocationStep(driver, report).run(customer)
-        CenterStep(driver, report).run(customer)
+        #CenterStep(driver, report).run(customer)
         p = None
         return Response()
 
@@ -298,21 +298,20 @@ class test(APIView):
     def get(self, request, *args, **kwargs):
         message, title = '', '1a'
 
-        #driver = test_setup()
-        #driver.get('https://softgozar.com/')
+        driver = test_setup()
+        driver.get('https://softgozar.com/')
+        wait = WebDriverWait(driver, 10)
         #chrome_pid = driver.service.process.pid
-        job = Job.objects.get(id=2)
-        job.status = 'finish'
-        job.save()
+        #job = Job.objects.get(id=2)
+        #job.status = 'finish'
+        #job.save()
         logger.info(f"chrome_pid: {5}")
         #time.sleep(2)
         #windows = gw.getWindowsWithTitle(title)
-
-
         #print(CrawlFuncArgs.objects.get(id=2).get_reserve_dates_times())
         #os.kill(int(Job.objects.first().process_id), signal.SIGTERM)
         #subprocess.run([r'C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe',r'C:\Users\akh\Downloads\shared_folder\nobat\scripts\minimize_chrome.ahk'])
-        time.sleep(2)
+        time.sleep(20)
 
         return Response({'message response:': message})
 
@@ -322,21 +321,22 @@ class test(APIView):
 
 class BrowserIconList(APIView):
     def get(self, request, *args, **kwargs):
-        # return driver_process_id that are not None
-        jobs = Job.objects.exclude(status='close').filter(driver_process_id__isnull=False).values_list(
-            'driver_process_id', 'status')
+        # refresh and get new status by js every 2 sec (driver_id of 'fnish' job -> 'wait' should update (set via admin or...)
+        jobs = Job.objects.exclude(status='close').filter(driver_process_id__isnull=False).values_list('driver_process_id', 'status')
         # Return dict: {id: status, ...} for JS consumption
         statuses = {str(id): status for id, status in jobs}
-        logger.info(f"id_status: {statuses}")
+        # logger.info(f"id_status: {statuses}")
         return Response({'statuses': statuses})
 
     def post(self, request, customer_id=None, *args, **kwargs):
         driver_id = request.POST.get('id')  # is sent via js
-        request.session['last_driver_id'] = driver_id
-        real_driver_id = driver_id if driver_id else request.session['last_driver_id']
-        logger.info(f"id of driver for maximize window: {real_driver_id}")
+        logger.info(f"js successfully posted to django view, driver id: {driver_id}")
 
-        WindowsHandler.show_by_driver_id(request.session['last_driver_id'])
+        #request.session['last_driver_id'] = driver_id
+        #real_driver_id = driver_id if driver_id else request.session['last_driver_id']
+        #logger.info(f"id of driver for maximize window: {real_driver_id}")
+
+        WindowsHandler.show_by_driver_id(driver_id)
         return Response()
 
 
@@ -347,7 +347,7 @@ class BrowserStatus(APIView):
         jobs = Job.objects.exclude(status='close').filter(driver_process_id__isnull=False).values_list('driver_process_id', 'status')
         # Return dict: {id: status, ...} for JS consumption
         statuses = {str(id): status for id, status in jobs}
-        logger.info(f"id_status: {statuses}")
+        logger.info(f"statuses: {statuses}")
         return Response({'statuses': statuses})
 
 

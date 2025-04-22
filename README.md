@@ -12,6 +12,12 @@ DRIVER_PATH=/path/to/driver
 CHROME_PATH=/path/to/chrome
 WINDOWS_CRAWL=True  # Set to False on Linux
 REDIS_PASS=         # Redis password if set
+POSTGRES_DBNAME=
+POSTGRES_USERNAME=
+POSTGRES_USERPASS=
+POSTGRES_DBNAME_CHANEL=
+POSTGRES_USERNAME_CHANEL=
+POSTGRES_USERPASS_CHANEL=
 ```
 
 ## 3. Set Up Logging Directory and  log files

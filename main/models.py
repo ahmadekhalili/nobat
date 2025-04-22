@@ -44,7 +44,8 @@ class Job(models.Model):  # every process one job
         if self.start_time.tzinfo:
             # If datetime is timezone-aware
             return self.start_time.astimezone(tehran_tz)
-
+'''
+# this is for socket channels (change browser icon, when job status get 'finish'
 @receiver(pre_save, sender=Job)
 def notify_finish_status(sender, instance, **kwargs):
     # send job.status to the websocket if changed to 'finish' to update browser icon
@@ -62,3 +63,4 @@ def notify_finish_status(sender, instance, **kwargs):
     if old_status != 'finish' and instance.status == 'finish':
         # send finally as {'statuses': {str(instance.driver_process_id): instance.status}} by consumers.py
         update_browser_status({str(instance.driver_process_id): instance.status})
+'''

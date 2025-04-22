@@ -805,103 +805,77 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<script> // create list of browser icons and send POST request on click
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("nav-container"); // Container for buttons
-  // 1) Fetch list of IDs from backend
-  const resp = await fetch("{% url 'main:browser_list' %}");
-  const data = await resp.json();
-  const statuses = data.statuses;
-  // 2) Create a button for each ID
+<script>
+  // create list of browser icons and send POST request on click
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("nav-container"); // Container for buttons
 
-  Object.entries(statuses).forEach(([id, status]) => {
-    const btn = document.createElement("button");
-    btn.type = "button"; // Ensure it won't trigger form submission
-    btn.className = "tv-button"; // Custom class for styling
-    btn.dataset.id = id; // Store ID in dataset
-    const imgSrc = status === 'finish'
-        ? `media/chrome_stop.png`
-        : `media/chrome_working.jpg`;
-    btn.innerHTML = `<img src="${imgSrc}" width="30" height="30" alt="status icon">`;
-
-    // 3) On button click, send POST request with ID
-    btn.addEventListener("click", async () => {
+    // Function to fetch the list of browser IDs and update the UI
+    const fetchData = async () => {
       try {
-        // Extract CSRF token from cookies
-        const csrf = document.cookie
-          .split(';')
-          .map(c => c.trim().split('='))
-          .find(([n]) => n === 'csrftoken')[1];
+        const resp = await fetch("{% url 'main:browser_list' %}");
+        const data = await resp.json();
+        const statuses = data.statuses;
 
-        // Build form data to send
-        const formData = new URLSearchParams();
-        formData.append('id', id);
+        // Clear previous buttons and re-create them
+        container.innerHTML = '';
 
-        // Send POST request to server with ID and CSRF token
-        const post = await fetch("{% url 'main:browser_list' %}", {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": csrf,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: formData.toString()
+        // Create a button for each ID
+        Object.entries(statuses).forEach(([id, status]) => {
+          const btn = document.createElement("button");
+          btn.type = "button"; // Ensure it won't trigger form submission
+          btn.className = "tv-button"; // Custom class for styling
+          btn.dataset.id = id; // Store ID in dataset
+          const imgSrc = status === 'finish'
+            ? `media/chrome_stop.png`
+            : `media/chrome_working.jpg`;
+          btn.innerHTML = `<img src="${imgSrc}" width="30" height="30" alt="status icon">`;
+
+          // 3) On button click, send POST request with ID
+          btn.addEventListener("click", async () => {
+            try {
+              // Extract CSRF token from cookies
+              const csrf = document.cookie
+                .split(';')
+                .map(c => c.trim().split('='))
+                .find(([n]) => n === 'csrftoken')[1];
+
+              // Build form data to send
+              const formData = new URLSearchParams();
+              formData.append('id', id);
+
+              // Send POST request to server with ID and CSRF token
+              const post = await fetch("{% url 'main:browser_list' %}", {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": csrf,
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formData.toString()
+              });
+
+              const result = await post.json();
+              console.log("Submitted:", result); // Log server response
+
+              // Optional: update UI based on result here
+            } catch (err) {
+              console.error("Error submitting id:", err); // Handle errors
+            }
+          });
+
+          container.appendChild(btn); // Add button to container
         });
-
-        const result = await post.json();
-        console.log("Submitted:", result); // Log server response
-
-        // Optional: update UI based on result here
-
-      } catch(err) {
-        console.error("Error submitting id:", err); // Handle errors
+      } catch (err) {
+        console.error("Error fetching browser list:", err); // Handle errors
       }
-    });
+    };
 
-    container.appendChild(btn); // Add button to container
+    // Call fetchData every 2 seconds
+    fetchData(); // Initial call
+    setInterval(fetchData, 2000); // Run every 2000ms (2 seconds)
   });
-});
 </script>
 
-<script>  // check browsers status and update icon, if 'finish', via socket realtime
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("nav-container");
-
-  // WebSocket setup
-  const socket = new WebSocket('ws://' + window.location.host + '/ws/status/');
-
-  // When the WebSocket connection is established
-  socket.onopen = function(event) {
-    console.log('WebSocket is open now.');
-  };
-
-  // When we receive data from the WebSocket
-  socket.onmessage = function(event) {
-    const { statuses } = JSON.parse(event.data);
-
-    // Loop through all the statuses and update the img.src dynamically
-    Object.entries(statuses).forEach(([id, status]) => {
-      const btn = container.querySelector(`button[data-id="${id}"]`);
-      if (!btn) return;
-      const img = btn.querySelector("img");
-      if (!img) return;
-      // Update the image based on the browser's status
-      img.src = status === "finish"
-        ? "{{ MEDIA_URL }}media/chrome_stop.png"  // Image for finished status
-        : "{{ MEDIA_URL }}media/chrome_working.jpg";  // Image for working status
-    });
-  };
-
-  // When the WebSocket connection is closed
-  socket.onclose = function(event) {
-    console.log('WebSocket is closed now.');
-  };
-
-  // Handle errors
-  socket.onerror = function(event) {
-    console.error('WebSocket error:', event);
-  };
-});
-</script>
 
               </div>
             </div>

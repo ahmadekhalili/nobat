@@ -28,8 +28,8 @@ pywinauto
 pygetwindow
 daphne  # daphne -b 0.0.0.0 -p 8000 nobat.asgi:application
 channels_postgres  # required for socket CHANNEL_LAYERS, if set on postgres
-psycopg2-binary
-psycopg
+psycopg[binary]     # used by channels
+#psycopg2-binary     # used for django (postgres backend)
 #whitenoise    # if put in middleware some socket functions not works, in production use nginx
 
 #pywin32_postinstall -install

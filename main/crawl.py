@@ -46,11 +46,77 @@ logging = py_logging.getLogger('web')
 #driver_path = ChromeDriverManager().install()
 
 
+def test_setup():
+    service = Service(driver_path=env('DRIVER_PATH'))
+    options = Options()
+    options.binary_location = env('CHROME_PATH')
+
+    # Create a custom Chrome user data directory
+    user_data_dir = "C:/path/to/custom/chrome_data"
+    options.add_argument(f"--user-data-dir={user_data_dir}")
+
+    # Enable Chrome extensions and developer mode
+    options.add_argument("--enable-extensions")
+    options.add_argument("--extensions-install-verification=0")
+    options.add_argument("--disable-extensions-file-access-check")
+
+    # Load the unpacked extension
+    extension_path = "C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_close"
+    options.add_argument(f"--load-unpacked-extension={extension_path}")
+
+    # Additional configurations
+    options.add_argument("--remote-debugging-port=9222")
+    options.add_argument("--auto-open-devtools-for-tabs")
+    options.add_argument("--enable-logging")
+    options.add_argument("--v=1")
+    options.add_experimental_option("detach", True)
+
+    # Add preferences to enable dev mode
+    prefs = {
+        "extensions": {
+            "ui": {"developer_mode": True},
+        }
+    }
+    options.add_experimental_option("prefs", prefs)
+
+    # Bypass extension installation restrictions
+    options.add_experimental_option("excludeSwitches", ["extension-installation-prompt"])
+
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.maximize_window()
+    return driver
+
+
+def setup():
+    options = Options()
+    winpath_driver, winpath_chrome = r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe", r"C:/chrome/chrome_browser_134.0.6998.35/chrome.exe"
+    linuxpath_driver, linuxpath_chrome = r"/home/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
+    service = Service(driver_path=env('DRIVER_PATH'))
+    options.binary_location = env('CHROME_PATH')  # C:\chrome\chrome_browser_134.0.6998.35
+    options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
+    if not env.bool('WINDOWS_CRAWL', default=False):
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--dns-prefetch-disable')
+    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_close")
+    user_agent = UserAgent().random
+    options.add_argument(f"--user-agent={user_agent}")
+    logging.info(f"DRIVER_PATH: {env('DRIVER_PATH')}")
+    logging.info(f"CHROME_PATH: {env('CHROME_PATH')}")
+    driver = webdriver.Chrome(service=service, options=options)
+    #driver.delete_all_cookies()  # Clear all cookies
+    driver.maximize_window()
+    return driver
+
+
 def advance_setup():
-    service = Service(driver_path=r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe")
+    service = Service(driver_path=env('DRIVER_PATH'))
 
     options = uc.ChromeOptions()
-    options.binary_location = r'C:/chrome/chrome_browser_134.0.6998.35/chrome.exe'
+    options.binary_location = env('CHROME_PATH')
     #options.add_argument(r"user-data-dir=C:/Users/akh/AppData/Local/Google/Chrome/User Data")
     #options.add_argument(r"--profile-directory=Profile 6")
     #profile_path = os.path.join(os.getenv('APPDATA'), 'Local', 'Google', 'Chrome', 'User Data', 'Profile5')
@@ -68,53 +134,23 @@ def advance_setup():
 
     driver = uc.Chrome(service=service, options=options)
     driver.set_window_size(1920, 1080)
-    user_agent = UserAgent().ua.random  #"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    user_agent = UserAgent().random  #"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
     options.add_argument(f"user-agent={user_agent}")
     #stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True, run_on_insecure_origins=True, hide_webdriver=True)
     # Open a blank page to start with a clean slate
+    logging.info('before open the page')
     driver.get("about:blank")
-
+    logging.info('blank opended')
     # Create an ActionChains instance
     actions = ActionChains(driver)
     # Optionally, position the mouse at a central point (this is our starting point)
     start_x, start_y = 1078, 521
+    logging.info('ActionChains opended')
     actions.move_by_offset(start_x, start_y).perform()
+    logging.info('move_by_offset run')
     time.sleep(0.41)  # a slight pause to mimic natural behavior
     actions = HumanMouseMove.human_mouse_move(actions, (random.randint(0, 500), random.randint(0, 500)), (random.randint(0, 500), random.randint(0, 500)))
-    driver.maximize_window()
-    return driver
-
-
-def test_setup():
-    service = Service(driver_path=env('DRIVER_PATH'))
-    options = Options()
-    options.binary_location = env('CHROME_PATH')
-    driver = webdriver.Chrome(service=service, options=options)
-    driver.maximize_window()
-    return driver
-
-
-def setup():
-    options = Options()
-    winpath_driver, winpath_chrome = r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe", r"C:/chrome/chrome_browser_134.0.6998.35/chrome.exe"
-    linuxpath_driver, linuxpath_chrome = r"/home/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
-    service = Service(driver_path=env('DRIVER_PATH'))
-    options.binary_location = env('CHROME_PATH')  # C:\chrome\chrome_browser_134.0.6998.35
-    # options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
-    if not env.bool('WINDOWS_CRAWL', default=False):
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--dns-prefetch-disable')
-    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_close")
-    #user_agent = UserAgent().random
-    #options.add_argument(f"--user-agent={user_agent}")
-    logging.info(f"DRIVER_PATH: {env('DRIVER_PATH')}")
-    logging.info(f"CHROME_PATH: {env('CHROME_PATH')}")
-    driver = webdriver.Chrome(service=service, options=options)
-    #driver.delete_all_cookies()  # Clear all cookies
+    logging.info('human_mouse_move run')
     driver.maximize_window()
     return driver
 
@@ -125,7 +161,7 @@ def crawl_login(driver, job_id, phone, password, title):
     driver_process_id = driver.service.process.pid
     if driver_process_id:
         try:
-            WindowsHandler.hide_by_driver_id(driver_process_id)
+            #WindowsHandler.hide_by_driver_id(driver_process_id)
             logging.info(f"window successfully hidden, job id: {job_id}, title: {title}")
         except:
             logging.error(f"Failed hidding window for job id: {job_id}")
@@ -144,7 +180,7 @@ def crawl_login(driver, job_id, phone, password, title):
     try:
         i, max_iter = 0, 20
         while i < 20:
-            driver.execute_script(f"document.title = '{title}'")
+            # driver.execute_script(f"document.title = '{title}'")
             # Locate and fill the "شماره موبایل" input (mobile number)
             try:
                 mobile_input = wait.until(EC.visibility_of_element_located((By.NAME, "username")))
@@ -181,7 +217,7 @@ def crawl_login(driver, job_id, phone, password, title):
                         (By.XPATH, "//button[@type='submit' and contains(@class, 'btn-success') and text()='ورود']")
                     ))
                     ActionChains(driver).move_to_element(submit_button).click().perform()
-                    driver.execute_script(f"document.title = '{title}'")
+                    #driver.execute_script(f"document.title = '{title}'")
                     try:  # if find element we are not logged in, continue looping
                         logging.info('search captcha input:')
                         #time.sleep(5)  # wait a bit to leave the page and load sec page ((important)
@@ -289,7 +325,7 @@ class LocationStep:
     def run(self, customer):
         time.sleep(2)
         self.driver.get('https://nobat.epolice.ir/')
-        self.driver.execute_script(f"document.title = '{self.title}'")
+        #self.driver.execute_script(f"document.title = '{self.title}'")
         # note (optional): in 'select2-vehicle-mz-container', 'mz' part is variable. and in 'select2-specialty-aw-results', 'aw' part
         four_section_data = [{'ul_id': 'select2-zone_home', 'value': customer.state.name}, {'ul_id': 'select2-subzone_home', 'value': customer.town.name}, {'ul_id': 'select2-specialty-aw-results', 'value': customer.service_type.name}, {'ul_id': 'select2-vehicle-mz-container', 'value': customer.get_vehicle_cat_display()}]
         if self.handle_dropdown_location(four_section=four_section_data):
@@ -330,7 +366,7 @@ class CenterStep:
 
                         # Click the link
                         link.click()
-                        self.driver.execute_script(f"document.title = '{self.title}'")
+                        #self.driver.execute_script(f"document.title = '{self.title}'")
                         message = f"مرکز {search_text} با موفقیت انتخاب شد. مرحله بعد انتخاب روز."
                         self.report.append(('pub', message))
                         logging.info(message)
@@ -381,7 +417,7 @@ class CenterStep:
             return False
 
     def run(self, customer):
-        self.driver.execute_script(f"document.title = '{self.title}'")
+        # self.driver.execute_script(f"document.title = '{self.title}'")
         return self.handle_center(customer.service_center.title, customer.service_type.name)
 
 
@@ -621,7 +657,7 @@ class DateTimeStep:
                 else:    # if user not selected any date, select all times to reservation
                     valid_times = valid_times
             tuple = (date, self.time_handler(time_of_date))  # in time step, title changes
-            self.driver.execute_script(f"document.title = '{self.title}'")
+            # self.driver.execute_script(f"document.title = '{self.title}'")
             return tuple
         return (False, False)
 

@@ -35,23 +35,24 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'channels',
-    'channels_postgres',
     'django.contrib.staticfiles',
+    'corsheaders',  # CORS headers should be before rest_framework and channels
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'channels',  # This should come after rest_framework to ensure proper integration
+    #'channels_postgres',  # PostgreSQL Channel Layer should be after channels
+    'rest_framework',
     'main',
     'user',
     'django_jalali',
+    # Uncomment and use these if you need Celery
     # 'django_celery_beat',
     # 'django_celery_results',
-    'rest_framework',
 ]
 
 
@@ -146,24 +147,20 @@ WSGI_APPLICATION = 'nobat.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django',
-        'USER': 'postgres',
-        'PASSWORD': 'a13431343',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
     'channels_postgres': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'postgres',
-        'PASSWORD': 'a13431343',
+        'NAME': env('POSTGRES_DBNAME_CHANEL'),
+        'USER': env('POSTGRES_USERNAME_CHANEL'),
+        'PASSWORD': env('POSTGRES_USERPASS_CHANEL'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
 
-ASGI_APPLICATION = 'nobat.asgi.application'
+#ASGI_APPLICATION = 'nobat.asgi.application'
 CHANNEL_LAYERS = {
   'default': {
     'BACKEND': 'channels_postgres.core.PostgresChannelLayer',
