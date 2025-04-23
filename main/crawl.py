@@ -50,10 +50,8 @@ def test_setup():
     service = Service(driver_path=env('DRIVER_PATH'))
     options = Options()
     options.binary_location = env('CHROME_PATH')
-    user_data_dir = env('CHROME_PROFILE_PATH')
     options.add_argument(f"--user-data-dir={env('CHROME_PROFILE_PATH')}")
     options.add_argument(f"--profile-directory={env('CHROME_PROFILE_FOLDER')}")
-
     options.add_argument("--no-sandbox")
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument("--auto-open-devtools-for-tabs")
@@ -65,17 +63,6 @@ def test_setup():
     options.add_argument("--disable-dev-shm-usage")
     extension_path = env('EXTENSION_PATH')
     #options.add_argument(f"--load-extension={extension_path}")
-    EXTENSION_ID = "gemilamdmcddjmddhbkmdapdckghbpko"
-    options.add_experimental_option("prefs", {
-        "extensions.ui.developer_mode": True,  # Optional for debugging
-        "profile.content_settings.exceptions.automatic_downloads": {
-            "*": {"last_used": time.time(), "setting": 1}
-        },
-        f"extensions.settings.{EXTENSION_ID}": {
-            "ack_external": True,
-            "state": 1  # 1 = Enabled, 0 = Disabled
-        }
-    })
     driver = webdriver.Chrome(service=service, options=options)
     driver.maximize_window()
     return driver

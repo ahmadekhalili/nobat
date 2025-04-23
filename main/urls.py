@@ -17,7 +17,7 @@ urlpatterns = [
     path('square_nums/', views.StartButtonSquares.as_view(), name='square_nums'),
     path('test/', views.test.as_view(), name='test'),
     path('browser_list/', views.BrowserIconList.as_view(), name='browser_list'),
-    path('close_browser/', views.CloseBrowsers.as_view(), name='close_browser'),
+    path('browser_close/', views.CloseBrowsers.as_view(), name='browser_status'),
     path('browser_status/', views.BrowserStatus.as_view(), name='browser_status'),
 
 ]
