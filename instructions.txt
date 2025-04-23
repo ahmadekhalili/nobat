@@ -17,5 +17,6 @@ README.md
 
 
 # notes:
-dont add chromedriver to winpath (conflict)
-check chrome driver version
+- dont add chromedriver to winpath (conflict)
+- check chrome driver version before running 
+- chrome binaries save profiles in folder "Chrome for Testing", not mentioned anywhere. C:\Users\Admin\AppData\Local\Google\Chrome for Testing

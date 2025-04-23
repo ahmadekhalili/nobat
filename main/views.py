@@ -299,13 +299,14 @@ class test(APIView):
         message, title = '', '1a'
 
         driver = test_setup()
-        driver.get('https://softgozar.com/')
+        driver.get("about:blank")
+        #driver.get('https://softgozar.com/')
         wait = WebDriverWait(driver, 10)
         #chrome_pid = driver.service.process.pid
         #job = Job.objects.get(id=2)
         #job.status = 'finish'
         #job.save()
-        logger.info(f"chrome_pid: {5}")
+        logger.info(f"chrome loaded complettly: {5}")
         #time.sleep(2)
         #windows = gw.getWindowsWithTitle(title)
         #print(CrawlFuncArgs.objects.get(id=2).get_reserve_dates_times())
@@ -353,6 +354,8 @@ class BrowserStatus(APIView):
 
 class CloseBrowsers(APIView):
     def get(self, request, *args, **kwargs):
+        print("id of driver for set 'close' job")
+        logger.info(f"id of the driver for set 'close' job")
         return Response()
     def post(self, request, customer_id=None, *args, **kwargs):
         print("id of driver for set 'close' job")

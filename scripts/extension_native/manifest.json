@@ -1,0 +1,17 @@
+{
+  "name": "Browser Monitor",
+  "description": "Monitor browser window events and send them to native host",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+    "nativeMessaging", // Required for chrome.runtime.connectNative
+    "windows"          // Required for chrome.windows.onRemoved
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  // "host_permissions": ["http://127.0.0.1:8000/*"], // Only needed if making web requests to this host
+  "action": {
+    "default_title": "Browser Monitor"
+  }
+}

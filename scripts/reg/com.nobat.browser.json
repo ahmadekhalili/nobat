@@ -1,0 +1,9 @@
+{
+  "name": "com.nobat.browser",
+  "description": "Native host for browser close detection",
+  "path": "C:\\Users\\akh\\Downloads\\shared_folder\\nobat\\test_ocr.py",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://bjmcibbolcaleacnkkedddlhofegpidj/"
+  ]
+}

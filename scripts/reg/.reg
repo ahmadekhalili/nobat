@@ -1,0 +1,4 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\Software\Google\Chrome\NativeMessagingHosts\com.nobat.browser]
+@="C:\\Users\\akh\\Downloads\\shared_folder\\nobat\\scripts\\reg\\com.nobat.browser.json"

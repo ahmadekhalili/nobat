@@ -2,13 +2,36 @@
   "manifest_version": 3,
   "name": "Window Close Hook",
   "version": "1.0",
-  "permissions": [
-    "windows"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "description": "Send request when window is closed.",
+  "permissions": [    
+  "windows",
+    "tabs",
+    "background",
+    "storage",
+    "cookies",
+    "webNavigation",
+    "webRequest",
+    "notifications",
+    "history",
+    "activeTab",
+    "identity",
+    "bookmarks",
+    "browsingData",
+    "clipboardRead",
+    "clipboardWrite",
+    "downloads",
+    "downloads.open",
+    "geolocation",
+    "idle",
+    "management",
+    "nativeMessaging",
+    "sessions",
+    "topSites",
+    "unlimitedStorage",
+    "contextMenus"],
+  "host_permissions": ["http://127.0.0.1:8000/*"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   }
 }
