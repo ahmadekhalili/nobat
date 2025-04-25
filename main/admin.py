@@ -29,7 +29,7 @@ class JobAdmin(admin.ModelAdmin):
     readonly_fields = ('start_time',)
     #list_display = ('id', 'start_date', 'end_date', 'customer_id')  # Columns in admin list
     #search_fields = ('customer_id')  # Enables search box
-    #list_filter = ('is_test',)  # Adds a sidebar filter
+    list_filter = ('status',)  # Adds a sidebar filter
     ordering = ('-start_time',)  # Orders by newest jobs first
 
 

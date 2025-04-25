@@ -38,7 +38,7 @@ chrome.windows.onRemoved.addListener((windowId) => {
 
 // Optional: Add a listener for messages *from* the native host, if needed.
 // This would require keeping the port open (don't call disconnect immediately).
-/*
+
 chrome.runtime.onConnectNative.addListener((port) => {
   if (port.name === 'com.nobat.browser') { // Check if it's the expected host
     port.onMessage.addListener((msg) => {
@@ -53,6 +53,6 @@ chrome.runtime.onConnectNative.addListener((port) => {
     });
   }
 });
-*/
+
 
 console.log("Browser Monitor service worker started.");

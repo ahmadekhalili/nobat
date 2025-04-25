@@ -57,7 +57,6 @@ def test_setup():
     options.add_argument("--auto-open-devtools-for-tabs")
     options.add_argument("--enable-logging")
     options.add_argument("--v=1")
-    options.add_experimental_option("detach", True)
     options.add_argument("--disable-background-timer-throttling")
     options.add_argument("--disable-backgrounding-occluded-windows")
     options.add_argument("--disable-dev-shm-usage")
@@ -91,8 +90,6 @@ def devmode_setup():
     options.add_argument("--auto-open-devtools-for-tabs")
     options.add_argument("--enable-logging")
     options.add_argument("--v=1")
-    options.add_experimental_option("detach", True)
-
     # Add preferences to enable dev mode
     prefs = {
         "extensions": {
@@ -111,23 +108,16 @@ def devmode_setup():
 
 def setup():
     options = Options()
-    winpath_driver, winpath_chrome = r"C:\Users\akh\.wdm\drivers\chromedriver\win64\134.0.6998.35\chromedriver-win32/chromedriver.exe", r"C:/chrome/chrome_browser_134.0.6998.35/chrome.exe"
-    linuxpath_driver, linuxpath_chrome = r"/home/nobat/chrome/chromedriver-linux64/chromedriver", r"/home/nobat/chrome/chrome-headless-shell-linux64/chrome-headless-shell"
     service = Service(driver_path=env('DRIVER_PATH'))
     options.binary_location = env('CHROME_PATH')  # C:\chrome\chrome_browser_134.0.6998.35
-    options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
-    if not env.bool('WINDOWS_CRAWL', default=False):
-        options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
+    #options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--dns-prefetch-disable')
-    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_close")
+    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
     user_agent = UserAgent().random
     options.add_argument(f"--user-agent={user_agent}")
-    logging.info(f"DRIVER_PATH: {env('DRIVER_PATH')}")
-    logging.info(f"CHROME_PATH: {env('CHROME_PATH')}")
     driver = webdriver.Chrome(service=service, options=options)
     #driver.delete_all_cookies()  # Clear all cookies
     driver.maximize_window()
@@ -161,7 +151,7 @@ def advance_setup():
     #stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True, run_on_insecure_origins=True, hide_webdriver=True)
     # Open a blank page to start with a clean slate
     logging.info('before open the page')
-    driver.get("about:blank")
+    #driver.get("about:blank")
     logging.info('blank opended')
     # Create an ActionChains instance
     actions = ActionChains(driver)
@@ -173,17 +163,19 @@ def advance_setup():
     time.sleep(0.41)  # a slight pause to mimic natural behavior
     actions = HumanMouseMove.human_mouse_move(actions, (random.randint(0, 500), random.randint(0, 500)), (random.randint(0, 500), random.randint(0, 500)))
     logging.info('human_mouse_move run')
+    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
     driver.maximize_window()
     return driver
 
 
 def crawl_login(driver, job_id, phone, password, title):
+    logging.info(f"status before open windows: {Job.objects.get(id=job_id).status}")
     driver.get("https://nobat.epolice.ir/login")
     wait = WebDriverWait(driver, 10)
     driver_process_id = driver.service.process.pid
     if driver_process_id:
         try:
-            #WindowsHandler.hide_by_driver_id(driver_process_id)
+            WindowsHandler.hide_by_driver_id(driver_process_id)
             logging.info(f"window successfully hidden, job id: {job_id}, title: {title}")
         except:
             logging.error(f"Failed hidding window for job id: {job_id}")
@@ -195,7 +187,6 @@ def crawl_login(driver, job_id, phone, password, title):
             logging.info(f"driver_process_id successfully saved")
         except Exception as e:
             logging.error(f"Failed save driver_process_id for job id: {job_id}")
-
     else:
         logging.error(f"driver_process_id not found, Failed hidding window.")
 
@@ -664,6 +655,7 @@ class DateTimeStep:
                 return False
 
     def run(self, dates, times):
+        logging.info(f"dates: {dates}")
         valid_dates = [date.replace('/', '-') for date in dates if date]
         date = self.date_handler(valid_dates)
         time_of_date = None

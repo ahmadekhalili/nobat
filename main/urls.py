@@ -17,7 +17,10 @@ urlpatterns = [
     path('square_nums/', views.StartButtonSquares.as_view(), name='square_nums'),
     path('test/', views.test.as_view(), name='test'),
     path('browser_list/', views.BrowserIconList.as_view(), name='browser_list'),
-    path('browser_close/', views.CloseBrowsers.as_view(), name='browser_status'),
-    path('browser_status/', views.BrowserStatus.as_view(), name='browser_status'),
+    path('browser_minimize/', views.BrowserMinimize.as_view(), name='browser_minimize'),
+    path('browser_open/', views.BrowserOpen.as_view(), name='browser_open'),
+    path('kill_process/', views.KillProcess.as_view(), name='kill_process'),
+    path('stop_job/', views.StopJob.as_view(), name='stop_job'),
+    path('repeat_job/', views.ReapeatJob.as_view(), name='repeat_job'),
 
 ]

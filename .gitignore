@@ -4,3 +4,4 @@ chrome/
 logs/*
 !logs/
 .env
+scripts/reg

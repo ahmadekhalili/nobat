@@ -1,3 +1,5 @@
 2025-04-23 15:54:29,380 [INFO] برنامه شروع شد
 2025-04-23 15:54:29,381 [INFO] read_message running:
 2025-04-23 15:54:29,381 [INFO] sys.stdin.buffer.read: b'/\x00\x00\x00'
+2025-04-23 20:17:57,822 [INFO] برنامه شروع شد
+2025-04-23 20:17:57,823 [INFO] read_message running:

@@ -34,9 +34,9 @@ def thread_task(thread_id, job_id, fun_to_run):  # thread_id used to set title o
     args_obj = Job.objects.select_related('func_args').get(id=job_id).func_args
     #args_obj.title_ids = thread_id
     #args_obj.save()
-    dates, times = args_obj.get_reserve_dates_times()
-
-    logger.info(f"thread function: {thread_id} is starting. job id: {job_id} args_obj: {args_obj}")
+    dates, times = [args_obj.reserve_date], [args_obj.reserve_time]
+    logger.info(f"dates, times: {dates}, {times}")
+    logger.info(f"thread function: {thread_id} is starting. job id: {job_id} args_obj: {args_obj}, status: {Job.objects.get(id=job_id).status}")
     fun_to_run(args_obj.customer_id, job_id, dates, times, args_obj.is_test, thread_id)
     logger.info(f"thread function: {thread_id} is finished")
 
@@ -84,12 +84,14 @@ if __name__ == '__main__':
             batched_jobs = running_jobs[start:start + bath]
             # پردازش هر batch
             for i, job in enumerate(batched_jobs):
+
                 process = multiprocessing.Process(target=process_task, args=(process_number, threads, job.id, crawl_func))
                 process.start()
                 job.process_id = process.pid
                 job.save()
                 processes.append(process)
                 process_number += 1
-
+                logger.info(f"job status after process creation: {job.status}, fresh status: {Job.objects.get(id=job.id).status}")
         for process in processes:
+            logger.info(f"process join loop: {Job.objects.all().values_list('status', flat=True)}")
             process.join()

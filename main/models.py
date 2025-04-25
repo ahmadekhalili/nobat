@@ -29,8 +29,8 @@ class Job(models.Model):  # every process one job
     # id auto
     start_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=10, db_index=True, default='wait', blank=True)  # wait, finish, close
-    func_args = models.ForeignKey(CrawlFuncArgs, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.CharField(max_length=10, db_index=True, default='wait', blank=True, choices=[('wait', 'Wait'), ('finish', 'Finish'), ('close', 'Close')])  # wait, finish, close
+    func_args = models.ForeignKey(CrawlFuncArgs, on_delete=models.CASCADE, null=True, blank=True)
     process_id = models.IntegerField(null=True, blank=True)  # used to kill python process if needed
     driver_process_id = models.IntegerField(null=True, blank=True)  # used to get hwnd to control window
 
@@ -44,6 +44,10 @@ class Job(models.Model):  # every process one job
         if self.start_time.tzinfo:
             # If datetime is timezone-aware
             return self.start_time.astimezone(tehran_tz)
+
+
+class OpenedBrowser(models.Model):
+    driver_id = models.IntegerField(null=True, blank=True)
 '''
 # this is for socket channels (change browser icon, when job status get 'finish'
 @receiver(pre_save, sender=Job)

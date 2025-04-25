@@ -157,7 +157,7 @@
               <div class="col-6">
                 <form id="crawlstopForm" action="{% url 'main:stop_crawl' %}?{{ request.GET.urlencode }}" method="GET">
                 <button class="my-button">توقف</button>
-                </form>>
+                </form>
               </div>
               <div class="col-6">
 
@@ -845,7 +845,7 @@ document.addEventListener('DOMContentLoaded', function() {
               formData.append('id', id);
 
               // Send POST request to server with ID and CSRF token
-              const post = await fetch("{% url 'main:browser_list' %}", {
+              const post = await fetch("{% url 'main:browser_open' %}", {
                 method: "POST",
                 headers: {
                   "X-CSRFToken": csrf,

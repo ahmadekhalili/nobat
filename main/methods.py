@@ -8,6 +8,7 @@ import cv2
 import os
 import time
 import pytz
+import signal
 import random
 import logging
 import psutil
@@ -423,3 +424,34 @@ class WindowsHandler:     # handle via AutoHotkey software
         parent = psutil.Process(chromedriver_pid)
         # Look for chrome.exe children
         return [c.pid for c in parent.children(recursive=True) if 'chrome.exe' in c.name().lower()]
+
+
+def is_chrome_alive(driver_id):  # return False if chrome windows closed
+    # each driver can have several sub process manages chrome windows. they can be terminate (close windows) while driver process exist alive!
+    try:
+        child_driver_ids = WindowsHandler._get_chrome_child_pids(driver_id)
+        if child_driver_ids:       # it can be blank list if windows closed via close button (only driver process itself available)
+            return any(is_driver_alive(child_driver_id) for child_driver_id in child_driver_ids)  # 'or' between all items
+        else:
+            return False
+    except Exception as e:
+        logger.info(f"failed getting chrome processes status. error: {e}")
+        return False
+
+
+def is_driver_alive(driver_id):  # return true if related process tp driver_id is alive
+    try:
+        p = psutil.Process(driver_id)
+        logger.info(f"driver id {driver_id} p.is_running(): {p.is_running()}")
+        logger.info(f"driver id {driver_id} p.status() != psutil.STATUS_ZOMBIE: {p.is_running()}")
+        return p.is_running() and p.status() != psutil.STATUS_ZOMBIE
+    except psutil.NoSuchProcess:
+        logger.info(f"driver id not alive")
+        return False
+
+
+class JobStatus:
+    @staticmethod
+    def close(driver_id):
+        if not is_chrome_alive(driver_id):    # all windows of the driver closed
+            os.kill(driver_id, signal.SIGTERM)
