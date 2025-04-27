@@ -115,7 +115,9 @@ def setup():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--dns-prefetch-disable')
-    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
+    options.add_argument(f"--load-extension={env('EXTENSION_PATH')}")
+    options.add_argument('--no-proxy-server')
+    options.add_argument('--proxy-bypass-list=*')
     user_agent = UserAgent().random
     options.add_argument(f"--user-agent={user_agent}")
     driver = webdriver.Chrome(service=service, options=options)
@@ -132,7 +134,9 @@ def setup2():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--dns-prefetch-disable')
-    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
+    options.add_argument(f"--load-extension={env('EXTENSION_PATH')}")
+    options.add_argument('--no-proxy-server')
+    options.add_argument('--proxy-bypass-list=*')
     user_agent = UserAgent().random
     options.add_argument(f"--user-agent={user_agent}")
     driver = webdriver.Chrome(service=service, options=options)
@@ -150,7 +154,9 @@ def setup3():
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--dns-prefetch-disable')
-    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
+    options.add_argument(f"--load-extension={env('EXTENSION_PATH')}")
+    options.add_argument('--no-proxy-server')
+    options.add_argument('--proxy-bypass-list=*')
     user_agent = UserAgent().random
     options.add_argument(f"--user-agent={user_agent}")
     driver = webdriver.Chrome(service=service, options=options)

@@ -302,8 +302,9 @@ class test(APIView):
     def get(self, request, *args, **kwargs):
         message, title = '', '1a'
 
-        #driver = setup()
-        #driver.get("https://softgozar.com")
+        driver = setup()
+        driver.get("https://softgozar.com")
+        time.sleep(20)
         #driver.execute_script("window.open('https://nobat.epolice.ir/login', '_blank');")
         a = is_driver_alive(15676)
         b = is_chrome_alive(15676)

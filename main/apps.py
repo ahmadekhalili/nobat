@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db.models.signals import post_migrate
 
 
 class MainConfig(AppConfig):
@@ -6,13 +7,14 @@ class MainConfig(AppConfig):
     name = 'main'
 
     def ready(self):      # create just once OpenedBrowser in all live cycle of program in robust way
-        pass
-        """
-        try:
-            from main.models import OpenedBrowser
-            if not OpenedBrowser.objects.exists():
-                OpenedBrowser.objects.create()
-        except:
-            # Happens when DB or table doesn't exist yet (e.g. during migrate)
-            pass
-        """
+        from .models import OpenedBrowser
+
+        def ensure_openedbrowser(sender, **kwargs):  # create OpenedBrowser only one in totall program works cycle
+            # idempotent
+            try:
+                obj, created = OpenedBrowser.objects.get_or_create(pk=1)
+                if created:
+                    print("🟢 OpenedBrowser instance created (pk=%s).", obj.pk)
+            except Exception as e:
+                print("❌ Could not create OpenedBrowser instance: %s", e)
+        post_migrate.connect(ensure_openedbrowser, sender=self)

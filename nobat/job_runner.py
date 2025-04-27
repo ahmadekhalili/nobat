@@ -99,10 +99,10 @@ if __name__ == '__main__':
             logger.info(f"number of threads to start at the same time: {batched_jobs}")
             for i, job in enumerate(batched_jobs):
 
-                process = multiprocessing.Process(target=process_task, args=(process_number, threads, job.id, crawl_func))
+                process = threading.Thread(target=process_task, args=(process_number, threads, job.id, crawl_func))
                 process.start()
                 logger.info(f"Process {process_number} .start() called, (may not run)")
-                job.process_id = process.pid
+                job.process_id = process.ident
                 job.save()
                 processes.append(process)
                 process_number += 1
