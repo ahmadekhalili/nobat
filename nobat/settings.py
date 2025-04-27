@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import environ
-import redis
+#import redis
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',  # CORS headers should be before rest_framework and channels
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'channels',  # This should come after rest_framework to ensure proper integration
+    #'channels',  # This should come after rest_framework to ensure proper integration
     #'channels_postgres',  # PostgreSQL Channel Layer should be after channels
     'rest_framework',
     'main',
@@ -86,20 +86,18 @@ LOGGING = {
         # Handler for Django/system logs
         'django_file': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
+            'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 1024 * 1024 * 5,  # 5 MB per file
-            'backupCount': 5,
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
         # Handler for web logs (you decide when to log)
         'web_file': {
             'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
+            'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'web.log'),
-            'maxBytes': 1024 * 1024 * 5,  # 5 MB per file
-            'backupCount': 5,
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
         'console': {
             'class': 'logging.StreamHandler',
@@ -147,6 +145,16 @@ WSGI_APPLICATION = 'nobat.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DBNAME'),
+        'USER': env('POSTGRES_USERNAME'),
+        'PASSWORD': env('POSTGRES_USERPASS'),
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+""" 
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
@@ -158,15 +166,16 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
-}
 
-#ASGI_APPLICATION = 'nobat.asgi.application'
 CHANNEL_LAYERS = {
   'default': {
     'BACKEND': 'channels_postgres.core.PostgresChannelLayer',
     'CONFIG':  DATABASES['channels_postgres'],
   },
 }
+"""
+#ASGI_APPLICATION = 'nobat.asgi.application'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

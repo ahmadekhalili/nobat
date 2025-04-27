@@ -41,3 +41,5 @@ python manage.py pre_centers
 python manage.py centers
 python manage.py createsuperuser
 ```
+
+one instance of OpenedBrowser should be created.

@@ -450,6 +450,26 @@ def is_driver_alive(driver_id):  # return true if related process tp driver_id i
         return False
 
 
+def kill_driver_and_windows(driver_id):
+    try:
+        driver_id = int(driver_id)
+        child_driver_ids = WindowsHandler._get_chrome_child_pids(driver_id)
+        if child_driver_ids:
+            for process_id in child_driver_ids:
+                process_id = int(process_id)
+                try:
+                    os.kill(process_id, signal.SIGTERM)  # quite drive too (driver.quite)
+                except:       # process not exits or stoped before
+                    pass
+        try:
+            os.kill(driver_id, signal.SIGTERM)
+        except:       # process not exits or stopped before
+            pass
+        logger.info(f"driver and all its process successfully killed")
+    except Exception as e:
+        logger.info(f"Error raise during stop driver and all its process: {e}")
+
+
 class JobStatus:
     @staticmethod
     def close(driver_id):

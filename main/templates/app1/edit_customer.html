@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block additional_style %}
+<style>
         .form-container {
             background-color: white;
             border-radius: 0 0 15px 15px;
@@ -75,6 +76,7 @@
             margin-top: 20px;
             transition: all 0.3s ease;
         }
+</style>
 {% endblock %}
 {% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}
 

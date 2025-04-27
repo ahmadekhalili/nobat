@@ -34,3 +34,4 @@ class JobAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CrawlFuncArgs)
+admin.site.register(OpenedBrowser)

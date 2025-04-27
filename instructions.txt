@@ -20,3 +20,4 @@ README.md
 - dont add chromedriver to winpath (conflict)
 - check chrome driver version before running 
 - chrome binaries save profiles in folder "Chrome for Testing", not mentioned anywhere. C:\Users\Admin\AppData\Local\Google\Chrome for Testing
+- after updating .env restart job_ranner.py too (it take an instance of django project 'django.setup()' that use previouse .env 'env.read_env(os.path.join(BASE_DIR, '.env'))'

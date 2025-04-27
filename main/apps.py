@@ -6,10 +6,13 @@ class MainConfig(AppConfig):
     name = 'main'
 
     def ready(self):      # create just once OpenedBrowser in all live cycle of program in robust way
-        from main.models import OpenedBrowser
+        pass
+        """
         try:
+            from main.models import OpenedBrowser
             if not OpenedBrowser.objects.exists():
                 OpenedBrowser.objects.create()
         except:
             # Happens when DB or table doesn't exist yet (e.g. during migrate)
             pass
+        """

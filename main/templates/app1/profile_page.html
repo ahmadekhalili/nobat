@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block additional_style %}
+<style>
 .datepicker-wrapper {
   /* Override the document's RTL order only for this container */
   direction: ltr;
@@ -117,7 +118,57 @@
   border: 1px solid #d0d0d0;
 }
 
+
+/* Browser item container styling */
+.browser-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
+}
+
+/* Tag button styling */
+.tag-button {
+  width: 33px;
+    height: 15px;
+  padding: 3px 0;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #d2d5d9;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+  outline: none;
+  margin: 0
+}
+
+/* Hover effect */
+.tag-button:hover {
+  transform: scale(1.05);
+  background-color: #e0e9fa;
+}
+
+/* Tagged state styling */
+.tag-button.tagged {
+  background-color: #b5cdfa;
+  color: #4f46e5;
+  border-color: #c7d2fe;
+}
+
+/* Tag icon size */
+.tag-icon {
+  width: 10px;
+  height: 10px;
+}
+</style>
 {% endblock %}
+
 {% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}
 {% block content %}
           <div class="buttons-middle middle-buttons">
@@ -152,7 +203,9 @@
                   </form>
               </div>
               <div class="col-6">
-                <button class="my-button">حذف</button>
+                 <form action="{% url 'main:repeat_job' %}?{{ request.GET.urlencode }}" method="POST">
+                <button id="crawlrepeatJob" class="my-button">تکرار</button>
+                 </form>
               </div>
               <div class="col-6">
                 <form id="crawlstopForm" action="{% url 'main:stop_crawl' %}?{{ request.GET.urlencode }}" method="GET">
@@ -806,77 +859,199 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-  // create list of browser icons and send POST request on click
-  document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("nav-container"); // Container for buttons
+// create list of browser icons and tags and send POST request on click
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("nav-container"); // Container for buttons
 
-    // Function to fetch the list of browser IDs and update the UI
-    const fetchData = async () => {
-      try {
-        const resp = await fetch("{% url 'main:browser_list' %}");
-        const data = await resp.json();
-        const statuses = data.statuses;
+  // Function to save selected tags to localStorage
+  const saveSelectedTags = (selectedTags) => {
+    localStorage.setItem('selectedBrowserTags', JSON.stringify(selectedTags));
+  };
 
-        // Clear previous buttons and re-create them
-        container.innerHTML = '';
+  // Function to get selected tags from localStorage
+  const getSelectedTags = () => {
+    const saved = localStorage.getItem('selectedBrowserTags');
+    return saved ? JSON.parse(saved) : {};
+  };
 
-        // Create a button for each ID
-        Object.entries(statuses).forEach(([id, status]) => {
-          const btn = document.createElement("button");
-          btn.type = "button"; // Ensure it won't trigger form submission
-          btn.className = "tv-button"; // Custom class for styling
-          btn.dataset.id = id; // Store ID in dataset
-          const imgSrc = status === 'finish'
-            ? `media/chrome_stop.png`
-            : `media/chrome_working.jpg`;
-          btn.innerHTML = `<img src="${imgSrc}" width="30" height="30" alt="status icon">`;
+  // Get previously selected tags
+  let selectedTags = getSelectedTags();
 
-          // 3) On button click, send POST request with ID
-          btn.addEventListener("click", async () => {
-            try {
-              // Extract CSRF token from cookies
-              const csrf = document.cookie
-                .split(';')
-                .map(c => c.trim().split('='))
-                .find(([n]) => n === 'csrftoken')[1];
+  // Function to fetch the list of browser IDs and update the UI
+  const fetchData = async () => {
+    try {
+      const resp = await fetch("{% url 'main:browser_list' %}");
+      const data = await resp.json();
+      const statuses = data.statuses;
 
-              // Build form data to send
-              const formData = new URLSearchParams();
-              formData.append('id', id);
+      // Clear previous buttons and re-create them
+      container.innerHTML = '';
 
-              // Send POST request to server with ID and CSRF token
-              const post = await fetch("{% url 'main:browser_open' %}", {
-                method: "POST",
-                headers: {
-                  "X-CSRFToken": csrf,
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: formData.toString()
-              });
+      // Create a button for each ID
+      Object.entries(statuses).forEach(([id, status]) => {
+        // Create a container for each browser item
+        const browserItem = document.createElement("div");
+        browserItem.className = "browser-item";
 
-              const result = await post.json();
-              console.log("Submitted:", result); // Log server response
+        // Create the main button
+        const btn = document.createElement("button");
+        btn.type = "button"; // Ensure it won't trigger form submission
+        btn.className = "tv-button"; // Custom class for styling
+        btn.dataset.id = id; // Store ID in dataset
+        const imgSrc = status === 'finish'
+          ? `media/chrome_stop.png`
+          : `media/chrome_working.png`;
+        btn.innerHTML = `<img src="${imgSrc}" width="30" height="30" alt="status icon">`;
 
-              // Optional: update UI based on result here
-            } catch (err) {
-              console.error("Error submitting id:", err); // Handle errors
-            }
-          });
+        // On button click, send POST request with ID
+        btn.addEventListener("click", async () => {
+          try {
+            // Extract CSRF token from cookies
+            const csrf = document.cookie
+              .split(';')
+              .map(c => c.trim().split('='))
+              .find(([n]) => n === 'csrftoken')[1];
 
-          container.appendChild(btn); // Add button to container
+            // Build form data to send
+            const formData = new URLSearchParams();
+            formData.append('id', id);
+
+            // Send POST request to server with ID and CSRF token
+            const post = await fetch("{% url 'main:browser_open' %}", {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": csrf,
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: formData.toString()
+            });
+
+            const result = await post.json();
+            console.log("Submitted:", result); // Log server response
+
+            // Optional: update UI based on result here
+          } catch (err) {
+            console.error("Error submitting id:", err); // Handle errors
+          }
         });
-      } catch (err) {
-        console.error("Error fetching browser list:", err); // Handle errors
-      }
-    };
 
-    // Call fetchData every 2 seconds
-    fetchData(); // Initial call
-    setInterval(fetchData, 2000); // Run every 2000ms (2 seconds)
-  });
+        // Create the tag button that will appear below the image
+        const tagButton = document.createElement("button");
+        tagButton.className = "tag-button";
+        tagButton.id = `tag-${id}`;
+
+        // Add selected attribute and tagged class if this id was previously tagged
+        if (selectedTags[id]) {
+          tagButton.classList.add("tagged");
+          tagButton.setAttribute("selected", "true");
+        }
+
+        // Add click event to tag button
+        tagButton.addEventListener("click", function() {
+          this.classList.toggle("tagged");
+
+          if (this.classList.contains("tagged")) {
+            this.setAttribute("selected", "true");
+            selectedTags[id] = true;
+          } else {
+            this.removeAttribute("selected");
+            delete selectedTags[id];
+          }
+
+          // Save to localStorage whenever a tag is clicked
+          saveSelectedTags(selectedTags);
+        });
+
+        // Add both buttons to the browser item container
+        browserItem.appendChild(btn);
+        browserItem.appendChild(tagButton);
+
+        // Add the browser item to the main container
+        container.appendChild(browserItem);
+      });
+    } catch (err) {
+      console.error("Error fetching browser list:", err); // Handle errors
+    }
+  };
+
+  // Call fetchData every 2 seconds
+  fetchData(); // Initial call
+  setInterval(fetchData, 2000); // Run every 2000ms (2 seconds)
+});
 </script>
 
+<script>
+// collect and send selected tags to the server when crawlrepeatJob button is clicked
+document.addEventListener("DOMContentLoaded", () => {
+  // Find the crawlrepeatJob button
+  const crawlRepeatButton = document.getElementById("crawlrepeatJob");
 
+  // If the button exists, add event listener
+  if (crawlRepeatButton) {
+    crawlRepeatButton.addEventListener("click", function(event) {
+      // Prevent default form submission if this is inside a form
+      event.preventDefault();
+
+      // Call function to send selected tags
+      sendSelectedTagsToServer();
+    });
+  }
+
+  // Function to collect all selected tag IDs and send them to the server, here runs after click
+  const sendSelectedTagsToServer = async () => {
+    try {
+      // Find all tag buttons that have id starting with "tag-" and have selected="true" attribute
+      const selectedTagButtons = document.querySelectorAll('button[id^="tag-"][selected="true"]');
+
+      // Extract the IDs from these buttons
+      const selectedIds = Array.from(selectedTagButtons).map(button => {
+        // Extract the ID from the button's id attribute (remove "tag-" prefix)
+        return button.id.replace('tag-', '');
+      });
+
+      // If no items are selected, we can notify and stop
+      if (selectedIds.length === 0) {
+        return;
+      }
+
+      // Extract CSRF token from cookies
+      const csrf = document.cookie
+        .split(';')
+        .map(c => c.trim().split('='))
+        .find(([n]) => n === 'csrftoken')[1];
+
+      // Build form data to send
+      const formData = new URLSearchParams();
+      // Add each ID to the form data
+      selectedIds.forEach(id => {
+        formData.append('selected_ids', id);
+      });
+
+      // Send POST request to server with selected IDs and CSRF token
+      const response = await fetch("{% url 'main:repeat_job' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrf,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString()
+      });
+
+      // Process response
+      if (response.ok) {
+        const result = await response.json();
+
+      } else {  //Error response from server:
+        console.error("Error response from server:", response.status);
+        alert("Error repeating job. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error sending selected tags to server:", err);
+      alert("An error occurred. Please try again.");
+    }
+  };
+});
+</script>
               </div>
             </div>
           </div>

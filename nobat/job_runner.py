@@ -14,10 +14,9 @@ import pytz
 import time
 import string
 
-from user.models import User
-from main.models import Job
-from main.crawl import test_setup
-from main.views import akh, crawl_func
+from main.models import Job, OpenedBrowser
+from main.views import crawl_func
+
 
 log_dir = os.path.join(settings.BASE_DIR, 'logs')
 os.makedirs(log_dir, exist_ok=True)           # if django_root/logs not exists, create that folder, otherwise skip
@@ -30,31 +29,45 @@ tehran_tz = pytz.timezone("Asia/Tehran")
 letters = list(string.ascii_lowercase + string.ascii_uppercase)
 
 
-def thread_task(thread_id, job_id, fun_to_run):  # thread_id used to set title of browser page
+def thread_task(thread_number, job_id, fun_to_run):  # thread_id used to set title of browser page
     args_obj = Job.objects.select_related('func_args').get(id=job_id).func_args
     #args_obj.title_ids = thread_id
     #args_obj.save()
     dates, times = [args_obj.reserve_date], [args_obj.reserve_time]
-    logger.info(f"dates, times: {dates}, {times}")
-    logger.info(f"thread function: {thread_id} is starting. job id: {job_id} args_obj: {args_obj}, status: {Job.objects.get(id=job_id).status}")
-    fun_to_run(args_obj.customer_id, job_id, dates, times, args_obj.is_test, thread_id)
-    logger.info(f"thread function: {thread_id} is finished")
+    logger.info(f"thread function: {thread_number} is starting. job id: {job_id} args_obj: {args_obj}, status: {Job.objects.get(id=job_id).status}")
+    o_b = OpenedBrowser.objects.first()
+    if o_b:
+        if not o_b.driver_number == 3:
+            o_b.driver_number += 1
+            o_b.save()
+            logger.info(f"driver_number increased successfully")
+        else:
+            o_b.driver_number = 1
+            o_b.save()
+            logger.info(f"driver_number increased successfully")
+    else:
+        logger.error(f"create first instance of OpenedBrowser")
+    fun_to_run(args_obj.customer_id, job_id, dates, times, args_obj.is_test, o_b.driver_number)
+    logger.info(f"thread function: {thread_number} is finished")
 
 
 # تابعی که در هر پراسس اجرا می‌شود
 def process_task(process_number, threads_count, job_id, fun_to_run):
-    logger.info("11111111")
-    print(f"Process {process_number} is starting")
+    logger.info(f"Process {process_number} is running")
+    #from django.db import connection
+    #connection.close()
     # ایجاد سه ترد در داخل هر پراسس
-    threads = []
+    threads_list = []
+
     for i in range(threads_count):
-        thread_id = f"{process_number}{letters[i]}"
-        thread = threading.Thread(target=thread_task, args=(thread_id, job_id, fun_to_run))
-        threads.append(thread)
+        thread = threading.Thread(target=thread_task, args=(process_number, job_id, fun_to_run))
+        logger.info(f"thread {i} instance created.")
+        threads_list.append(thread)
         thread.start()
+        logger.info(f"thread {i} started .start()")
 
     # منتظر ماندن برای پایان هر سه ترد
-    for thread in threads:
+    for thread in threads_list:
         thread.join()
 
     # After all threads complete, mark job as finished
@@ -83,15 +96,16 @@ if __name__ == '__main__':
         for start in range(0, total, bath):
             batched_jobs = running_jobs[start:start + bath]
             # پردازش هر batch
+            logger.info(f"number of threads to start at the same time: {batched_jobs}")
             for i, job in enumerate(batched_jobs):
 
                 process = multiprocessing.Process(target=process_task, args=(process_number, threads, job.id, crawl_func))
                 process.start()
+                logger.info(f"Process {process_number} .start() called, (may not run)")
                 job.process_id = process.pid
                 job.save()
                 processes.append(process)
                 process_number += 1
-                logger.info(f"job status after process creation: {job.status}, fresh status: {Job.objects.get(id=job.id).status}")
         for process in processes:
             logger.info(f"process join loop: {Job.objects.all().values_list('status', flat=True)}")
             process.join()

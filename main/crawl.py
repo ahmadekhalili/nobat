@@ -41,7 +41,7 @@ extension_title_path = os.path.join(BASE_DIR, 'scripts', 'extension_close')
 
 
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env.read_env(os.path.join(BASE_DIR, '.env'))
 logging = py_logging.getLogger('web')
 #driver_path = ChromeDriverManager().install()
 
@@ -50,8 +50,8 @@ def test_setup():
     service = Service(driver_path=env('DRIVER_PATH'))
     options = Options()
     options.binary_location = env('CHROME_PATH')
-    options.add_argument(f"--user-data-dir={env('CHROME_PROFILE_PATH')}")
-    options.add_argument(f"--profile-directory={env('CHROME_PROFILE_FOLDER')}")
+    #options.add_argument(f"--user-data-dir={env('CHROME_PROFILE_PATH')}")
+    #options.add_argument(f"--profile-directory={env('CHROME_PROFILE_FOLDER')}")
     options.add_argument("--no-sandbox")
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument("--auto-open-devtools-for-tabs")
@@ -123,6 +123,44 @@ def setup():
     driver.maximize_window()
     return driver
 
+def setup2():
+    options = Options()
+    service = Service(driver_path=env('DRIVER_PATH2'))
+    options.binary_location = env('CHROME_PATH2')  # C:\chrome\chrome_browser_134.0.6998.35
+    #options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--dns-prefetch-disable')
+    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
+    user_agent = UserAgent().random
+    options.add_argument(f"--user-agent={user_agent}")
+    driver = webdriver.Chrome(service=service, options=options)
+    #driver.delete_all_cookies()  # Clear all cookies
+    driver.maximize_window()
+    logging.info(f"DRIVER_PATH: {env('DRIVER_PATH2')}")
+    return driver
+
+def setup3():
+    options = Options()
+    service = Service(driver_path=env('DRIVER_PATH3'))
+    options.binary_location = env('CHROME_PATH3')  # C:\chrome\chrome_browser_134.0.6998.35
+    #options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--dns-prefetch-disable')
+    options.add_argument(f"--load-extension=C://Users//akh//Downloads//shared_folder//nobat//scripts//extension_minimize")
+    user_agent = UserAgent().random
+    options.add_argument(f"--user-agent={user_agent}")
+    driver = webdriver.Chrome(service=service, options=options)
+    #driver.delete_all_cookies()  # Clear all cookies
+    driver.maximize_window()
+    logging.info(f"DRIVER_PATH: {env('DRIVER_PATH3')}")
+    return driver
+
+setup_funcs = {1: setup, 2: setup2, 3: setup3}
+
 
 def advance_setup():
     service = Service(driver_path=env('DRIVER_PATH'))
@@ -168,7 +206,7 @@ def advance_setup():
     return driver
 
 
-def crawl_login(driver, job_id, phone, password, title):
+def crawl_login(driver, job_id, phone, password, thread_num):
     logging.info(f"status before open windows: {Job.objects.get(id=job_id).status}")
     driver.get("https://nobat.epolice.ir/login")
     wait = WebDriverWait(driver, 10)
@@ -176,7 +214,7 @@ def crawl_login(driver, job_id, phone, password, title):
     if driver_process_id:
         try:
             WindowsHandler.hide_by_driver_id(driver_process_id)
-            logging.info(f"window successfully hidden, job id: {job_id}, title: {title}")
+            logging.info(f"window successfully hidden, job id: {job_id}, thread_num: {thread_num}")
         except:
             logging.error(f"Failed hidding window for job id: {job_id}")
 
@@ -193,7 +231,7 @@ def crawl_login(driver, job_id, phone, password, title):
     try:
         i, max_iter = 0, 20
         while i < 20:
-            # driver.execute_script(f"document.title = '{title}'")
+            # driver.execute_script(f"document.thread_num = '{thread_num}'")
             # Locate and fill the "شماره موبایل" input (mobile number)
             try:
                 mobile_input = wait.until(EC.visibility_of_element_located((By.NAME, "username")))
@@ -230,7 +268,7 @@ def crawl_login(driver, job_id, phone, password, title):
                         (By.XPATH, "//button[@type='submit' and contains(@class, 'btn-success') and text()='ورود']")
                     ))
                     ActionChains(driver).move_to_element(submit_button).click().perform()
-                    #driver.execute_script(f"document.title = '{title}'")
+                    #driver.execute_script(f"document.thread_num = '{thread_num}'")
                     try:  # if find element we are not logged in, continue looping
                         logging.info('search captcha input:')
                         #time.sleep(5)  # wait a bit to leave the page and load sec page ((important)
@@ -304,7 +342,7 @@ class LocationStep:
         try:
             dropdowns = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "span.select2-selection__rendered")))
             for i, dropdown in enumerate(dropdowns):
-                logging.info(f'Successfully got dropdown {i+1} to click: ', dropdown.get_attribute('outerHTML'))
+                logging.info(f"Successfully got dropdown {i+1} to click: {dropdown.get_attribute('outerHTML')}")
                 value, ul_id = four_section[i]['value'], four_section[i]['ul_id']
                 ActionChains(driver).move_to_element(dropdown).click().perform()
                 # Locate the state by text

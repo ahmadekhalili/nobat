@@ -1,6 +1,7 @@
 import time
 
 from django.shortcuts import render, redirect
+from django.db import transaction
 from django.contrib.admin.views.decorators import staff_member_required
 
 from rest_framework.views import APIView
@@ -8,21 +9,21 @@ from rest_framework.response import Response
 
 import pytz
 import sys
-import redis
+#import redis
 import signal
 import subprocess
 from datetime import datetime, timedelta
 import logging as py_logging
 
 from .crawl import *
-from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime, get_datetime, maximize_chrome_window, minimize_chrome_window, is_driver_alive, is_chrome_alive
+from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime, get_datetime, maximize_chrome_window, minimize_chrome_window, is_driver_alive, is_chrome_alive, kill_driver_and_windows
 from .models import Job, CrawlFuncArgs, OpenedBrowser
 from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
 #from nobat.celery import crawls_task
 
 
-if not sys.platform.startswith('win'):
+if False and not sys.platform.startswith('win'):
     r = redis.Redis(connection_pool=settings.REDIS_POOL)
 
 logger = py_logging.getLogger('web')  # show in both celery and django console
@@ -49,13 +50,14 @@ def index(request):
 
 
 active_browsers = {}
-def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, title):
+def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, thread_num):
     # this func only tuns in job_runner via thread_task
-    logging.info(f"status in crawl_func0: {Job.objects.get(id=job_id).status}")
     customer, report = Customer.objects.get(id=customer_id), []
     finall_message = ''  # clear up "no time/date message remains" message
     status = 'stop'   # for set in last
-    driver = setup()
+    logger.info(f"selected driver to run: {setup_funcs[thread_num]}, func number: {thread_num}")
+    driver = setup_funcs[thread_num]()
+
     logger.info('started the crawl')
     # we dont want unwanted subsequnce requests came after complete crawl, to make status stop
     if customer.status == 'stop':
@@ -75,15 +77,15 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, title):
         customer.drivers = [driver]
     else:
         customer.append(driver)
-    success, finall_message = crawl_login(driver, job_id, str(customer.phone).strip(), customer.password, title), 'دریافت نوبت  موفقیت آمیز نبود دوباره تلاش کنید'
+    success, finall_message = crawl_login(driver, job_id, str(customer.phone).strip(), customer.password, thread_num), 'دریافت نوبت  موفقیت آمیز نبود دوباره تلاش کنید'
     if success:
         # driver.get('https://nobat.epolice.ir/?mod=search&city=614&subzone=616&specialty=13&vehicle=0')
-        success = LocationStep(driver, report, title).run(customer)
+        success = LocationStep(driver, report, thread_num).run(customer)
         if success:
-            success = CenterStep(driver, report, title).run(customer)
+            success = CenterStep(driver, report, thread_num).run(customer)
             if success:
                 # only first index of date and times used for customer.customer_dates&time
-                success_datetime = DateTimeStep(driver, report, title).run(dates=reserve_dates, times=[reserve_times])  # each date can have several times here only one
+                success_datetime = DateTimeStep(driver, report, thread_num).run(dates=reserve_dates, times=[reserve_times])  # each date can have several times here only one
                 if not success_datetime[1]:   # time is better identifier is loop
                     if reserve_dates and reserve_times:
                         finall_message = "هیچ روز و ساعت خالی برای رزرو وجود ندارد"
@@ -156,7 +158,7 @@ class CrawlCustomer(APIView):
         pre_datetimes = [convert_jalali_to_gregorian(dates_times.get(f"date{i}"), dates_times.get(f"time{i}")) for i in range(1, 5)]
         datetimes = [date_time for date_time in pre_datetimes if date_time]
         logger.info("datetimes for schedules: %d", len(datetimes))
-        add_square(customer_id, color_class='green')
+        #add_square(customer_id, color_class='green')
         #customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
         # pass customer_id, reserve_date, reserve_time to crawl_func(), if date and time is none, fastest time will be selected by crawl_func()
         crawl_func_args = CrawlFuncArgs.objects.create(customer_id=int(customer_id),
@@ -300,23 +302,11 @@ class test(APIView):
     def get(self, request, *args, **kwargs):
         message, title = '', '1a'
 
-        #driver = test_setup()
-        #driver.get("about:blank")
-        #driver.get('https://softgozar.com/')
-        #wait = WebDriverWait(driver, 10)
-        #chrome_pid = driver.service.process.pid
-        #job = Job.objects.get(id=2)
-        #job.status = 'finish'
-        #job.save()
-        #time.sleep(2)
-        #windows = gw.getWindowsWithTitle(title)
-        #print(CrawlFuncArgs.objects.get(id=2).get_reserve_dates_times())
-        #os.kill(int(Job.objects.first().process_id), signal.SIGTERM)
-        #subprocess.run([r'C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe',r'C:\Users\akh\Downloads\shared_folder\nobat\scripts\minimize_chrome.ahk'])
-        #time.sleep(20)
-
-        a = is_driver_alive(16828)
-        b = is_chrome_alive(16828)
+        #driver = setup()
+        #driver.get("https://softgozar.com")
+        #driver.execute_script("window.open('https://nobat.epolice.ir/login', '_blank');")
+        a = is_driver_alive(15676)
+        b = is_chrome_alive(15676)
         #os.kill(23172, signal.SIGTERM)
         return Response({'message response:': a, 'childs': b})
 
@@ -328,9 +318,11 @@ class BrowserIconList(APIView):
     def get(self, request, *args, **kwargs):
         # refresh and get new status by js every 2 sec (driver_id of 'fnish' job -> 'wait' should update (set via admin or...)
         jobs = Job.objects.exclude(status='close').filter(driver_process_id__isnull=False).values_list('driver_process_id', 'status')
+        # some drivers set for repeat (job.status set to 'wait'. here must to kill those jobs before event creation process
+        finished_jobs = Job.objects.filter(status='finish').filter(driver_process_id__isnull=False).values_list('driver_process_id', 'status')
         # Return dict: {id: status, ...} for JS consumption
         dead_job_ids = []
-        for driver_id, status in jobs:
+        for driver_id, status in finished_jobs:
             if not is_chrome_alive(driver_id):   # all windows of the driver closed
                 logger.info(f"chrome processes not found, ready to close drive too")
                 try:
@@ -339,7 +331,7 @@ class BrowserIconList(APIView):
                     logger.info("Process is already stoped and dont need further action")
                 dead_job_ids.append(driver_id)
         logger.info(f"death joss ids for set close: {dead_job_ids}")
-        #Job.objects.filter(driver_process_id__in=dead_job_ids).update(status='close')
+        Job.objects.filter(driver_process_id__in=dead_job_ids).update(status='close')
         statuses = {str(id): status for id, status in jobs}
         return Response({'statuses': statuses})
 
@@ -410,28 +402,37 @@ class ReapeatJob(APIView):
     def get(self, request, *args, **kwargs):
         print("id of driver for set 'close' job")
         logger.info(f"id of the driver for set 'close' job")
+        return Response()
 
-        return Response()
     def post(self, request, customer_id=None, *args, **kwargs):
-        print("id of driver for set 'close' job")
-        driver_id = request.POST.get('id')
-        logger.info(f"id of the driver for repeat the job: {driver_id}")
-        if driver_id:
-            job = Job.objects.get(driver_process_id=driver_id)
-            job.status = 'close'
-            job.save()
-        return Response()
+        selected_ids = request.POST.get('selected_ids')
+        logger.info(f"id of the driver for repeat the job: {selected_ids}")
+        try:
+            if selected_ids:
+                kill_driver_and_windows(selected_ids)
+                jobs_for_repeat = Job.objects.filter(driver_process_id=selected_ids)
+                for job in jobs_for_repeat:  # only seting current job to 'wait' cant be start crawling. driver_id still refernce to previouse died driver_id
+                    Job.objects.create(start_time=datetime.now(tehran_tz), status='wait', func_args=job.func_args)
+                logger.info(f"--------------------- job {selected_ids} set to repeat successfully")
+        except Exception as e:
+            logger.info(f"error: {e}")
+        return Response({'message:': f"repeated job ids: {selected_ids}"})
 
 
 class KillProcess(APIView):
     def get(self, request, *args, **kwargs):
         logger.info(f"ready for kill all python procceses")
-        success, failed = 0, 0
+        success, failed, jobs_to_update = 0, 0, []
         for job in Job.objects.all():
             try:
                 os.kill(int(job.process_id), signal.SIGTERM)
                 success += 1
+                job.status = 'close'
+                jobs_to_update.append(job)
             except:
                 failed += 1
+        if jobs_to_update:
+            with transaction.atomic():
+                Job.objects.bulk_update(jobs_to_update, ['status'])
         logger.info(f"failed kills: {failed}, success killed: {success}")
         return Response({'result': f"failed kills: {failed}, success killed: {success}"})

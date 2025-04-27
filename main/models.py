@@ -48,6 +48,7 @@ class Job(models.Model):  # every process one job
 
 class OpenedBrowser(models.Model):
     driver_id = models.IntegerField(null=True, blank=True)
+    driver_number = models.IntegerField(default=0, blank=True)  # only 1,2,3
 '''
 # this is for socket channels (change browser icon, when job status get 'finish'
 @receiver(pre_save, sender=Job)
