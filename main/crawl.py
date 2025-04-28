@@ -108,8 +108,8 @@ def devmode_setup():
 
 def setup():
     options = Options()
-    service = Service(driver_path=env('DRIVER_PATH'))
-    options.binary_location = env('CHROME_PATH')  # C:\chrome\chrome_browser_134.0.6998.35
+    service = Service(driver_path=env('DRIVER_PATH1'))
+    options.binary_location = env('CHROME_PATH1')  # C:\chrome\chrome_browser_134.0.6998.35
     #options.add_argument("--incognito")  # Enable incognito mode (disable extensions)
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')

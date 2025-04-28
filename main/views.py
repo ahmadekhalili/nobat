@@ -72,7 +72,7 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, thread_n
             active_browsers[customer.id] += [driver]
         else:
             active_browsers[customer.id] = [driver]
-        logger.info(f'----active browsers of user (django env): {len(active_browsers[customer.id])}')
+        logger.info(f'@active_browsers of user (django env): {len(active_browsers[customer.id])}')
     if not hasattr(customer, 'drivers'):
         customer.drivers = [driver]
     else:
@@ -101,14 +101,14 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, thread_n
                         logger.info("cd peigiry, image url to save in model: %s", peigiry_path)
                         customer.status = 'complete'
                         customer.finall_message = "رزرو نوبت با مشخصات زیر با موفقیت در سامانه ثبت شد"
-                        logger.info("specefic selected date$time to save in customer model: %s", success_datetime)
+                        logger.info("specefic selected date&time to save in customer model: %s", success_datetime)
                         if success_datetime[0] and success_datetime[1]:
                             customer.customer_date, customer.customer_time = success_datetime[0], success_datetime[1]
                         with open(peigiry_path[1], 'rb') as f:
                             # This ensures Django uses the 'upload_to' path and handles the file storage correctly.
                             customer.result_image.save(os.path.basename(peigiry_path[1]), File(f), save=True)
                         customer.save()
-                        logger.info("everthing done successfully and saved to the model(customer)")
+                        logger.info("everything done successfully and saved to the model(customer)")
                         return True
                     else:
                         #driver.quit()
@@ -119,11 +119,7 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, thread_n
                         return False
 
     #driver.quit()
-    if False:
-        r.decr(f'customer:{customer_id}:active_drivers')
-    else:
-        if active_browsers:
-            active_browsers.popitem()
+    logger.info(f'@active_browsers of user in last (django env): {len(active_browsers[customer.id])}')
     if customer.status != 'complete':  # don't override the message in subsequence browsers came after successfull submit
         customer.finall_message = finall_message
         customer.status = status
@@ -191,12 +187,13 @@ class CrawlCustomer(APIView):
 
 class StopCrawl(APIView):
     def get(self, request, *args, **kwargs):
+        global active_browsers
         customer = Customer.objects.get(id=request.GET['customer'])
         customer.color_classes = ''
         customer.status = 'stop'       # now customer can add another nobar reservation (afte complete status)
         customer.save()
         customer_active_browsers = active_browsers.get(customer.id, [])
-        logger.info(f"----Active browsers to close: {len(customer_active_browsers)}")
+        logger.info(f"@active_browsers to close: {len(customer_active_browsers)}")
         fails, success = 0, 0
         for driver in customer_active_browsers:
             try:
@@ -289,13 +286,7 @@ class StartButtonSquares(APIView):
 
 
 def akh(title):
-    while True:
-        logger.info("akhhhhhhhhh")
-        time.sleep(2)
-    driver = test_setup()
-    driver.get('https://softgozar.com')
-
-    driver.quit()
+    pass
 
 
 class test(APIView):
