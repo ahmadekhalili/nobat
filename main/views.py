@@ -285,27 +285,6 @@ class StartButtonSquares(APIView):
         return Response()
 
 
-def akh(title):
-    pass
-
-
-class test(APIView):
-    def get(self, request, *args, **kwargs):
-        message, title = '', '1a'
-
-        driver = setup()
-        driver.get("https://softgozar.com")
-        time.sleep(20)
-        #driver.execute_script("window.open('https://nobat.epolice.ir/login', '_blank');")
-        a = is_driver_alive(15676)
-        b = is_chrome_alive(15676)
-        #os.kill(23172, signal.SIGTERM)
-        return Response({'message response:': a, 'childs': b})
-
-    def post(self, request, customer_id=None, *args, **kwargs):
-        return Response()
-
-
 class BrowserIconList(APIView):
     def get(self, request, *args, **kwargs):
         # refresh and get new status by js every 2 sec (driver_id of 'fnish' job -> 'wait' should update (set via admin or...)
@@ -428,3 +407,40 @@ class KillProcess(APIView):
                 Job.objects.bulk_update(jobs_to_update, ['status'])
         logger.info(f"failed kills: {failed}, success killed: {success}")
         return Response({'result': f"failed kills: {failed}, success killed: {success}"})
+
+
+def akh(title):
+    pass
+
+from scheduler.scheduler import scheduler
+from scheduler.tasks import multy_thread
+import uuid
+class test(APIView):
+    def get(self, request, *args, **kwargs):
+        message, title = '', '1a'
+
+        #driver = setup()
+        #driver.get("https://softgozar.com")
+        #time.sleep(20)
+        #driver.execute_script("window.open('https://nobat.epolice.ir/login', '_blank');")
+        a = is_driver_alive(15676)
+        b = is_chrome_alive(15676)
+        #os.kill(23172, signal.SIGTERM)
+
+        job_id = uuid.uuid4()
+        scheduler.add_job(
+            func=multy_thread,
+            trigger='date',
+            run_date=datetime.now(),
+            kwargs={
+                'task_type': 'task_type',
+                'data': 'data'
+            },
+            id=str(job_id),
+            replace_existing=True
+        )
+
+        return Response({'message response:': a, 'childs': b})
+
+    def post(self, request, customer_id=None, *args, **kwargs):
+        return Response()

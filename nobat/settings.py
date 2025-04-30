@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'main',
     'user',
+    'scheduler',
     'django_jalali',
     # Uncomment and use these if you need Celery
     # 'django_celery_beat',
@@ -214,8 +215,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 TIME_ZONE = 'Asia/Tehran'  # must be same with celery confs
 USE_TZ = True   # this make uses TIME_ZONE, otherwise server or local time zone will be used
-# if set False auto_now, auto_now_create will be used datetime.now() that use local timezone (not suitable for distibuted servers if different locations)
-# if set True, user.created or .. datetime fields will be retures as UTC time zone, but in template rendering auto converting will be done ({{ user.created }}))
+# if set False auto_now, auto_now_create will be used datetime.now() that use local timezone (times saves in db in local time zone) (not suitable for distibuted servers if different locations)
+# if set True, user.created or .. datetime fields will be retures as UTC time zone (that is diffrent from tehran time), but in template rendering or admin panel, auto converting will be done ({{ user.created }}))
 
 LANGUAGE_CODE = 'en-us'
 
