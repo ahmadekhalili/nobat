@@ -32,7 +32,7 @@ import re
 import os
 
 from user.models import Center
-from .models import Job
+from scheduler.models import Job
 from .methods import image_to_text, HumanMouseMove, WindowsHandler
 from user.models import ServiceType, PELAK_LETTER_OPTIONS
 

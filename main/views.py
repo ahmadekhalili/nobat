@@ -1,5 +1,6 @@
 import time
 
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.admin.views.decorators import staff_member_required
@@ -9,26 +10,28 @@ from rest_framework.response import Response
 
 import pytz
 import sys
-#import redis
+import os
+import uuid
 import signal
-import subprocess
+import logging
+import environ
+from pathlib import Path
 from datetime import datetime, timedelta
-import logging as py_logging
 
-from .crawl import *
+from .crawl import setup_funcs, advance_setup, crawl_login, select_dropdown_items, LocationStep, CenterStep, DateTimeStep, LastStep
 from .methods import convert_jalali_to_gregorian, add_square, convert_str_jdatetime, get_datetime, maximize_chrome_window, minimize_chrome_window, is_driver_alive, is_chrome_alive, kill_driver_and_windows
-from .models import Job, CrawlFuncArgs, OpenedBrowser
+from .models import OpenedBrowser
+from scheduler.scheduler import scheduler
+from scheduler.models import Job, CrawlFuncArgs
+from scheduler.tasks import thread_task
 from user.methods import remain_secs
 from user.models import Customer, State, Town, Center,  ServiceType
-#from nobat.celery import crawls_task
 
-
-if False and not sys.platform.startswith('win'):
-    r = redis.Redis(connection_pool=settings.REDIS_POOL)
-
-logger = py_logging.getLogger('web')  # show in both celery and django console
-cl_logging = py_logging.getLogger('celery')
+logger = logging.getLogger('web')  # show in both celery and django console
 tehran_tz = pytz.timezone('Asia/Tehran')
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 class test_celery(APIView):
@@ -45,7 +48,7 @@ class test_celery(APIView):
 def index(request):
     if request.method == 'GET':
         logger.info("Task runnnnnnnnnnn")
-        py_logging.info("Task runnnnnnnnnnn")
+        logger.info("Task runnnnnnnnnnn")
         return render(request, 'app1/index.html', {'product': 'p'})
 
 
@@ -63,7 +66,7 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, thread_n
     if customer.status == 'stop':
         customer.status = 'start'
         customer.save()
-    logging.info(f"status in crawl_func1: {Job.objects.get(id=job_id).status}")
+    logger.info(f"status in crawl_func1: {Job.objects.get(id=job_id).status}")
     if False:
         r.incr(f'customer:{customer_id}:active_drivers')
         logger.info('----active browsers of user (celery env): %s', r.get(f'customer:{customer_id}:active_drivers'))
@@ -128,6 +131,34 @@ def crawl_func(customer_id, job_id, reserve_dates, reserve_times, test, thread_n
 
 
 
+import threading
+def multy_thread_manager(job_id, thread_count=2):
+    print("multy_thread just started")
+    logger.info("multy_thread just started, logger")
+    threads_list = []
+    for i in range(thread_count):
+        thread = threading.Thread(target=thread_task, args=(i+1, job_id, crawl_func))
+        logger.info(f"thread {i} instance created.")
+        threads_list.append(thread)
+        thread.start()
+        logger.info(f"thread {i} started .start()")
+
+    # منتظر ماندن برای پایان هر سه ترد
+    for thread in threads_list:
+        thread.join()
+
+from asgiref.sync import async_to_sync
+import httpx
+def request_fast_api():
+    async def fetch():
+        async with httpx.AsyncClient() as client:
+            response = await client.get("http://127.0.0.1:8002/api/threads")
+            return response
+
+    response = async_to_sync(fetch)()
+    return JsonResponse(response.json())
+
+
 class CrawlCustomer(APIView):
     #driver, message = crawl_login('09127761266', 'a13431343')
     def get(self, request, *args, **kwargs):
@@ -148,7 +179,7 @@ class CrawlCustomer(APIView):
         customer_id = post['customer']
         logger.info(f"form data: {request.POST}")
         dates_times = {f"{field}{i}": request.POST.get(f"{field}{i}", "") for field in ["time", "date"] for i in range(1, 5)}  # is like: time1,time2...,date1,date2..
-        customer_time, customer_date = post.get('customer_time', ''), post.get('customer_date', '')  # customer_time like: 07:33  customer_date like: 1404/04/05
+        reserve_time, reserve_date = post.get('customer_time', ''), post.get('customer_date', '')  # customer_time like: 07:33  customer_date like: 1404/04/05
 
         customer = Customer.objects.filter(id=customer_id)
         pre_datetimes = [convert_jalali_to_gregorian(dates_times.get(f"date{i}"), dates_times.get(f"time{i}")) for i in range(1, 5)]
@@ -158,15 +189,26 @@ class CrawlCustomer(APIView):
         #customer.update(**dates_times, customer_time=customer_time, customer_date=customer_date)
         # pass customer_id, reserve_date, reserve_time to crawl_func(), if date and time is none, fastest time will be selected by crawl_func()
         crawl_func_args = CrawlFuncArgs.objects.create(customer_id=int(customer_id),
-                                                       reserve_date=customer_date,
-                                                       reserve_time=customer_time,
+                                                       reserve_date=reserve_date,
+                                                       reserve_time=reserve_time,
                                                        is_test=test)
-        logger.info("crawl_func is created date: %s, time: %s", customer_date, customer_time)
+        logger.info("crawl_func is created date: %s, time: %s", reserve_date, reserve_time)
         logger.info(f"datetimes: {datetimes}")
         if not datetimes:   # crawl now
-            #crawl_func(customer_id, customer_date, customer_time, test, 'test_title')
-            Job.objects.create(start_time=datetime.now(tehran_tz), status='wait', func_args=crawl_func_args)
+            #crawl_func(customer_id, reserve_date, reserve_time, test, 'test_title')
+            job = Job.objects.create(start_time=datetime.now(tehran_tz), status='wait', func_args=crawl_func_args)
             logger.info("job created successfully for now")
+            scheduler.add_job(
+                func=request_fast_api,
+                trigger='date',
+                run_date=datetime.now(),
+                kwargs={
+                    'job_id': job.id,
+                    'thread_count': 2
+                },
+                id=str(job.id),
+                replace_existing=True
+            )
 
         else:              # crawl schedule date time
             for date_time in datetimes:
@@ -178,9 +220,9 @@ class CrawlCustomer(APIView):
                 #task_date = jalali_date.strftime("%Y/%m/%d")
                 #task_time = jalali_date.strftime("%H:%M")  # Format Time (HH:MM)
                 #date_time_aware = tehran_tz.localize(date_time)
-                #task1 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
+                #task1 = crawls_task.apply_async(args=[customer_id, reserve_date, reserve_time, test], eta=date_time_aware)
                 #r.sadd(f'customer:{customer_id}:active_tasks', task1.id)
-                #task2 = crawls_task.apply_async(args=[customer_id, customer_date, customer_time, test], eta=date_time_aware)
+                #task2 = crawls_task.apply_async(args=[customer_id, reserve_date, reserve_time, test], eta=date_time_aware)
                 logger.info("Celery rask created for run in: %s %s")
         return redirect('user:profile')  # رزرو موفقیت آمیر نبود دوباره تلاش کنید
 
@@ -384,7 +426,7 @@ class ReapeatJob(APIView):
                 jobs_for_repeat = Job.objects.filter(driver_process_id=selected_ids)
                 for job in jobs_for_repeat:  # only seting current job to 'wait' cant be start crawling. driver_id still refernce to previouse died driver_id
                     Job.objects.create(start_time=datetime.now(tehran_tz), status='wait', func_args=job.func_args)
-                logger.info(f"--------------------- job {selected_ids} set to repeat successfully")
+                logger.info(f"job {selected_ids} set to repeat successfully")
         except Exception as e:
             logger.info(f"error: {e}")
         return Response({'message:': f"repeated job ids: {selected_ids}"})
@@ -412,9 +454,7 @@ class KillProcess(APIView):
 def akh(title):
     pass
 
-from scheduler.scheduler import scheduler
-from scheduler.tasks import multy_thread
-import uuid
+
 class test(APIView):
     def get(self, request, *args, **kwargs):
         message, title = '', '1a'
@@ -429,12 +469,12 @@ class test(APIView):
 
         job_id = uuid.uuid4()
         scheduler.add_job(
-            func=multy_thread,
+            func=multy_thread_manager,
             trigger='date',
             run_date=datetime.now(),
             kwargs={
-                'task_type': 'task_type',
-                'data': 'data'
+                'job_id': 'task_type',
+                'thread_count': 2
             },
             id=str(job_id),
             replace_existing=True

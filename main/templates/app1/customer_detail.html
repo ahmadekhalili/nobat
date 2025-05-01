@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block additional_style %}
+<style>
      /* Scoped styles that won't affect your sidebar */
     .rtl-info-module {
       font-family: 'Tahoma', sans-serif;
@@ -158,6 +159,7 @@
         margin-bottom: 15px;
       }
     }
+</style>
 {% endblock %}
 
 {% block title %}<a href="{% url 'user:profile' %}">پروفایل</a>{% endblock %} {# Override the 'title' block #}

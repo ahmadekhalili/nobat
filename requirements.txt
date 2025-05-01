@@ -30,5 +30,8 @@ daphne  # daphne -b 0.0.0.0 -p 8000 nobat.asgi:application
 channels_postgres  # required for socket CHANNEL_LAYERS, if set on postgres
 #psycopg[binary]     # used by channels
 psycopg2-binary     # used for django (postgres backend), apscheduler
-apscheduler
+apscheduler[sqlalchemy]
 #pywin32_postinstall -install
+# nobat_as
+fastapi uvicorn
+

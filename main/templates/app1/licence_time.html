@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block additional_style %}
+<style>
   .license-container {
     max-width: 600px;
     margin: 0 auto;
@@ -121,6 +122,7 @@
       gap: 5px;
     }
   }
+</style>
 {% endblock %}
 
 {% block title %}<a href="{% url 'user:profile' %}">زمان لایسنس</a>{% endblock %} {# Override the 'title' block #}

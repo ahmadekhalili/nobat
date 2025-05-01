@@ -1,25 +1,22 @@
 from django.conf import settings
 from django.utils import timezone
 
-from main.models import Job, OpenedBrowser
-from main.views import crawl_func, akh
-from main.crawl import setup
+from scheduler.models import Job
+from main.models import OpenedBrowser
 
 import logging
-import os
 import multiprocessing
 import threading
 import pytz
 import time
 import string
-
-from main.crawl import setup_funcs
+import os
 
 logger = logging.getLogger('web')
 tehran_tz = pytz.timezone("Asia/Tehran")
 
-
-class TtthreadTask:
+'''
+class TthreadTask:
     def __init__(self, threads_count, process_number, job_id, fun_to_run):
         try:
             self.thread = {job_id: threading.Thread(target=thread_task, args=(process_number, job_id, fun_to_run))}
@@ -35,27 +32,25 @@ class TtthreadTask:
 
         for job_id, thread in self.threads.items():
             thread.join()
+'''
 
-
-def thread_task(i):  # thread_id used to set title of browser page
-    driver = setup_funcs[i]()
-    driver.get("https://softgozar.com")
-    time.sleep(5)
-
-
-def multy_thread(job_id, thread_count=2):
-    print("multy_thread just started")
-    logger.info("multy_thread just started, logger")
-    threads_list = []
-    for i in range(thread_count):
-        thread = threading.Thread(target=thread_task, args=(i+1,))
-        logger.info(f"thread {i} instance created.")
-        threads_list.append(thread)
-        thread.start()
-        logger.info(f"thread {i} started .start()")
-
-    # منتظر ماندن برای پایان هر سه ترد
-    for thread in threads_list:
-        thread.join()
-
-
+def thread_task(thread_number, job_id, crawl_func_run):  # thread_id used to set title of browser page
+    args_obj = Job.objects.select_related('func_args').get(id=job_id).func_args
+    #args_obj.title_ids = thread_id
+    #args_obj.save()
+    dates, times = [args_obj.reserve_date], [args_obj.reserve_time]
+    o_b = OpenedBrowser.objects.first()
+    if o_b:
+        if not o_b.driver_number == 3:
+            o_b.driver_number += 1
+            o_b.save()
+            logger.info(f"driver_number increased successfully")
+        else:
+            o_b.driver_number = 1
+            o_b.save()
+            logger.info(f"driver_number reset to 1")
+    else:
+        logger.error(f"plz create 1 instance of OpenedBrowser for start")
+    logger.info(f"thread function: {thread_number} is going to run the function. job id: {job_id} args_obj: {args_obj}, status: {Job.objects.get(id=job_id).status}")
+    crawl_func_run(args_obj.customer_id, job_id, dates, times, args_obj.is_test, o_b.driver_number)
+    logger.info(f"thread function: {thread_number} is finished")
